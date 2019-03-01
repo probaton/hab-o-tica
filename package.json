@@ -13,6 +13,12 @@
     "ts-node": "^3.0.4",
     "typescript": "^2.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^11.9.5",
+    "@types/react": "^16.8.5",
+    "@types/react-dom": "^16.8.2",
+    "@types/react-native": "^0.57.38",
+    "tslint": "^5.13.0"
+  },
   "private": true
 }

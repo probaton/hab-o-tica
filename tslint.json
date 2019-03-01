@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "lib": ["dom", "es6", "es2016.array.include", "es2018.promise"],
+      "declaration": false,
+      "removeComments": true,
+      "allowSyntheticDefaultImports": true,
+      "sourceMap": true,
+      "noEmit": true,
+      "noEmitOnError": true,
+      "jsx": "react",
+      "outDir": "dist",
+      "moduleResolution": "node",
+      "baseUrl": ".",
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "noUnusedLocals": true,
+      "strict": true,
+    },
+    "exclude": ["node_modules"]
+  }
+  

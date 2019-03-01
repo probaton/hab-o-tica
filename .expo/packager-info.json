@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 20853,
+  "expoServerNgrokUrl": "https://b9-r67.anonymous.habiticandroid.exp.direct",
+  "packagerNgrokUrl": "https://packager.b9-r67.anonymous.habiticandroid.exp.direct",
+  "ngrokPid": 20933
 }
