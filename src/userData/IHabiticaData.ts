@@ -79,25 +79,9 @@ export interface IHabit {
 }
 
 export function getLowestValueHabit(habits: IHabit[]): IHabit {
-    let res: IHabit;
-    let lowestValue: number;
-    habits.forEach((habit) => {
-        if (habit.value < lowestValue || lowestValue === undefined) {
-            res = habit;
-            lowestValue = habit.value;
-        }
-    });
-    return res;
+    return habits.sort((a, b) => a.value - b.value)[0];
 }
 
 export function getHighestValueHabit(habits: IHabit[]): IHabit {
-    let res: IHabit;
-    let highestValue: number;
-    habits.forEach((habit) => {
-        if (habit.value > highestValue || highestValue === undefined) {
-            res = habit;
-            highestValue = habit.value;
-        }
-    });
-    return res;
+    return habits.sort((a, b) => b.value - a.value)[0];
 }
