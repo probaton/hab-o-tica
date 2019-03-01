@@ -1,19 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { useSkillOnHighestValueHabit } from "./skills/useSkill";
+import { StyleSheet, Text, View, Alert } from 'react-native';
+import { getUserData } from './userData/userData';
 
 export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <button onClick={this.fireBall}>Fuego!</button>
-        <Text>Open up App.js to start working on your app!</Text>
+        <Text onPress={this.fireBall}>Fuego!</Text>
       </View>
     );
   }
 
-  private fireBall = () => {
-    useSkillOnHighestValueHabit("fireball", 1, "Fuego!");
+  private fireBall = async () => {
+    getUserData().then((responseJson) => {
+        Alert.alert("Response", JSON.stringify(responseJson));
+    })
   }
 }
 
