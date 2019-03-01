@@ -13,7 +13,7 @@ export default class App extends React.Component {
 
   private fireBall = async () => {
     getUserData().then((responseJson) => {
-        Alert.alert("Response", JSON.stringify(responseJson));
+        Alert.alert("Response", responseJson.lastCron);
     })
   }
 }
