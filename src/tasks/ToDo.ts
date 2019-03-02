@@ -1,19 +1,10 @@
-import { getHabReqOpts, callHabApi } from "../requests/HabiticaRequest";
+import { callHabApi } from "../requests/HabiticaRequest";
 
-function newToDo(message: string) {
+export function newToDo(message: string) {
     const body = {
         text: message, 
         type: "todo",
         priority: "1.5",
     }
-    const toDoOpts = getHabReqOpts("post", "/api/v3/tasks/user", body);
-    callHabApi(toDoOpts, () => console.log("Message sent"));
+    callHabApi("/api/v3/tasks/user", "POST", body);
 }
-
-const toDoMessage = process.argv[2];
-if (!toDoMessage) {
-    console.log("No to-do message");
-    process.exit(1);
-}
-
-newToDo(toDoMessage);

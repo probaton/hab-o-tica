@@ -4,6 +4,7 @@ import { StyleSheet, View, Alert } from 'react-native';
 import { TileButton } from "./TileButton";
 import { getUserData } from './userData/userData';
 import { useSkillOnHighestValueHabit } from './skills/useSkill';
+import { listItems } from './items/listItems';
 
 export default class App extends React.Component {
     render() {
@@ -13,6 +14,10 @@ export default class App extends React.Component {
                     <TileButton
                         text="Habit"
                         onPress={this.getUserHabit}
+                    />
+                    <TileButton
+                        text="List 'em"
+                        onPress={this.listPets}
                     />
                 </View>
                 
@@ -27,13 +32,19 @@ export default class App extends React.Component {
     private fireBall = async () => {
         useSkillOnHighestValueHabit("fireball", 1).then((responseJson) => {
             Alert.alert("Response", JSON.stringify(responseJson));
-        })
+        });
     }
 
     private getUserHabit = async () => {
         getUserData().then(userData => {
             Alert.alert("Response", JSON.stringify(userData.tasks.habits[0].text));
-        })
+        });
+    }
+
+    private listPets = () => {
+        listItems("pets").then(items => {
+            Alert.alert("Response", JSON.stringify(items));
+        });
     }
 }
 

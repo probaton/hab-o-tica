@@ -1,5 +1,4 @@
-import { callHabApi, getHabReqOpts } from "../requests/HabiticaRequest";
-import { getUserData } from"../userData/userData";
+import { callHabApi } from "../requests/HabiticaRequest";
 import { IHabiticaData } from "../userData/IHabiticaData";
 
 function collectLikedFoods(petType: string): string[] {
@@ -18,7 +17,7 @@ function collectLikedFoods(petType: string): string[] {
 
     const foodMatch = foodTypes.find(foodType => foodType.petType == petType);
     const likedFoodTypes = foodMatch ? [foodMatch] : foodTypes;
-    let likedFoods = [];
+    let likedFoods: string[] = [];
     likedFoodTypes.forEach(foodType => {
         likedFoods.push(foodType.likedFood);
         likedFoods.push("Candy_" + foodType.petType);
@@ -28,8 +27,8 @@ function collectLikedFoods(petType: string): string[] {
 }
 
 function makeFoodCounter(likedFoods: string[], userData: IHabiticaData): string[] {
-    const userFood = userData.items.food;
-    const foodCount = [];
+    const userFood = (userData.items.food) as any;
+    const foodCount: string[] = [];
     likedFoods.forEach(food => {
         for (let i = userFood[food]; i > 0; i--) foodCount.push(food);
     });
@@ -41,27 +40,7 @@ function spamFood(petId: string, petType: string): void {
     
     function iterate(foodCount: string[]) {
         if (foodCount.length > 0) {
-            const feedOpts = getHabReqOpts("post", `/api/v3/user/feed/${petId}-${petType}/${foodCount.pop()}`); 
-            callHabApi(feedOpts, () => {
-                console.log("Omnomnom")
-                iterate(foodCount);
-            });
+            callHabApi(`/api/v3/user/feed/${petId}-${petType}/${foodCount.pop()}`, "POST"); 
         }
-    }
-
-    getUserData(userData => {
-        iterate(makeFoodCounter(likedFoods, userData));
-    });
-}
-
-const petId = process.argv[2];
-if (!petId) { 
-    console.log("No pet id");
-} else {
-    const petAttributes = petId.split("-");
-    if (petAttributes.length != 2) {
-        console.log("Invalid pet id");
-    } else {
-        spamFood(petAttributes[0], petAttributes[1]);
     }
 }
