@@ -13,11 +13,14 @@ export class TileButton extends Component<ITileButtonProps> {
                 onPress={this.props.onPress}
                 style={{
                     alignItems: "center",
-                    backgroundColor: "blue",
                     justifyContent: "center",
                     height: Dimensions.get("window").height / 4,
+                    backgroundColor: "#e5fff8",
+                    borderRadius: 5,
+                    elevation: 2,
+                    margin: 3,
                 }}>
-                <Text style={{ color: "white" }}>{this.props.text}</Text>
+                <Text style={{ color: "#3cb371", fontSize: 30 }}>{this.props.text}</Text>
             </TouchableOpacity>
         );
     }

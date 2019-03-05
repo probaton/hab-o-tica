@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, View } from "react-native";
 
 import { TileButton } from "./TileButton";
 
@@ -10,7 +10,7 @@ import { getUserData } from "./userData/userData";
 export default class App extends React.Component {
     render() {
         return (
-            <View style={styles.container}>
+            <View style={{ flex: 1, flexDirection: "row" }}>
                 <View style={{ flex: 1 }}>
                     <TileButton
                         text="Habit"
@@ -23,7 +23,10 @@ export default class App extends React.Component {
                 </View>
 
                 <View style={{ flex: 1 }}>
-                    <TileButton text="w00t"/>
+                    <TileButton
+                        text="w00t"
+                        onPress={this.getDialogInput}
+                    />
                     <TileButton text="Awesome"/>
                 </View>
             </View>
@@ -48,11 +51,3 @@ export default class App extends React.Component {
         });
     }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#c0ffee",
-  },
-});
