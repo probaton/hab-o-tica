@@ -13,11 +13,11 @@ function collectLikedFoods(petType: string): string[] {
         { petType: "CottonCandyPink", likedFood: "CottonCandyPink" },
         { petType: "CottonCandyBlue", likedFood: "CottonCandyBlue" },
         { petType: "Golden", likedFood: "Honey" },
-    ]
+    ];
 
-    const foodMatch = foodTypes.find(foodType => foodType.petType == petType);
+    const foodMatch = foodTypes.find(foodType => foodType.petType === petType);
     const likedFoodTypes = foodMatch ? [foodMatch] : foodTypes;
-    let likedFoods: string[] = [];
+    const likedFoods: string[] = [];
     likedFoodTypes.forEach(foodType => {
         likedFoods.push(foodType.likedFood);
         likedFoods.push("Candy_" + foodType.petType);
@@ -33,14 +33,14 @@ function makeFoodCounter(likedFoods: string[], userData: IHabiticaData): string[
         for (let i = userFood[food]; i > 0; i--) foodCount.push(food);
     });
     return foodCount;
-}   
+}
 
 function spamFood(petId: string, petType: string): void {
     const likedFoods = collectLikedFoods(petType);
-    
+
     function iterate(foodCount: string[]) {
         if (foodCount.length > 0) {
-            callHabApi(`/api/v3/user/feed/${petId}-${petType}/${foodCount.pop()}`, "POST"); 
+            callHabApi(`/api/v3/user/feed/${petId}-${petType}/${foodCount.pop()}`, "POST");
         }
     }
 }

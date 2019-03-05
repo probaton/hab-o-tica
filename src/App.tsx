@@ -1,10 +1,11 @@
-import React from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import React from "react";
+import { Alert, StyleSheet, View } from "react-native";
 
 import { TileButton } from "./TileButton";
-import { getUserData } from './userData/userData';
-import { useSkillOnHighestValueHabit } from './skills/useSkill';
-import { listItems } from './items/listItems';
+
+import { listItems } from "./items/listItems";
+import { useSkillOnHighestValueHabit } from "./skills/useSkill";
+import { getUserData } from "./userData/userData";
 
 export default class App extends React.Component {
     render() {
@@ -20,7 +21,7 @@ export default class App extends React.Component {
                         onPress={this.listPets}
                     />
                 </View>
-                
+
                 <View style={{ flex: 1 }}>
                     <TileButton text="w00t"/>
                     <TileButton text="Awesome"/>
@@ -52,6 +53,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: '#c0ffee',
+    backgroundColor: "#c0ffee",
   },
 });

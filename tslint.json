@@ -1,23 +1,26 @@
 {
-    "compilerOptions": {
-      "target": "es6",
-      "module": "commonjs",
-      "lib": ["dom", "es6", "es2016.array.include", "es2018.promise"],
-      "declaration": false,
-      "removeComments": true,
-      "allowSyntheticDefaultImports": true,
-      "sourceMap": true,
-      "noEmit": true,
-      "noEmitOnError": true,
-      "jsx": "react",
-      "outDir": "dist",
-      "moduleResolution": "node",
-      "baseUrl": ".",
-      "noImplicitReturns": true,
-      "noImplicitThis": true,
-      "noUnusedLocals": true,
-      "strict": true,
+    "extends": "tslint:recommended",
+    "rules": {
+        "max-line-length": {
+            "options": [120]
+        },
+        "arrow-parens": false,
+        "curly": false,
+        "member-access": false,
+        "new-parens": true,
+        "no-arg": true,
+        "no-bitwise": true,
+        "no-conditional-assignment": true,
+        "no-consecutive-blank-lines": false,
+        "no-console": {
+            "severity": "warning",
+            "options": ["debug", "info", "log", "time", "timeEnd", "trace"]
+        },
+        "object-literal-sort-keys": false
     },
-    "exclude": ["node_modules"]
-  }
-  
+    "jsRules": {
+        "max-line-length": {
+            "options": [120]
+        }
+    }
+}

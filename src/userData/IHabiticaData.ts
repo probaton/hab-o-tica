@@ -11,14 +11,14 @@ export interface IHabiticaData {
         exp: number;
         mp: number;
         hp: number;
-    }
+    };
     tasks: {
         habits: IHabit[];
-    }
+    };
     lastCron: string;
     items: {
         food: IFood;
-    }
+    };
 
 }
 
@@ -53,7 +53,7 @@ export interface IFood {
     Candy_CottonCandyPink: number;
     Candy_CottonCandyBlue: number;
     Candy_Golden: number;
-    Saddle:number;
+    Saddle: number;
 }
 
 export interface IHabit {
@@ -69,12 +69,12 @@ export interface IHabit {
     tags: string[];
     notes: string;
     type: string;
-    history: Object[][];
+    history: object[][];
     frequency: string;
     counterDown: number;
     counterUp: number;
     down: false;
-    up: true
+    up: true;
     id: string;
 }
 

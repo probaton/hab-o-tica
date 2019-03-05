@@ -1,11 +1,11 @@
 import { callHabApi } from "../requests/HabiticaRequest";
 import { getHighestValueHabit } from "../userData/IHabiticaData";
-import { getUserData } from"../userData/userData";
+import { getUserData } from "../userData/userData";
 
 
 export function useSkill(skill: Skills, habitId?: string, onEnd?: () => void) {
     let apiSuffix = `/api/v3/user/class/cast/${skill}`;
-    apiSuffix += habitId ? `?targetId=${habitId}`: "";
+    apiSuffix += habitId ? `?targetId=${habitId}` : "";
     callHabApi(apiSuffix, "POST");
 }
 
