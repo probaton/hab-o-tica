@@ -13,13 +13,6 @@ export default class App extends React.Component {
         showUseSkillInput: false,
     };
 
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            showUseSkillInput: false,
-        };
-    }
-
     render() {
         return (
             <View style={{ flex: 1, flexDirection: "row" }}>
@@ -45,7 +38,8 @@ export default class App extends React.Component {
                     visible={this.state.showUseSkillInput}
                     dialogTitle="How many pew pew?"
                     dialogText="How many times would you like to cast Fireball?"
-                    onPress={this.closeDialogInput}
+                    close={this.closeInputDialog}
+                    onSubmit={this.onSubmit}
                 />
             </View>
         );
@@ -73,7 +67,11 @@ export default class App extends React.Component {
         this.setState({ showUseSkillInput: true });
     }
 
-    private closeDialogInput = () => {
+    private closeInputDialog = () => {
         this.setState({ showUseSkillInput: false });
+    }
+
+    private onSubmit = (input: string) => {
+        Alert.alert("Input?", input);
     }
 }

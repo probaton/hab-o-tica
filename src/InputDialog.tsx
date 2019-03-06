@@ -1,14 +1,19 @@
 import React, { Component } from "react";
-import { Alert, Modal, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { Alert, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 interface IInputDialogProps {
     visible: boolean;
     dialogText: string;
     dialogTitle: string;
-    onPress: () => void;
+    close: () => void;
+    onSubmit: (input: string) => void;
 }
 
 export class InputDialog extends Component<IInputDialogProps> {
+    state = {
+        input: "",
+    };
+
     render() {
         return (
             <Modal
@@ -20,7 +25,7 @@ export class InputDialog extends Component<IInputDialogProps> {
                 <TouchableOpacity
                     style={styles.overlay}
                     activeOpacity={1}
-                    onPress={this.props.onPress}
+                    onPress={this.props.close}
                 >
                     <View
                         style={styles.dialog}
@@ -28,21 +33,25 @@ export class InputDialog extends Component<IInputDialogProps> {
 
                         <View style={styles.dialogPadding}>
                             <Text style={styles.title}>{this.props.dialogTitle}</Text>
-
                             <Text>{this.props.dialogText}</Text>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={input => this.setState({ input })}
+                                autoFocus={true}
+                            />
                         </View>
 
                         <View style={styles.buttonBar}>
                             <TouchableOpacity
                                 style={styles.button}
-                                onPress={this.props.onPress}
+                                onPress={this.props.close}
                             >
                                 <Text style={styles.cancelButton}>CANCEL</Text>
                             </TouchableOpacity>
                             <View style={styles.buttonDivider}></View>
                             <TouchableOpacity
                                 style={styles.button}
-                                onPress={this.props.onPress}
+                                onPress={() => this.props.onSubmit(this.state.input)}
                             >
                                 <Text style={styles.submitButton}>SUBMIT</Text>
                             </TouchableOpacity>
@@ -105,5 +114,13 @@ const styles = StyleSheet.create({
         textAlign: "right",
         color: "#009688",
         padding: 8,
+    },
+    input: {
+        textAlign: "left",
+        fontSize: 16,
+        color: "rgba(0,0,0,0.54)",
+        marginTop: 8,
+        borderBottomWidth: 2,
+        borderColor: "#009688",
     },
 });
