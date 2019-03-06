@@ -43,6 +43,8 @@ export default class App extends React.Component {
                 </View>
                 <InputDialog
                     visible={this.state.showUseSkillInput}
+                    dialogTitle="How many pew pew?"
+                    dialogText="How many times would you like to cast Fireball?"
                     onPress={this.closeDialogInput}
                 />
             </View>

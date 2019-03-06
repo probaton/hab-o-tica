@@ -3,6 +3,8 @@ import { Alert, Modal, StyleSheet, Text, TouchableHighlight, TouchableOpacity, V
 
 interface IInputDialogProps {
     visible: boolean;
+    dialogText: string;
+    dialogTitle: string;
     onPress: () => void;
 }
 
@@ -13,9 +15,7 @@ export class InputDialog extends Component<IInputDialogProps> {
                 animationType="fade"
                 transparent={true}
                 visible={this.props.visible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                }}
+                onRequestClose={() => Alert.alert("Modal has been closed.")}
             >
                 <TouchableOpacity
                     style={styles.overlay}
@@ -25,15 +25,29 @@ export class InputDialog extends Component<IInputDialogProps> {
                     <View
                         style={styles.dialog}
                     >
-                        <View style={styles.dialogPadding}>
-                            <Text style={styles.title}>Hello World!</Text>
 
-                            <TouchableHighlight
+                        <View style={styles.dialogPadding}>
+                            <Text style={styles.title}>{this.props.dialogTitle}</Text>
+
+                            <Text>{this.props.dialogText}</Text>
+                        </View>
+
+                        <View style={styles.buttonBar}>
+                            <TouchableOpacity
+                                style={styles.button}
                                 onPress={this.props.onPress}
                             >
-                                <Text>Hide Modal</Text>
-                            </TouchableHighlight>
+                                <Text style={styles.cancelButton}>CANCEL</Text>
+                            </TouchableOpacity>
+                            <View style={styles.buttonDivider}></View>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={this.props.onPress}
+                            >
+                                <Text style={styles.submitButton}>SUBMIT</Text>
+                            </TouchableOpacity>
                         </View>
+
                     </View>
                 </TouchableOpacity>
             </Modal>
@@ -65,5 +79,31 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 20,
         textAlign: "left",
+    },
+    buttonBar: {
+        flex: 1,
+        flexDirection: "row",
+        alignSelf: "flex-end",
+        maxHeight: 52,
+        paddingTop: 8,
+        paddingBottom: 8,
+    },
+    buttonDivider: {
+        width: 0,
+    },
+    button: {
+        paddingRight: 8,
+        minWidth: 64,
+        height: 36,
+    },
+    cancelButton: {
+        textAlign: "right",
+        color: "#009688",
+        padding: 8,
+    },
+    submitButton: {
+        textAlign: "right",
+        color: "#009688",
+        padding: 8,
     },
 });
