@@ -1,6 +1,7 @@
 import React from "react";
 import { Alert, View } from "react-native";
 
+import { InputDialog } from "./InputDialog";
 import { TileButton } from "./TileButton";
 
 import { listItems } from "./items/listItems";
@@ -8,6 +9,17 @@ import { useSkillOnHighestValueHabit } from "./skills/useSkill";
 import { getUserData } from "./userData/userData";
 
 export default class App extends React.Component {
+    state = {
+        showUseSkillInput: false,
+    };
+
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            showUseSkillInput: false,
+        };
+    }
+
     render() {
         return (
             <View style={{ flex: 1, flexDirection: "row" }}>
@@ -24,11 +36,15 @@ export default class App extends React.Component {
 
                 <View style={{ flex: 1 }}>
                     <TileButton
-                        text="w00t"
+                        text="Pop pop"
                         onPress={this.getDialogInput}
                     />
                     <TileButton text="Awesome"/>
                 </View>
+                <InputDialog
+                    visible={this.state.showUseSkillInput}
+                    onPress={this.closeDialogInput}
+                />
             </View>
         );
     }
@@ -49,5 +65,13 @@ export default class App extends React.Component {
         listItems("pets").then(items => {
             Alert.alert("Response", JSON.stringify(items));
         });
+    }
+
+    private getDialogInput = () => {
+        this.setState({ showUseSkillInput: true });
+    }
+
+    private closeDialogInput = () => {
+        this.setState({ showUseSkillInput: false });
     }
 }
