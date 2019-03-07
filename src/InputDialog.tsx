@@ -38,6 +38,7 @@ export class InputDialog extends Component<IInputDialogProps> {
                                 style={styles.input}
                                 onChangeText={input => this.setState({ input })}
                                 autoFocus={true}
+                                keyboardType={"numeric"}
                             />
                         </View>
 
@@ -64,8 +65,13 @@ export class InputDialog extends Component<IInputDialogProps> {
     }
 
     private submitAndClose = () => {
-        this.props.onSubmit(this.state.input);
-        this.props.close();
+        const count = +this.state.input;
+        if (!Number.isInteger(count) || count < 1) {
+            Alert.alert("Invalid number");
+        } else {
+            this.props.onSubmit(this.state.input);
+            this.props.close();
+        }
     }
 }
 
