@@ -25,13 +25,18 @@ export async function spamSkill(skillId: SkillId, count = -1): Promise<any> {
         let i = 0;
         while (count !== i) {
             await callSkillApi(skillId, habitId).catch(e => {
-                resolve(`${skill.name} failed after ${i} successful cast${i === 1 ? "" : "s"}`
-                    + ` with the following response: \n${e.message}`);
+                resolve(e.message === "Not enough mana."
+                    ? `Cast ${skill.name} ${i} time${s(i)} before running out of mana`
+                    : `${skill.name} failed after ${i} cast${s(i)}: \n${e.message}`);
             });
             i++;
         }
-        resolve(`Succesfully cast ${skill.name} ${i} time${i === 1 ? "" : "s"}`);
+        resolve(`Succesfully cast ${skill.name} ${i} time${s(i)}`);
     });
+}
+
+function s(i: number): "s" | "" {
+    return i === 1 ? "" : "s";
 }
 
 type SkillId =
