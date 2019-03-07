@@ -2,18 +2,16 @@ import { callHabApi } from "../requests/HabiticaRequest";
 import { getUserData } from "../userData/userData";
 
 
-function useSkill(skill: SkillId, habitId?: string): Promise<any> {
+function callSkillApi(skill: SkillId, habitId: string): Promise<any> {
     let apiSuffix = `/api/v3/user/class/cast/${skill}`;
     apiSuffix += habitId ? `?targetId=${habitId}` : "";
-    return callHabApi(apiSuffix, "POST").catch(e => { throw new Error(e); });
+    return callHabApi(apiSuffix, "POST");
 }
 
 /**
  * Spams a skill a given number of times or until mana runs out.
  * @param skill The skill to be used.
  * @param count The number of times to perform the skill. Will run until out of mana if set to -1, which is the default.
- * @param habitRank Determines whether to use the skill on the highest or lowest ranked task.
- * Skill will be used without task parameter if left empty.
  */
 export async function spamSkill(skillId: SkillId, count = -1): Promise<any> {
     const skill = getSkill(skillId);
@@ -22,12 +20,14 @@ export async function spamSkill(skillId: SkillId, count = -1): Promise<any> {
         const habits = (await getUserData()).tasks.habits.sort((a, b) => a.value - b.value);
         habitId = skill.habit === "lowest" ? habits[0].id : habits[habits.length - 1].id;
     }
-    return new Promise<any> (async (resolve, reject) => {
-        while (count !== 0) {
-            await useSkill(skillId, habitId).catch(e => { reject(e); });
-            count--;
+
+    return new Promise<string | undefined> (async (resolve) => {
+        let i = 0;
+        while (count !== i) {
+            await callSkillApi(skillId, habitId).catch(e => { resolve(e.message); });
+            i++;
         }
-        resolve(true);
+        resolve("no error");
     });
 }
 

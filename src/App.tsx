@@ -5,7 +5,7 @@ import { InputDialog } from "./InputDialog";
 import { TileButton } from "./TileButton";
 
 import { listItems } from "./items/listItems";
-import { useSkillOnHighestValueHabit } from "./skills/useSkill";
+import { spamSkill } from "./skills/useSkill";
 import { getUserData } from "./userData/userData";
 
 export default class App extends React.Component {
@@ -32,7 +32,10 @@ export default class App extends React.Component {
                         text="Pop pop"
                         onPress={this.getDialogInput}
                     />
-                    <TileButton text="Awesome"/>
+                    <TileButton
+                        text="Awesome"
+                        onPress={this.walabble}
+                    />
                 </View>
                 <InputDialog
                     visible={this.state.showUseSkillInput}
@@ -46,7 +49,7 @@ export default class App extends React.Component {
     }
 
     private fireBall = async () => {
-        useSkillOnHighestValueHabit("fireball", 1).then((responseJson) => {
+        spamSkill("fireball", 1).then((responseJson) => {
             Alert.alert("Response", JSON.stringify(responseJson));
         });
     }
@@ -71,7 +74,16 @@ export default class App extends React.Component {
         this.setState({ showUseSkillInput: false });
     }
 
-    private onSubmit = (input: string) => {
-        Alert.alert("Input?", input);
+    private onSubmit = async (input: string) => {
+        spamSkill("fireball", +input)
+            .then(responseJson => {
+                Alert.alert("Fireball", JSON.stringify(responseJson));
+            }).catch(e => {
+                throw new Error(e);
+            });
+    }
+
+    private walabble = async () => {
+        Alert.alert("Fireball", await spamSkill("fireball", 2));
     }
 }

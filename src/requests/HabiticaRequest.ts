@@ -10,5 +10,10 @@ export async function callHabApi(apiSuffix: string, method: "POST" | "GET", body
         },
     };
 
-    return fetch(`https://habitica.com${apiSuffix}`, options).then(response => response.json());
+    return fetch(`https://habitica.com${apiSuffix}`, options).then(async response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error((await response.json()).message);
+    });
 }
