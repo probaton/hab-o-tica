@@ -77,11 +77,3 @@ export interface IHabit {
     up: true;
     id: string;
 }
-
-export function getLowestValueHabit(habits: IHabit[]): IHabit {
-    return habits.sort((a, b) => a.value - b.value)[0];
-}
-
-export function getHighestValueHabit(habits: IHabit[]): IHabit {
-    return habits.sort((a, b) => b.value - a.value)[0];
-}
