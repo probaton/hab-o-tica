@@ -51,7 +51,7 @@ export class InputDialog extends Component<IInputDialogProps> {
                             <View style={styles.buttonDivider}></View>
                             <TouchableOpacity
                                 style={styles.button}
-                                onPress={() => this.props.onSubmit(this.state.input)}
+                                onPress={this.submitAndClose}
                             >
                                 <Text style={styles.submitButton}>SUBMIT</Text>
                             </TouchableOpacity>
@@ -61,6 +61,11 @@ export class InputDialog extends Component<IInputDialogProps> {
                 </TouchableOpacity>
             </Modal>
         );
+    }
+
+    private submitAndClose = () => {
+        this.props.onSubmit(this.state.input);
+        this.props.close();
     }
 }
 

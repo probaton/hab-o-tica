@@ -20,7 +20,7 @@ export class TileButton extends Component<ITileButtonProps> {
                     elevation: 2,
                     margin: 3,
                 }}>
-                <Text style={{ color: "#3cb371", fontSize: 30 }}>{this.props.text}</Text>
+                <Text style={{ color: "#3cb371", fontSize: 20 }}>{this.props.text}</Text>
             </TouchableOpacity>
         );
     }

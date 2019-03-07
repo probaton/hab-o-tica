@@ -24,10 +24,13 @@ export async function spamSkill(skillId: SkillId, count = -1): Promise<any> {
     return new Promise<string | undefined> (async (resolve) => {
         let i = 0;
         while (count !== i) {
-            await callSkillApi(skillId, habitId).catch(e => { resolve(e.message); });
+            await callSkillApi(skillId, habitId).catch(e => {
+                resolve(`${skill.name} failed after ${i} successful cast${i === 1 ? "" : "s"}`
+                    + ` with the following response: \n${e.message}`);
+            });
             i++;
         }
-        resolve("no error");
+        resolve(`Succesfully cast ${skill.name} ${i} time${i === 1 ? "" : "s"}`);
     });
 }
 

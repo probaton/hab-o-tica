@@ -10,7 +10,7 @@ import { getUserData } from "./userData/userData";
 
 export default class App extends React.Component {
     state = {
-        showUseSkillInput: false,
+        fireballDialogVisible: false,
     };
 
     render() {
@@ -29,29 +29,22 @@ export default class App extends React.Component {
 
                 <View style={{ flex: 1 }}>
                     <TileButton
-                        text="Pop pop"
-                        onPress={this.getDialogInput}
+                        text="Burst of Flames"
+                        onPress={this.showFireballDialog}
                     />
                     <TileButton
                         text="Awesome"
-                        onPress={this.walabble}
                     />
                 </View>
                 <InputDialog
-                    visible={this.state.showUseSkillInput}
-                    dialogTitle="How many pew pew?"
-                    dialogText="How many times would you like to cast Fireball?"
+                    visible={this.state.fireballDialogVisible}
+                    dialogTitle="Burst of Flames"
+                    dialogText="How many times do you wish to cast Burst of Flames?"
                     close={this.closeInputDialog}
-                    onSubmit={this.onSubmit}
+                    onSubmit={this.onSkillSubmit}
                 />
             </View>
         );
-    }
-
-    private fireBall = async () => {
-        spamSkill("fireball", 1).then((responseJson) => {
-            Alert.alert("Response", JSON.stringify(responseJson));
-        });
     }
 
     private getUserHabit = async () => {
@@ -66,24 +59,15 @@ export default class App extends React.Component {
         });
     }
 
-    private getDialogInput = () => {
-        this.setState({ showUseSkillInput: true });
+    private showFireballDialog = () => {
+        this.setState({ fireballDialogVisible: true });
     }
 
     private closeInputDialog = () => {
-        this.setState({ showUseSkillInput: false });
+        this.setState({ fireballDialogVisible: false });
     }
 
-    private onSubmit = async (input: string) => {
-        spamSkill("fireball", +input)
-            .then(responseJson => {
-                Alert.alert("Fireball", JSON.stringify(responseJson));
-            }).catch(e => {
-                throw new Error(e);
-            });
-    }
-
-    private walabble = async () => {
-        Alert.alert("Fireball", await spamSkill("fireball", 2));
+    private onSkillSubmit = async (input: string) => {
+        Alert.alert("Burst of Flames", await spamSkill("fireball", +input));
     }
 }
