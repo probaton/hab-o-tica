@@ -1,16 +1,18 @@
 import React from "react";
 import { Alert, View } from "react-native";
 
+import { SetCredentialsDialog } from "./dialogs/SetCredentialsDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
 import { TileButton } from "./TileButton";
 
 import { listItems } from "../items/listItems";
-import { getCredentials, setCredentials } from "../store/CredentialStore";
+import { getCredentials } from "../store/CredentialStore";
 import { getUserData } from "../userData/userData";
 
 export default class App extends React.Component {
     state = {
-        fireballDialogVisible: false,
+        spamSkillDialogVisible: false,
+        setCredentialsDialogVisible: false,
     };
 
     render() {
@@ -30,11 +32,11 @@ export default class App extends React.Component {
                 <View style={{ flex: 1 }}>
                     <TileButton
                         text="Burst of Flames"
-                        onPress={this.showFireballDialog}
+                        onPress={this.toggleSpamSkillDialog}
                     />
                     <TileButton
                         text="Set credentials"
-                        onPress={this.setCredentials}
+                        onPress={this.toggleSetCredentialsDialog}
                     />
                     <TileButton
                         text="Get credentials"
@@ -42,20 +44,21 @@ export default class App extends React.Component {
                     />
                 </View>
                 {this.renderSpamSkillDialog()}
+                {this.renderSetCredentialsDialog()}
             </View>
         );
     }
 
     private renderSpamSkillDialog() {
-        if (this.state.fireballDialogVisible) {
-            return (
-                <SpamSkillDialog
-                    close={this.closeInputDialog}
-                />
-            );
-        } else {
-            return null;
-        }
+        return this.state.spamSkillDialogVisible
+            ? <SpamSkillDialog close={this.toggleSpamSkillDialog}/>
+            : null;
+    }
+
+    private renderSetCredentialsDialog() {
+        return this.state.setCredentialsDialogVisible
+            ? <SetCredentialsDialog close={this.toggleSetCredentialsDialog}/>
+            : null;
     }
 
     private getUserHabit = async () => {
@@ -70,17 +73,20 @@ export default class App extends React.Component {
         });
     }
 
-    private showFireballDialog = () => {
-        this.setState({ fireballDialogVisible: true });
+    private toggleSpamSkillDialog = () => {
+        this.setState(prevState => {
+            const state = ({...prevState} as any);
+            state.spamSkillDialogVisible = !state.spamSkillDialogVisible;
+            return state;
+        });
     }
 
-    private closeInputDialog = () => {
-        this.setState({ fireballDialogVisible: false });
-    }
-
-    private setCredentials = async () => {
-        await setCredentials("doops", "loops");
-        Alert.alert("Done!");
+    private toggleSetCredentialsDialog = () => {
+        this.setState(prevState => {
+            const state = ({...prevState} as any);
+            state.setCredentialsDialogVisible = !state.setCredentialsDialogVisible;
+            return state;
+        });
     }
 
     private getCredentials = async () => {
