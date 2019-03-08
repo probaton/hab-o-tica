@@ -1,12 +1,13 @@
 import React from "react";
 import { Alert, View } from "react-native";
 
-import { InputDialog } from "./InputDialog";
+import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
 import { TileButton } from "./TileButton";
 
-import { listItems } from "./items/listItems";
-import { spamSkill } from "./skills/useSkill";
-import { getUserData } from "./userData/userData";
+import { listItems } from "../items/listItems";
+import { spamSkill } from "../skills/useSkill";
+import { getCredentials, setCredentials } from "../store/CredentialStore";
+import { getUserData } from "../userData/userData";
 
 export default class App extends React.Component {
     state = {
@@ -33,18 +34,30 @@ export default class App extends React.Component {
                         onPress={this.showFireballDialog}
                     />
                     <TileButton
-                        text="Awesome"
+                        text="Set credentials"
+                        onPress={this.setCredentials}
+                    />
+                    <TileButton
+                        text="Get credentials"
+                        onPress={this.getCredentials}
                     />
                 </View>
-                <InputDialog
-                    visible={this.state.fireballDialogVisible}
-                    dialogTitle="Burst of Flames"
-                    dialogText="How many times do you wish to cast Burst of Flames?"
+                {this.renderSpamSkillDialog()}
+            </View>
+        );
+    }
+
+    private renderSpamSkillDialog() {
+        if (this.state.fireballDialogVisible) {
+            return (
+                <SpamSkillDialog
                     close={this.closeInputDialog}
                     onSubmit={this.onSkillSubmit}
                 />
-            </View>
-        );
+            );
+        } else {
+            return null;
+        }
     }
 
     private getUserHabit = async () => {
@@ -69,5 +82,15 @@ export default class App extends React.Component {
 
     private onSkillSubmit = async (input: string) => {
         Alert.alert("Burst of Flames", await spamSkill("fireball", +input));
+    }
+
+    private setCredentials = async () => {
+        await setCredentials("doops", "loops");
+        Alert.alert("Done!");
+    }
+
+    private getCredentials = async () => {
+        const credentials = await getCredentials();
+        Alert.alert("Credentials?", `id: ${credentials.userId} token: ${credentials.apiToken}`);
     }
 }
