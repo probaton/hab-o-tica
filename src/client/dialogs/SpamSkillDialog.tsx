@@ -4,9 +4,10 @@ import { Alert, StyleSheet, TextInput } from "react-native";
 
 import { BaseInputDialog } from "./BaseInputDialog";
 
+import { spamSkill } from "../../skills/useSkill";
+
 interface ISpamSkillDialogProps {
     close: () => void;
-    onSubmit: (input: string) => void;
 }
 
 export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
@@ -32,12 +33,12 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
         );
     }
 
-    private onSubmit = () => {
+    private onSubmit = async () => {
         const count = +this.state.input;
         if (!Number.isInteger(count) || count < 1) {
             Alert.alert("Invalid number");
         } else {
-            this.props.onSubmit(this.state.input);
+            Alert.alert("Burst of Flames", await spamSkill("fireball", +this.state.input));
             this.props.close();
         }
     }

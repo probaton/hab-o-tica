@@ -5,7 +5,6 @@ import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
 import { TileButton } from "./TileButton";
 
 import { listItems } from "../items/listItems";
-import { spamSkill } from "../skills/useSkill";
 import { getCredentials, setCredentials } from "../store/CredentialStore";
 import { getUserData } from "../userData/userData";
 
@@ -52,7 +51,6 @@ export default class App extends React.Component {
             return (
                 <SpamSkillDialog
                     close={this.closeInputDialog}
-                    onSubmit={this.onSkillSubmit}
                 />
             );
         } else {
@@ -78,10 +76,6 @@ export default class App extends React.Component {
 
     private closeInputDialog = () => {
         this.setState({ fireballDialogVisible: false });
-    }
-
-    private onSkillSubmit = async (input: string) => {
-        Alert.alert("Burst of Flames", await spamSkill("fireball", +input));
     }
 
     private setCredentials = async () => {
