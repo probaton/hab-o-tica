@@ -1,7 +1,8 @@
 import React from "react";
 import { Component } from "react";
-import { Alert, StyleSheet, TextInput } from "react-native";
+import { Alert } from "react-native";
 
+import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
 
 import { spamSkill } from "../../skills/useSkill";
@@ -23,8 +24,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
                 close={this.props.close}
                 onSubmit={this.onSubmit}
             >
-                <TextInput
-                    style={styles.input}
+                <Input
                     onChangeText={input => this.setState({ input })}
                     autoFocus={true}
                     keyboardType={"numeric"}
@@ -43,14 +43,3 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
         }
     }
 }
-
-const styles = StyleSheet.create({
-    input: {
-        textAlign: "left",
-        fontSize: 16,
-        color: "rgba(0,0,0,0.54)",
-        marginTop: 8,
-        borderBottomWidth: 2,
-        borderColor: "#009688",
-    },
-});
