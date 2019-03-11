@@ -6,6 +6,7 @@ import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
 
 import { getClassSkills, getSkillById, spamSkill } from "../../skills/useSkill";
+import { getLastSkill, setLastSkill } from "../../store/PreferenceStore";
 import { getUserData } from "../../userData/userData";
 
 interface ISpamSkillDialogProps {
@@ -21,13 +22,20 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
 
     async componentDidMount() {
         const habiticaClass = (await getUserData()).stats.class;
-        const pickerOptions = this.state.skillOptions.concat(getClassSkills(habiticaClass));
-        this.setState({ skillOptions: pickerOptions });
+        const lastSkill = await getLastSkill();
+        if (lastSkill) {
+            const skillOptions = getClassSkills(habiticaClass);
+            this.setState({ skillOptions, skillInput: lastSkill });
+        } else {
+            const skillOptions = this.state.skillOptions.concat(getClassSkills(habiticaClass));
+            this.setState({ skillOptions });
+        }
     }
 
     render() {
         const pickerOptions = this.state.skillOptions
             .map((skill) => <Picker.Item label={skill.name} key={skill.id} value={skill.id}/>);
+
         return (
             <BaseInputDialog
                 dialogTitle="Use Skill"
@@ -66,11 +74,15 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
         if (!Number.isInteger(count) || count < 1) {
             return Alert.alert("Invalid number");
         }
-        if (!this.state.skillInput || this.state.skillInput === "placeholder") {
+
+        const skillInput = this.state.skillInput;
+        if (!skillInput || skillInput === "placeholder") {
             return Alert.alert("No skill selected");
         }
-        const skill = getSkillById(this.state.skillInput!);
+
+        const skill = getSkillById(skillInput);
         Alert.alert(skill.name, await spamSkill(skill.id, +this.state.usesInput));
+        setLastSkill(skill.id);
         this.props.close();
     }
 }
