@@ -20,7 +20,6 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
                 <TouchableOpacity
                     style={styles.overlay}
                     activeOpacity={1}
-                    onPress={close}
                 >
                     <View
                         style={styles.dialog}

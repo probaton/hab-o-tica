@@ -74,19 +74,11 @@ export default class Home extends React.Component {
     }
 
     private toggleSpamSkillDialog = () => {
-        this.setState(prevState => {
-            const state = ({...prevState} as any);
-            state.spamSkillDialogVisible = !state.spamSkillDialogVisible;
-            return state;
-        });
+        this.setState({ spamSkillDialogVisible: !this.state.spamSkillDialogVisible });
     }
 
     private toggleSetCredentialsDialog = () => {
-        this.setState(prevState => {
-            const state = ({...prevState} as any);
-            state.setCredentialsDialogVisible = !state.setCredentialsDialogVisible;
-            return state;
-        });
+        this.setState({ setCredentialsDialogVisible: !this.state.setCredentialsDialogVisible });
     }
 
     private getCredentials = async () => {

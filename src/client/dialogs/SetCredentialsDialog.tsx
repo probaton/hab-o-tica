@@ -28,7 +28,7 @@ export class SetCredentialsDialog extends Component<ISetCredentialsDialogProps> 
 
         return (
             <BaseInputDialog
-                dialogTitle="Authorization"
+                dialogTitle="Authentication"
                 dialogText={dialogMessage}
                 close={this.props.close}
                 onSubmit={this.onSubmit}
