@@ -1,4 +1,5 @@
 import { callHabApi } from "../requests/HabiticaRequest";
+import { HabiticaClass } from "../userData/IHabiticaData";
 import { getUserData } from "../userData/userData";
 
 
@@ -14,7 +15,7 @@ function callSkillApi(skill: SkillId, habitId: string): Promise<any> {
  * @param count The number of times to perform the skill. Will run until out of mana if set to -1, which is the default.
  */
 export async function spamSkill(skillId: SkillId, count = -1): Promise<any> {
-    const skill = getSkill(skillId);
+    const skill = getSkillById(skillId);
     let habitId = "";
     if (skill.habit !== "none") {
         const habits = (await getUserData()).tasks.habits.sort((a, b) => a.value - b.value);
@@ -57,61 +58,36 @@ type SkillId =
     "brightness" |
     "healAll";
 
-interface ISkill {
+export interface ISkill {
     id: SkillId;
     name: string;
     habit: "lowest" | "highest" | "none";
+    class: HabiticaClass;
 }
 
-function getSkill(skillId: SkillId): ISkill {
-    switch (skillId) {
-        case "fireball": {
-            return { id: skillId, name: "Burst of Flames", habit: "highest" };
-        }
-        case "mpHeal": {
-            return { id: skillId, name: "Ethereal Surge", habit: "none" };
-        }
-        case "earth": {
-            return { id: skillId, name: "Earthquake", habit: "none" };
-        }
-        case "frost": {
-            return { id: skillId, name: "Chilling Frost", habit: "none" };
-        }
-        case "smash": {
-            return { id: skillId, name: "Brutal Smash", habit: "lowest" };
-        }
-        case "defensiveStance": {
-            return { id: skillId, name: "Defensive Stance", habit: "none" };
-        }
-        case "valorousPresence": {
-            return { id: skillId, name: "Valorous Presence", habit: "none" };
-        }
-        case "intimidate": {
-            return { id: skillId, name: "Intimidating Gaze", habit: "none" };
-        }
-        case "pickPocket": {
-            return { id: skillId, name: "Pickpocket", habit: "highest" };
-        }
-        case "backStab": {
-            return { id: skillId, name: "Backstab", habit: "highest" };
-        }
-        case "toolsOfTrade": {
-            return { id: skillId, name: "Tools of the Trade", habit: "none" };
-        }
-        case "stealth": {
-            return { id: skillId, name: "Stealth", habit: "none" };
-        }
-        case "heal": {
-            return { id: skillId, name: "Healing Light", habit: "none" };
-        }
-        case "protectAura": {
-            return { id: skillId, name: "Protective Aura", habit: "none" };
-        }
-        case "brightness": {
-            return { id: skillId, name: "Searing Brightness", habit: "none" };
-        }
-        case "healAll": {
-            return { id: skillId, name: "Blessing", habit: "none" };
-        }
-    }
+export const skills: ISkill[] = [
+    { id: "fireball",           name: "Burst of Flames",    habit: "highest",   class: "wizard" },
+    { id: "mpHeal",             name: "Ethereal Surge",     habit: "none",      class: "wizard" },
+    { id: "earth",              name: "Earthquake",         habit: "none",      class: "wizard" },
+    { id: "frost",              name: "Chilling Frost",     habit: "none",      class: "wizard" },
+    { id: "smash",              name: "Brutal Smash",       habit: "lowest",    class: "warrior" },
+    { id: "defensiveStance",    name: "Defensive Stance",   habit: "none",      class: "warrior" },
+    { id: "valorousPresence",   name: "Valorous Presence",  habit: "none",      class: "warrior" },
+    { id: "intimidate",         name: "Intimidating Gaze",  habit: "none",      class: "warrior" },
+    { id: "pickPocket",         name: "Pickpocket",         habit: "highest",   class: "rogue" },
+    { id: "backStab",           name: "Backstab",           habit: "highest",   class: "rogue" },
+    { id: "toolsOfTrade",       name: "Tools of the Trade", habit: "none",      class: "rogue" },
+    { id: "stealth",            name: "Stealth",            habit: "none",      class: "rogue" },
+    { id: "heal",               name: "Healing Light",      habit: "none",      class: "healer" },
+    { id: "protectAura",        name: "Protective Aura",    habit: "none",      class: "healer" },
+    { id: "brightness",         name: "Searing Brightness", habit: "none",      class: "healer" },
+    { id: "healAll",            name: "Blessing",           habit: "none",      class: "healer" },
+];
+
+export function getSkillById(skillId: SkillId): ISkill {
+    return skills.find(skill => skill.id === skillId)!;
+}
+
+export function getClassSkills(habiticaClass: HabiticaClass): ISkill[] {
+    return skills.filter(skill => skill.class === habiticaClass);
 }

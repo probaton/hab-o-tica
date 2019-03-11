@@ -10,7 +10,7 @@ export interface IHabiticaData {
         con: number;
         str: number;
         points: number;
-        class: string;
+        class: HabiticaClass;
         lvl: number;
         gp: number;
         exp: number;
@@ -24,8 +24,9 @@ export interface IHabiticaData {
     items: {
         food: IFood;
     };
-
 }
+
+export type HabiticaClass = "wizard" | "healer" | "warrior" | "rogue";
 
 export interface IFood {
     Meat: number;
