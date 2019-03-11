@@ -2,7 +2,7 @@
     "extends": "tslint:recommended",
     "rules": {
         "max-line-length": {
-            "options": [120]
+            "options": [150]
         },
         "arrow-parens": false,
         "curly": false,
@@ -20,7 +20,7 @@
     },
     "jsRules": {
         "max-line-length": {
-            "options": [120]
+            "options": [150]
         }
     }
 }
