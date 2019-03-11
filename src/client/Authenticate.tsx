@@ -1,17 +1,16 @@
 import React from "react";
 import { Component } from "react";
-import { Alert } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import { Input } from "../controls/Input";
-import { BaseInputDialog } from "./BaseInputDialog";
+import { Input } from "./controls/Input";
 
-import { verifyCredentialsAndReturnUserName } from "../../store/CredentialStore";
+import { verifyCredentialsAndReturnUserName } from "../store/CredentialStore";
 
-interface ISetCredentialsDialogProps {
-    close: () => void;
+interface IAuthenticateProps {
+    onValidCredentials: () => {};
 }
 
-export class SetCredentialsDialog extends Component<ISetCredentialsDialogProps> {
+export class Authenticate extends Component<IAuthenticateProps> {
     state = {
         credentials: {
             userInput: "cookies",
@@ -22,28 +21,35 @@ export class SetCredentialsDialog extends Component<ISetCredentialsDialogProps> 
     render() {
         const dialogMessage =
             "Link this app to your Habitica account by providing your user ID and API token. "
-            + "These can both be found in your Habitica settings.\n"
+            + "These can both be found in your Habitica settings.\n\n"
             + "This information will be stored locally on your device "
             + "and won't be shared with anyone or anything except to communicate with Habitica.";
 
         return (
-            <BaseInputDialog
-                dialogTitle="Authorization"
-                dialogText={dialogMessage}
-                close={this.props.close}
-                onSubmit={this.onSubmit}
+            <View
+                style={styles.container}
             >
+                <Text style={styles.title}>Authenticate</Text>
+                <Text style={styles.text}>{dialogMessage}</Text>
                 <Input
                     autoFocus={true}
                     onChangeText={this.setUserInput}
-                    keyboardType={"numeric"}
+                    keyboardType={"default"}
+                    placeholder="User ID"
                 />
                 <Input
                     autoFocus={false}
                     onChangeText={this.setTokenInput}
-                    keyboardType={"numeric"}
+                    keyboardType={"default"}
+                    placeholder="API token"
                 />
-            </BaseInputDialog>
+                <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={this.onSubmit}
+                >
+                    <Text style={styles.submitButton}>SUBMIT</Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 
@@ -72,8 +78,36 @@ export class SetCredentialsDialog extends Component<ISetCredentialsDialogProps> 
                         + "Are you sure you pasted the correct values to the correct fields?");
                 } else {
                     Alert.alert(`Welcome, ${userName}!`);
-                    this.props.close();
+                    this.props.onValidCredentials();
                 }
             });
     }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 30,
+  },
+  title: {
+      fontWeight: "bold",
+      fontSize: 20,
+      textAlign: "left",
+  },
+  text: {
+      textAlign: "center",
+      paddingTop: 15,
+  },
+  button: {
+      paddingRight: 8,
+      minWidth: 64,
+      height: 36,
+  },
+  submitButton: {
+      textAlign: "right",
+      color: "#009688",
+      padding: 8,
+  },
+});

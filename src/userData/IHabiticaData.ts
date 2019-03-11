@@ -1,4 +1,9 @@
 export interface IHabiticaData {
+    auth: {
+        local: {
+            username: string;
+        };
+    };
     stats: {
         per: number;
         int: number;

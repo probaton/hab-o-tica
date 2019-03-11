@@ -6,17 +6,19 @@ interface IInputProps {
     onChangeText: (input: string) => void;
     autoFocus: boolean;
     keyboardType: KeyboardTypeOptions;
+    placeholder?: string;
 }
 
 export class Input extends Component<IInputProps> {
     render() {
-        const { onChangeText, autoFocus, keyboardType } = this.props;
+        const { onChangeText, autoFocus, keyboardType, placeholder } = this.props;
         return (
             <TextInput
                 style={styles.input}
                 onChangeText={onChangeText}
                 autoFocus={autoFocus}
                 keyboardType={keyboardType}
+                placeholder={placeholder}
             />
         );
     }
@@ -30,5 +32,6 @@ const styles = StyleSheet.create({
         marginTop: 8,
         borderBottomWidth: 2,
         borderColor: "#009688",
+        minWidth: 200,
     },
 });

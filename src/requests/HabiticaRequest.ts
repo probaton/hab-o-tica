@@ -1,12 +1,13 @@
-/* tslint:disable-next-line */
-const credentials = require("../../secret/credentials").credentials;
+import { getCredentials } from "../store/CredentialStore";
+
 
 export async function callHabApi(apiSuffix: string, method: "POST" | "GET", body?: any): Promise<any> {
+    const credentials = await getCredentials();
     const options = {
         method,
         headers: {
-            "x-api-user": credentials.habId,
-            "x-api-key": credentials.habToken,
+            "x-api-user": credentials.userId,
+            "x-api-key": credentials.apiToken,
         },
     };
 
