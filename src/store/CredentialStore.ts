@@ -9,7 +9,7 @@ export async function getCredentials(): Promise<ICredentials> {
     });
 }
 
-function _setCredentials(userId: string, apiToken: string): Promise<boolean> {
+export function setCredentials(userId: string, apiToken: string): Promise<boolean> {
     return new Promise<boolean> (resolve => {
         return AsyncStorage.multiSet([["userId", userId], ["apiToken", apiToken]]).then(() => { resolve(true); });
     });
@@ -21,22 +21,22 @@ export function getVerifiedCredentials(): Promise<boolean> {
     });
 }
 
-function _setVerifiedCredentials(value: boolean): Promise<boolean> {
+export function setVerifiedCredentials(value: boolean): Promise<boolean> {
     return new Promise<boolean> (resolve => {
         return AsyncStorage.setItem("verifiedCredentials", value ? "1" : "0").then(() => { resolve(true); });
     });
 }
 
 export async function verifyCredentialsAndReturnUserName(credentials: ICredentials): Promise<string> {
-    await _setCredentials(credentials.userId, credentials.apiToken);
+    await setCredentials(credentials.userId, credentials.apiToken);
     return new Promise<string> (resolve => {
         _getUserName()
             .then(async userName => {
                 if (userName === "Invalid credentials") {
-                    await _setVerifiedCredentials(false);
+                    await setVerifiedCredentials(false);
                     resolve(userName);
                 } else {
-                    await _setVerifiedCredentials(true);
+                    await setVerifiedCredentials(true);
                     resolve(userName);
                 }
             });

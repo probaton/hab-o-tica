@@ -15,8 +15,8 @@ export class Authenticate extends Component<IAuthenticateProps> {
 
     state = {
         credentials: {
-            userInput: "cookies",
-            tokenInput: "initial",
+            userInput: "",
+            tokenInput: "",
         },
     };
 
@@ -28,12 +28,10 @@ export class Authenticate extends Component<IAuthenticateProps> {
             + "and won't be shared with anyone or anything except to communicate with Habitica.";
 
         return (
-            <View style={styles.body}>
             <View
                 style={styles.container}
             >
                 <Text style={styles.title}>Authenticate</Text>
-                <Text style={styles.text}>{dialogMessage}</Text>
                 <Input
                     autoFocus={true}
                     onChangeText={this.setUserInput}
@@ -53,13 +51,13 @@ export class Authenticate extends Component<IAuthenticateProps> {
                     returnKeyType="done"
                     onSubmitEditing={this.onSubmit}
                 />
+                <Text style={styles.text}>{dialogMessage}</Text>
                 <TouchableOpacity
                     style={styles.submitButton}
                     onPress={this.onSubmit}
                 >
                     <Text style={styles.submitButton}>SUBMIT</Text>
                 </TouchableOpacity>
-            </View>
             </View>
         );
     }
@@ -96,10 +94,6 @@ export class Authenticate extends Component<IAuthenticateProps> {
 }
 
 const styles = StyleSheet.create({
-    body: {
-      flex: 1,
-      backgroundColor: "#432874",
-    },
     container: {
         flex: 1,
         alignItems: "center",
@@ -111,6 +105,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: "left",
         color: "#edecee",
+        marginBottom: 20,
     },
     text: {
         textAlign: "center",
@@ -126,5 +121,6 @@ const styles = StyleSheet.create({
         textAlign: "right",
         color: "#edecee",
         padding: 8,
+        marginBottom: 5,
     },
 });

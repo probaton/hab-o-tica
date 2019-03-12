@@ -5,6 +5,8 @@ import { Authenticate } from "./Authenticate";
 
 import { getVerifiedCredentials } from "../store/CredentialStore";
 import Home from "./Home";
+import Logo from "./images/Logo";
+import LogoutIcon from "./images/LogoutIcon";
 
 export default class App extends React.Component {
     state = {
@@ -16,6 +18,18 @@ export default class App extends React.Component {
     }
 
     render() {
+        return (
+            <View style={styles.body}>
+                <View style={styles.topBar}>
+                    <Logo/>
+                    {this.renderLogoutIcon()}
+                </View>
+                {this.renderContent()}
+            </View>
+        );
+    }
+
+    private renderContent() {
         switch (this.state.view) {
             case "loading": {
                 return this.renderLoading();
@@ -34,6 +48,14 @@ export default class App extends React.Component {
         this.setState({ view });
     }
 
+    private renderLogoutIcon() {
+        return this.state.view === "home"
+            ?   <LogoutIcon
+                    onLogout={this.setViewState}
+                />
+            : null;
+    }
+
     private renderLoading = () => {
         return (
             <View
@@ -46,10 +68,18 @@ export default class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#432874",
-  },
+    body: {
+        backgroundColor: "#36205D",
+        flex: 1,
+    },
+    topBar: {
+        backgroundColor: "#432874",
+        maxHeight: 56,
+        flex: 1,
+    },
+    container: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
 });

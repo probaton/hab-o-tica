@@ -3,7 +3,6 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { SetCredentialsDialog } from "./dialogs/SetCredentialsDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
-import Logo from "./images/Logo";
 import { TileButton } from "./TileButton";
 
 import { listItems } from "../items/listItems";
@@ -18,10 +17,6 @@ export default class Home extends React.Component {
 
     render() {
         return (
-            <View style={styles.body}>
-                <View style={styles.topBar}>
-                    <Logo/>
-                </View>
                 <View style={styles.container}>
                     <View style={styles.column}>
                         <TileButton
@@ -51,7 +46,6 @@ export default class Home extends React.Component {
                     {this.renderSpamSkillDialog()}
                     {this.renderSetCredentialsDialog()}
                 </View>
-            </View>
         );
     }
 
@@ -94,16 +88,6 @@ export default class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    body: {
-        backgroundColor: "#36205D",
-        flex: 1,
-    },
-    topBar: {
-        backgroundColor: "#432874",
-        alignSelf: "stretch",
-        maxHeight: 56,
-        flex: 1,
-    },
     container: {
         flex: 1,
         flexDirection: "row",
