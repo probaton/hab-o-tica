@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import { Alert, Picker } from "react-native";
+import { Alert, Picker, StyleSheet } from "react-native";
 
 import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
@@ -34,7 +34,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
 
     render() {
         const pickerOptions = this.state.skillOptions
-            .map((skill) => <Picker.Item label={skill.name} key={skill.id} value={skill.id}/>);
+            .map((skill) => <Picker.Item label={skill.name} key={skill.id} value={skill.id} color="#34313A"/>);
 
         return (
             <BaseInputDialog

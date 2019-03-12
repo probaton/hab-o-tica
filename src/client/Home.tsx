@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
 import { SetCredentialsDialog } from "./dialogs/SetCredentialsDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
@@ -17,8 +17,8 @@ export default class Home extends React.Component {
 
     render() {
         return (
-            <View style={{ flex: 1, flexDirection: "row" }}>
-                <View style={{ flex: 1 }}>
+            <View style={styles.container}>
+                <View style={styles.column}>
                     <TileButton
                         text="Habit"
                         onPress={this.getUserHabit}
@@ -29,7 +29,7 @@ export default class Home extends React.Component {
                     />
                 </View>
 
-                <View style={{ flex: 1 }}>
+                <View style={styles.column}>
                     <TileButton
                         text="Burst of Flames"
                         onPress={this.toggleSpamSkillDialog}
@@ -86,3 +86,14 @@ export default class Home extends React.Component {
         Alert.alert("Credentials?", `id: ${credentials.userId} token: ${credentials.apiToken}`);
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: "#432874",
+        flex: 1,
+        flexDirection: "row",
+    },
+    column: {
+        flex: 1,
+    },
+});

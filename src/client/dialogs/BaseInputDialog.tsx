@@ -27,7 +27,7 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
 
                         <View style={styles.dialogPadding}>
                             <Text style={styles.title}>{dialogTitle}</Text>
-                            <Text>{dialogText}</Text>
+                            <Text style={styles.text}>{dialogText}</Text>
                             {children}
                         </View>
 
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     dialog: {
         marginLeft: 30,
         marginRight: 30,
-        backgroundColor: "#fff",
+        backgroundColor: "#edecee",
         elevation: 24,
         minWidth: 280,
         borderRadius: 5,
@@ -78,6 +78,10 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 20,
         textAlign: "left",
+        color: "#34313A",
+    },
+    text: {
+        color: "#34313A",
     },
     buttonBar: {
         flex: 1,
@@ -94,6 +98,7 @@ const styles = StyleSheet.create({
         paddingRight: 8,
         minWidth: 64,
         height: 36,
+        color: "#34313A",
     },
     cancelButton: {
         textAlign: "right",
