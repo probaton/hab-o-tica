@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import { Alert, Picker, StyleSheet } from "react-native";
+import { Alert, Picker, StyleSheet, TouchableOpacity, Text } from "react-native";
 
 import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
@@ -39,7 +39,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
         return (
             <BaseInputDialog
                 dialogTitle="Use Skill"
-                dialogText="Which skill do you want to use and how often to you want to use it?"
+                dialogText="Select a skill and either keeping casting until you're out of mana or specify how often you want it used."
                 close={this.props.close}
                 onSubmit={this.onSubmit}
             >
@@ -50,6 +50,12 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
                 >
                     {pickerOptions}
                 </Picker>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={this.spamUntilOom}
+                >
+                    <Text style={styles.spamButton}>SPAM UNTIL I'M OUT OF MANA!</Text>
+                </TouchableOpacity>
                 <Input
                     onChangeText={input => this.setState({ usesInput: input })}
                     autoFocus={true}
@@ -85,4 +91,29 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
         setLastSkill(skill.id);
         this.props.close();
     }
+
+    private spamUntilOom = async () => {
+        const skillInput = this.state.skillInput;
+        if (!skillInput || skillInput === "placeholder") {
+            return Alert.alert("No skill selected");
+        }
+
+        const skill = getSkillById(skillInput);
+        Alert.alert(skill.name, await spamSkill(skill.id, -1));
+        setLastSkill(skill.id);
+        this.props.close();
+    }
 }
+
+const styles = StyleSheet.create({
+    button: {
+        height: 36,
+        color: "#34313A",
+        alignSelf: "center",
+    },
+    spamButton: {
+        color: "#009688",
+        padding: 8,
+    },
+
+});
