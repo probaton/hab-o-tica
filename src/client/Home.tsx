@@ -3,6 +3,7 @@ import { Alert, StyleSheet, View } from "react-native";
 
 import { SetCredentialsDialog } from "./dialogs/SetCredentialsDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
+import Logo from "./images/Logo";
 import { TileButton } from "./TileButton";
 
 import { listItems } from "../items/listItems";
@@ -17,34 +18,39 @@ export default class Home extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <View style={styles.column}>
-                    <TileButton
-                        text="Habit"
-                        onPress={this.getUserHabit}
-                    />
-                    <TileButton
-                        text="List 'em"
-                        onPress={this.listPets}
-                    />
+            <View style={styles.body}>
+                <View style={styles.topBar}>
+                    <Logo/>
                 </View>
+                <View style={styles.container}>
+                    <View style={styles.column}>
+                        <TileButton
+                            text="Habit"
+                            onPress={this.getUserHabit}
+                        />
+                        <TileButton
+                            text="List 'em"
+                            onPress={this.listPets}
+                        />
+                    </View>
 
-                <View style={styles.column}>
-                    <TileButton
-                        text="Burst of Flames"
-                        onPress={this.toggleSpamSkillDialog}
-                    />
-                    <TileButton
-                        text="Set credentials"
-                        onPress={this.toggleSetCredentialsDialog}
-                    />
-                    <TileButton
-                        text="Get credentials"
-                        onPress={this.getCredentials}
-                    />
+                    <View style={styles.column}>
+                        <TileButton
+                            text="Burst of Flames"
+                            onPress={this.toggleSpamSkillDialog}
+                        />
+                        <TileButton
+                            text="Set credentials"
+                            onPress={this.toggleSetCredentialsDialog}
+                        />
+                        <TileButton
+                            text="Get credentials"
+                            onPress={this.getCredentials}
+                        />
+                    </View>
+                    {this.renderSpamSkillDialog()}
+                    {this.renderSetCredentialsDialog()}
                 </View>
-                {this.renderSpamSkillDialog()}
-                {this.renderSetCredentialsDialog()}
             </View>
         );
     }
@@ -88,8 +94,17 @@ export default class Home extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    body: {
+        backgroundColor: "#36205D",
+        flex: 1,
+    },
+    topBar: {
         backgroundColor: "#432874",
+        alignSelf: "stretch",
+        maxHeight: 56,
+        flex: 1,
+    },
+    container: {
         flex: 1,
         flexDirection: "row",
     },
