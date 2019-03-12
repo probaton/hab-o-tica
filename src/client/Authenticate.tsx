@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, NativeComponent, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { Input } from "./controls/Input";
 
@@ -11,6 +11,8 @@ interface IAuthenticateProps {
 }
 
 export class Authenticate extends Component<IAuthenticateProps> {
+    tokenInput: NativeComponent | undefined = undefined;
+
     state = {
         credentials: {
             userInput: "cookies",
@@ -26,6 +28,7 @@ export class Authenticate extends Component<IAuthenticateProps> {
             + "and won't be shared with anyone or anything except to communicate with Habitica.";
 
         return (
+            <View style={styles.body}>
             <View
                 style={styles.container}
             >
@@ -36,12 +39,19 @@ export class Authenticate extends Component<IAuthenticateProps> {
                     onChangeText={this.setUserInput}
                     keyboardType={"default"}
                     placeholder="User ID"
+                    dark={true}
+                    onSubmitEditing={() => { (this.tokenInput as any).focus(); }}
+                    returnKeyType="next"
                 />
                 <Input
                     autoFocus={false}
                     onChangeText={this.setTokenInput}
                     keyboardType={"default"}
                     placeholder="API token"
+                    dark={true}
+                    setNextInput={(input) => this.tokenInput = input}
+                    returnKeyType="done"
+                    onSubmitEditing={this.onSubmit}
                 />
                 <TouchableOpacity
                     style={styles.submitButton}
@@ -49,6 +59,7 @@ export class Authenticate extends Component<IAuthenticateProps> {
                 >
                     <Text style={styles.submitButton}>SUBMIT</Text>
                 </TouchableOpacity>
+            </View>
             </View>
         );
     }
@@ -85,29 +96,35 @@ export class Authenticate extends Component<IAuthenticateProps> {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 30,
-  },
-  title: {
-      fontWeight: "bold",
-      fontSize: 20,
-      textAlign: "left",
-  },
-  text: {
-      textAlign: "center",
-      paddingTop: 15,
-  },
-  button: {
-      paddingRight: 8,
-      minWidth: 64,
-      height: 36,
-  },
-  submitButton: {
-      textAlign: "right",
-      color: "#009688",
-      padding: 8,
-  },
+    body: {
+      flex: 1,
+      backgroundColor: "#432874",
+    },
+    container: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        margin: 30,
+    },
+    title: {
+        fontWeight: "bold",
+        fontSize: 20,
+        textAlign: "left",
+        color: "#edecee",
+    },
+    text: {
+        textAlign: "center",
+        paddingTop: 15,
+        color: "#edecee",
+    },
+    button: {
+        paddingRight: 8,
+        minWidth: 64,
+        height: 36,
+    },
+    submitButton: {
+        textAlign: "right",
+        color: "#edecee",
+        padding: 8,
+    },
 });

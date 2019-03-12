@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import { Alert } from "react-native";
+import { Alert, NativeComponent } from "react-native";
 
 import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
@@ -12,17 +12,19 @@ interface ISetCredentialsDialogProps {
 }
 
 export class SetCredentialsDialog extends Component<ISetCredentialsDialogProps> {
+    tokenInput: NativeComponent | undefined = undefined;
+
     state = {
         credentials: {
-            userInput: "cookies",
-            tokenInput: "initial",
+            userInput: "",
+            tokenInput: "",
         },
     };
 
     render() {
         const dialogMessage =
             "Link this app to your Habitica account by providing your user ID and API token. "
-            + "These can both be found in your Habitica settings.\n"
+            + "These can both be found in your Habitica settings.\n\n"
             + "This information will be stored locally on your device "
             + "and won't be shared with anyone or anything except to communicate with Habitica.";
 
@@ -36,12 +38,19 @@ export class SetCredentialsDialog extends Component<ISetCredentialsDialogProps> 
                 <Input
                     autoFocus={true}
                     onChangeText={this.setUserInput}
-                    keyboardType={"numeric"}
+                    keyboardType={"default"}
+                    placeholder="User ID"
+                    onSubmitEditing={() => { this.tokenInput!.focus(); }}
+                    returnKeyType="next"
                 />
                 <Input
                     autoFocus={false}
                     onChangeText={this.setTokenInput}
-                    keyboardType={"numeric"}
+                    keyboardType={"default"}
+                    placeholder="API token"
+                    setNextInput={(input) => this.tokenInput = input}
+                    returnKeyType="done"
+                    onSubmitEditing={this.onSubmit}
                 />
             </BaseInputDialog>
         );
