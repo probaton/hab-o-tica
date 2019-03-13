@@ -2,47 +2,58 @@ import React from "react";
 import { Component } from "react";
 import { Alert, Picker } from "react-native";
 
-import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
 
-import { feedPet, getPetList } from "../../items/feedPet";
+import { feedPet, getPetList, IPet } from "../../items/feedPet";
 
 interface IFeedPetDialogProps {
     close: () => void;
 }
 
-export class FeedPetDialog extends Component<IFeedPetDialogProps> {
-    state = {
-        speciesOptions: [{ id: "placeholder", name: "Select a pet..." }],
-        speciesInput: undefined,
-        typeOptions: [{ id: "placeholder", name: "Select a type..." }],
-        typeInput: undefined,
-    };
+interface IFeedPetDialogState {
+    petList: IPet[] | undefined;
+    speciesOptions: Array<{ id: string, name: string }> | undefined;
+    speciesInput: string;
+    typeOptions: Array<{ id: string, name: string }> | undefined;
+    typeInput: string;
+}
+
+export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialogState> {
+    speciesPlaceholder = { id: "placeholder", name: "Select a pet..." };
+    typePlaceholder = { id: "placeholder", name: "Select a type..." };
+
+    constructor(props: IFeedPetDialogProps) {
+        super(props);
+        this.state = {
+            petList: [],
+            speciesOptions: [this.speciesPlaceholder],
+            speciesInput: "",
+            typeOptions: [this.typePlaceholder],
+            typeInput: "",
+        };
+    }
 
     async componentDidMount() {
         const petList = await getPetList();
 
-        const speciesList = petList.map(pet => {
-            return { id: pet.species, name: pet.species };
-        });
-        const speciesOptions = this.state.speciesOptions.concat(speciesList);
-        this.setState({ speciesOptions });
+        const speciesOptions = petList.map(pet => {
+                return { id: pet.species, name: pet.species };
+            });
+        speciesOptions.sort((a, b) => a.name.localeCompare(b.name));
+        speciesOptions.unshift(this.speciesPlaceholder);
 
-        const typeList = petList.map(pet => {
-            return { id: pet.type, name: pet.type };
-        });
-        const typeOptions = this.state.typeOptions.concat(typeList);
-        this.setState({ typeOptions });
+        this.setState({ petList, speciesOptions });
     }
 
     render() {
-        const dialogText = "The selected pet will be fed with type-appropriate food either "
-            + "until it turns into a mount or you run out food for the designated type.";
+        const dialogText = "Feed a pet with food it really likes until you run out or it turns into a mount.";
 
-        const speciesPickerOptions = this.state.speciesOptions
+        const { speciesOptions, typeOptions } = this.state;
+
+        const speciesPickerOptions = speciesOptions!
             .map((species) => <Picker.Item label={species.name} key={species.id} value={species.id} color="#34313A"/>);
 
-        const typePickerOptions = this.state.typeOptions
+        const typePickerOptions = typeOptions!
             .map((type) => <Picker.Item label={type.name} key={type.id} value={type.id} color="#34313A"/>);
 
         return (
@@ -53,56 +64,61 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps> {
                 onSubmit={this.onSubmit}
             >
                 <Picker
-                    enabled={this.state.speciesOptions.length > 1}
-                    onValueChange={this.setSpeciesInput}
+                    enabled={speciesOptions && speciesOptions.length > 1}
+                    onValueChange={this.handleSpeciesChange}
                     selectedValue={this.state.speciesInput}
                 >
                     {speciesPickerOptions}
                 </Picker>
                 <Picker
-                    enabled={this.state.typeOptions.length > 1}
-                    onValueChange={this.setTypeInput}
+                    enabled={typeOptions && typeOptions.length > 1}
+                    onValueChange={this.handleTypeChange}
                     selectedValue={this.state.typeInput}
                 >
                     {typePickerOptions}
                 </Picker>
-                <Input
-                    onChangeText={input => this.setState({ usesInput: input })}
-                    autoFocus={true}
-                    keyboardType={"numeric"}
-                    placeholder="Number of uses"
-                />
             </BaseInputDialog>
         );
     }
 
-    private setSpeciesInput = (skillInput: string) => {
-        if (skillInput !== "placeholder") {
-            const newOptions = this.state.speciesOptions.filter(option => option.id !== "placeholder");
-            this.setState({ speciesOptions: newOptions, skillInput });
+    private handleSpeciesChange = (speciesInput: string) => {
+        const newState: any = { speciesInput };
+
+        const pet = this.state.petList!.find(p => p.species === speciesInput);
+        if (!pet) {
+            newState.typeOptions = [this.typePlaceholder];
         } else {
-            this.setState({ skillInput });
+            const newTypeOptions = pet.types.map(type => {
+                return { id: type, name: type };
+            });
+            newTypeOptions.sort((a, b) => a.name.localeCompare(b.name));
+            newTypeOptions.unshift(this.typePlaceholder);
+
+            newState.typeOptions = newTypeOptions;
+            newState.speciesOptions = this.state.speciesOptions!.filter(option => option.id !== "placeholder");
         }
+
+        this.setState(newState);
     }
 
-    private setTypeInput = (skillInput: string) => {
-        if (skillInput !== "placeholder") {
-            const newOptions = this.state.speciesOptions.filter(option => option.id !== "placeholder");
-            this.setState({ speciesOptions: newOptions, skillInput });
-        } else {
-            this.setState({ skillInput });
+    private handleTypeChange = (typeInput: string) => {
+        const newState: any = { typeInput };
+        if (typeInput !== "placeholder") {
+            const newTypeOptions = this.state.typeOptions!.filter(option => option.id !== "placeholder");
+            newState.typeOptions = newTypeOptions;
         }
+        this.setState(newState);
     }
 
     private onSubmit = async () => {
         const speciesInput = this.state.speciesInput;
         if (!speciesInput || speciesInput === "placeholder") {
-            return Alert.alert("No skill selected");
+            return Alert.alert("No pet selected");
         }
 
         const typeInput = this.state.typeInput;
         if (!typeInput || typeInput === "placeholder") {
-            return Alert.alert("No skill selected");
+            return Alert.alert("No type selected");
         }
 
         Alert.alert(`Feeding ${speciesInput}`, await feedPet(speciesInput, typeInput));
