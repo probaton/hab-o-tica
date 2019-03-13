@@ -1,29 +1,5 @@
 import { callHabApi } from "../requests/HabiticaRequest";
-import { IFood } from "../userData/IHabiticaData";
-
-export interface IPet {
-    species: string;
-    types: string[];
-}
-
-export function parsePets(rawPets: {}): IPet[] {
-    const petList: IPet[] = [];
-
-    for (const rawPet of Object.keys(rawPets)) {
-        const pet = parseRawPet(rawPet);
-        const lastIndex = petList.findIndex(p => p.species === pet.species);
-        lastIndex > -1
-            ? petList[lastIndex].types.push(pet.types[0])
-            : petList.push(pet);
-    }
-
-    return petList;
-}
-
-function parseRawPet(rawPet: string): IPet {
-    const petValues = rawPet.split("-");
-    return { species: petValues[0], types: [petValues[1]] };
-}
+import { IFood, IHabiticaData } from "../userData/IHabiticaData";
 
 export function feedPet(species: string, petType: string, food: IFood): Promise<any> {
     const likedFoodTypes = mapLikedFoodTypes(petType);
