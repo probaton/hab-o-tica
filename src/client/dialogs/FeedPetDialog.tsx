@@ -4,13 +4,16 @@ import { Alert, Picker } from "react-native";
 
 import { BaseInputDialog } from "./BaseInputDialog";
 
-import { feedPet, getPetList, IPet } from "../../items/feedPet";
+import { feedPet, IPet, parsePets } from "../../items/feedPet";
+import { IHabiticaData } from "../../userData/IHabiticaData";
+import { getUserData } from "../../userData/userData";
 
 interface IFeedPetDialogProps {
     close: () => void;
 }
 
 interface IFeedPetDialogState {
+    userData: Promise<IHabiticaData>;
     petList: IPet[] | undefined;
     speciesOptions: Array<{ id: string, name: string }> | undefined;
     speciesInput: string;
@@ -25,6 +28,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
     constructor(props: IFeedPetDialogProps) {
         super(props);
         this.state = {
+            userData: getUserData(),
             petList: [],
             speciesOptions: [this.speciesPlaceholder],
             speciesInput: "",
@@ -34,7 +38,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
     }
 
     async componentDidMount() {
-        const petList = await getPetList();
+        const petList = parsePets((await this.state.userData).items.pets);
 
         const speciesOptions = petList.map(pet => {
                 return { id: pet.species, name: pet.species };
@@ -121,7 +125,8 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
             return Alert.alert("No type selected");
         }
 
-        Alert.alert(`Feeding ${speciesInput}`, await feedPet(speciesInput, typeInput));
+        const food = (await this.state.userData).items.food;
+        Alert.alert(`Feeding ${speciesInput}`, await feedPet(speciesInput, typeInput, food));
         this.props.close();
     }
 }
