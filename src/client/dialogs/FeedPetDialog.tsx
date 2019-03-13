@@ -4,7 +4,8 @@ import { Alert, Picker } from "react-native";
 
 import { BaseInputDialog } from "./BaseInputDialog";
 
-import { feedPet, IPet, parsePets } from "../../items/feedPet";
+import { feedPet } from "../../items/feedPet";
+import { IPet, PetParser } from "../../items/PetParser";
 import { IHabiticaData } from "../../userData/IHabiticaData";
 import { getUserData } from "../../userData/userData";
 
@@ -38,7 +39,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
     }
 
     async componentDidMount() {
-        const petList = parsePets((await this.state.userData).items.pets);
+        const petList = new PetParser(await this.state.userData).parsePets();
 
         const speciesOptions = petList.map(pet => {
                 return { id: pet.species, name: pet.species };
@@ -92,11 +93,17 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
         if (!pet) {
             newState.typeOptions = [this.typePlaceholder];
         } else {
-            const newTypeOptions = pet.types.map(type => {
+            let newTypeOptions;
+
+            const selectedPetTypes = pet.types.map(type => {
                 return { id: type, name: type };
             });
-            newTypeOptions.sort((a, b) => a.name.localeCompare(b.name));
-            newTypeOptions.unshift(this.typePlaceholder);
+            if (selectedPetTypes.length === 1) {
+                newTypeOptions = selectedPetTypes;
+            } else {
+                newTypeOptions = selectedPetTypes.sort((a, b) => a.name.localeCompare(b.name));
+                newTypeOptions.unshift(this.typePlaceholder);
+            }
 
             newState.typeOptions = newTypeOptions;
             newState.speciesOptions = this.state.speciesOptions!.filter(option => option.id !== "placeholder");
