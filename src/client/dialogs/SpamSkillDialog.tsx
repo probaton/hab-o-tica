@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import { Alert, Picker, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { Alert, Picker, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";

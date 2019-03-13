@@ -23,6 +23,7 @@ export interface IHabiticaData {
     lastCron: string;
     items: {
         food: IFood;
+        pets: {};
     };
 }
 

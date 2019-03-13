@@ -1,14 +1,14 @@
 import React from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
+import { FeedPetDialog } from "./dialogs/FeedPetDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
 import { TileButton } from "./TileButton";
-
-import { listItems } from "../items/listItems";
 
 export default class Home extends React.Component {
     state = {
         spamSkillDialogVisible: false,
+        feedPetDialogVisible: false,
     };
 
     render() {
@@ -17,7 +17,7 @@ export default class Home extends React.Component {
                     <View style={styles.column}>
                         <TileButton
                             text="Feed pets"
-                            onPress={this.listPets}
+                            onPress={this.toggleFeedPetDialog}
                         />
                     </View>
 
@@ -28,6 +28,7 @@ export default class Home extends React.Component {
                         />
                     </View>
                     {this.renderSpamSkillDialog()}
+                    {this.renderFeedPetDialog()}
                 </View>
         );
     }
@@ -38,14 +39,18 @@ export default class Home extends React.Component {
             : null;
     }
 
-    private listPets = () => {
-        listItems("pets").then(items => {
-            Alert.alert("Response", JSON.stringify(items));
-        });
-    }
-
     private toggleSpamSkillDialog = () => {
         this.setState({ spamSkillDialogVisible: !this.state.spamSkillDialogVisible });
+    }
+
+    private renderFeedPetDialog() {
+        return this.state.feedPetDialogVisible
+            ? <FeedPetDialog close={this.toggleFeedPetDialog}/>
+            : null;
+    }
+
+    private toggleFeedPetDialog = () => {
+        this.setState({ feedPetDialogVisible: !this.state.feedPetDialogVisible });
     }
 }
 
