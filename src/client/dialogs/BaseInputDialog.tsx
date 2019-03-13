@@ -15,7 +15,7 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
             <Modal
                 animationType="fade"
                 transparent={true}
-                onRequestClose={() => Alert.alert("Modal has been closed.")}
+                onRequestClose={close}
             >
                 <TouchableOpacity
                     style={styles.overlay}
