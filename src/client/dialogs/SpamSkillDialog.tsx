@@ -101,9 +101,11 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
             return Alert.alert("No skill selected");
         }
 
+        this.setState({ loading: true });
         const skill = getSkillById(skillInput);
         Alert.alert(skill.name, await spamSkill(skill.id, +this.state.usesInput));
         setLastSkill(skill.id);
+        this.setState({ loading: false });
         this.props.close();
     }
 
@@ -113,9 +115,11 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
             return Alert.alert("No skill selected");
         }
 
+        this.setState({ loading: true });
         const skill = getSkillById(skillInput);
         Alert.alert(skill.name, await spamSkill(skill.id, -1));
         setLastSkill(skill.id);
+        this.setState({ loading: false });
         this.props.close();
     }
 }
