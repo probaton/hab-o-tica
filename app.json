@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Habitilities",
-    "slug": "habiticandroid",
+    "name": "Habotica",
+    "slug": "habotica",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -10,7 +10,7 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/androidIcon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -22,6 +22,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+        "package": "com.dexx.habotica"
+    },
     "ios": {
       "supportsTablet": true
     }

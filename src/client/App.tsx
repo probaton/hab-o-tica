@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     },
     topBar: {
         backgroundColor: "#2D7F83",
-        maxHeight: 56,
+        maxHeight: 64,
         flex: 1,
     },
     container: {
