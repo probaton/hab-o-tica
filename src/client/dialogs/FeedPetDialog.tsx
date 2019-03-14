@@ -20,6 +20,7 @@ interface IFeedPetDialogState {
     speciesInput: string;
     typeOptions: Array<{ id: string, name: string }> | undefined;
     typeInput: string;
+    loading: boolean;
 }
 
 export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialogState> {
@@ -35,6 +36,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
             speciesInput: "",
             typeOptions: [this.typePlaceholder],
             typeInput: "",
+            loading: true,
         };
     }
 
@@ -47,13 +49,13 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
         speciesOptions.sort((a, b) => a.name.localeCompare(b.name));
         speciesOptions.unshift(this.speciesPlaceholder);
 
-        this.setState({ petList, speciesOptions });
+        this.setState({ petList, speciesOptions, loading: false });
     }
 
     render() {
         const dialogText = "Feed a pet with food it really likes until you run out or it turns into a mount.";
 
-        const { speciesOptions, typeOptions } = this.state;
+        const { speciesOptions, typeOptions, loading } = this.state;
 
         const speciesPickerOptions = speciesOptions!
             .map((species) => <Picker.Item label={species.name} key={species.id} value={species.id} color="#34313A"/>);
@@ -67,6 +69,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
                 dialogText={dialogText}
                 close={this.props.close}
                 onSubmit={this.onSubmit}
+                loading={loading}
             >
                 <Picker
                     enabled={speciesOptions && speciesOptions.length > 1}

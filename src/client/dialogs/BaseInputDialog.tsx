@@ -1,55 +1,76 @@
 import React, { Component } from "react";
-import { Alert, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface IBaseInputDialogProps {
     dialogText: string;
     dialogTitle: string;
     close: () => void;
     onSubmit: () => void;
+    loading?: boolean;
 }
 
 export class BaseInputDialog extends Component<IBaseInputDialogProps> {
     render() {
-        const { dialogTitle, dialogText, close, onSubmit, children } = this.props;
         return (
             <Modal
                 animationType="fade"
                 transparent={true}
-                onRequestClose={close}
+                onRequestClose={this.props.close}
             >
                 <TouchableOpacity
                     style={styles.overlay}
                     activeOpacity={1}
                 >
-                    <View
-                        style={styles.dialog}
-                    >
-
-                        <View style={styles.dialogPadding}>
-                            <Text style={styles.title}>{dialogTitle}</Text>
-                            <Text style={styles.text}>{dialogText}</Text>
-                            {children}
-                        </View>
-
-                        <View style={styles.buttonBar}>
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={close}
-                            >
-                                <Text style={styles.cancelButton}>CANCEL</Text>
-                            </TouchableOpacity>
-                            <View style={styles.buttonDivider}></View>
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={onSubmit}
-                            >
-                                <Text style={styles.submitButton}>SUBMIT</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                    </View>
+                    {this.props.loading
+                        ? this.renderLoadingSpinner()
+                        : this.renderContent()
+                    }
                 </TouchableOpacity>
             </Modal>
+        );
+    }
+
+    renderLoadingSpinner() {
+        return (
+            <View
+                style={styles.spinnerDialog}
+            >
+                <ActivityIndicator
+                    size={Dimensions.get("window").width / 3}
+                    color="#2D7F83"
+                />
+            </View>
+        );
+    }
+
+    renderContent() {
+        const { dialogTitle, dialogText, close, onSubmit, children } = this.props;
+        return (
+            <View
+                style={styles.contentDialog}
+            >
+                <View style={styles.dialogPadding}>
+                    <Text style={styles.title}>{dialogTitle}</Text>
+                    <Text style={styles.text}>{dialogText}</Text>
+                    {children}
+                </View>
+
+                <View style={styles.buttonBar}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={close}
+                    >
+                        <Text style={styles.cancelButton}>CANCEL</Text>
+                    </TouchableOpacity>
+                    <View style={styles.buttonDivider}></View>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={onSubmit}
+                    >
+                        <Text style={styles.submitButton}>SUBMIT</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         );
     }
 }
@@ -63,7 +84,20 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    dialog: {
+    spinnerDialog: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        width: Dimensions.get("window").width - 60,
+        maxHeight: 300,
+        marginLeft: 30,
+        marginRight: 30,
+        backgroundColor: "#edecee",
+        elevation: 24,
+        minWidth: 280,
+        borderRadius: 5,
+    },
+    contentDialog: {
         marginLeft: 30,
         marginRight: 30,
         backgroundColor: "#edecee",
@@ -79,6 +113,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: "left",
         color: "#34313A",
+        paddingBottom: 8,
     },
     text: {
         color: "#34313A",
