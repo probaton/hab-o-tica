@@ -17,6 +17,7 @@ interface ISpamSkillDialogState {
     skillInput: SkillId | "" | "placeholder";
     usesInput: string;
     skillOptions: Array<{ id: string, name: string }>;
+    loading: boolean;
 }
 
 export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkillDialogState> {
@@ -26,19 +27,23 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
             skillInput: "",
             usesInput: "",
             skillOptions: [{ id: "placeholder", name: "Select a skill..." }],
+            loading: true,
         };
     }
 
     async componentDidMount() {
+        let newState: any;
         const habiticaClass = (await getUserData()).stats.class;
         const lastSkill = await getLastSkill();
         if (lastSkill) {
             const skillOptions = getClassSkills(habiticaClass);
-            this.setState({ skillOptions, skillInput: lastSkill as SkillId });
+            newState = { skillOptions, skillInput: lastSkill as SkillId };
         } else {
             const skillOptions = this.state.skillOptions.concat(getClassSkills(habiticaClass));
-            this.setState({ skillOptions });
+            newState = { skillOptions };
         }
+        newState.loading = false;
+        this.setState(newState);
     }
 
     render() {
@@ -51,6 +56,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
                 dialogText="Select a skill and either keeping casting until you're out of mana or specify how often you want it used."
                 close={this.props.close}
                 onSubmit={this.onSubmit}
+                loading={this.state.loading}
             >
                 <Picker
                     enabled={this.state.skillOptions.length > 1}
