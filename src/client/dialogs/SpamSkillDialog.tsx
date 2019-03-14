@@ -5,7 +5,7 @@ import { Alert, Picker, StyleSheet, Text, TouchableOpacity } from "react-native"
 import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
 
-import { getClassSkills, getSkillById, spamSkill } from "../../skills/useSkill";
+import { getClassSkills, getSkillById, SkillId, spamSkill } from "../../skills/useSkill";
 import { getLastSkill, setLastSkill } from "../../store/PreferenceStore";
 import { getUserData } from "../../userData/userData";
 
@@ -13,19 +13,28 @@ interface ISpamSkillDialogProps {
     close: () => void;
 }
 
-export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
-    state = {
-        skillInput: undefined,
-        usesInput: "",
-        skillOptions: [{ id: "placeholder", name: "Select a skill..." }],
-    };
+interface ISpamSkillDialogState {
+    skillInput: SkillId | "" | "placeholder";
+    usesInput: string;
+    skillOptions: Array<{ id: string, name: string }>;
+}
+
+export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkillDialogState> {
+    constructor(props: ISpamSkillDialogProps) {
+        super(props);
+        this.state = {
+            skillInput: "",
+            usesInput: "",
+            skillOptions: [{ id: "placeholder", name: "Select a skill..." }],
+        };
+    }
 
     async componentDidMount() {
         const habiticaClass = (await getUserData()).stats.class;
         const lastSkill = await getLastSkill();
         if (lastSkill) {
             const skillOptions = getClassSkills(habiticaClass);
-            this.setState({ skillOptions, skillInput: lastSkill });
+            this.setState({ skillOptions, skillInput: lastSkill as SkillId });
         } else {
             const skillOptions = this.state.skillOptions.concat(getClassSkills(habiticaClass));
             this.setState({ skillOptions });
@@ -69,9 +78,9 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps> {
     private setSkillInput = (skillInput: string) => {
         if (skillInput !== "placeholder") {
             const newOptions = this.state.skillOptions.filter(option => option.id !== "placeholder");
-            this.setState({ skillOptions: newOptions, skillInput });
+            this.setState({ skillOptions: newOptions, skillInput: skillInput as SkillId });
         } else {
-            this.setState({ skillInput });
+            this.setState({ skillInput: skillInput as SkillId });
         }
     }
 
