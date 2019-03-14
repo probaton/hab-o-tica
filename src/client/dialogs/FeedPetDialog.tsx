@@ -136,7 +136,9 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
         }
 
         const food = (await this.state.userData).items.food;
+        this.setState({ loading: true });
         Alert.alert(`Feeding ${speciesInput}`, await feedPet(speciesInput, typeInput, food));
+        this.setState({ loading: false });
         this.props.close();
     }
 }
