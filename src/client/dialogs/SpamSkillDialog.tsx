@@ -53,7 +53,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
         return (
             <BaseInputDialog
                 dialogTitle="Use Skill"
-                dialogText="Select a skill and either keeping casting until you're out of mana or specify how often you want it used."
+                dialogText="Use a skill on the most beneficial task a set number of times or until you're out of mana."
                 close={this.props.close}
                 onSubmit={this.onSubmit}
                 loading={this.state.loading}

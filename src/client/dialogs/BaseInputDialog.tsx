@@ -11,6 +11,7 @@ interface IBaseInputDialogProps {
 
 export class BaseInputDialog extends Component<IBaseInputDialogProps> {
     render() {
+        const { dialogTitle, close, onSubmit, loading } = this.props;
         return (
             <Modal
                 animationType="fade"
@@ -21,10 +22,34 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
                     style={styles.overlay}
                     activeOpacity={1}
                 >
-                    {this.props.loading
-                        ? this.renderLoadingSpinner()
-                        : this.renderContent()
-                    }
+                    <View
+                        style={styles.dialog}
+                    >
+                        <View style={styles.dialogPadding}>
+                            <Text style={styles.title}>{dialogTitle}</Text>
+                            {this.props.loading
+                                ? this.renderLoadingSpinner()
+                                : this.renderContent()
+                            }
+                        </View>
+                        <View style={styles.buttonBar}>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={close}
+                                disabled={loading}
+                            >
+                                <Text style={styles.cancelButton}>CANCEL</Text>
+                            </TouchableOpacity>
+                            <View style={styles.buttonDivider}></View>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={onSubmit}
+                                disabled={loading}
+                            >
+                                <Text style={styles.submitButton}>SUBMIT</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </TouchableOpacity>
             </Modal>
         );
@@ -32,45 +57,21 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
 
     renderLoadingSpinner() {
         return (
-            <View
-                style={styles.spinnerDialog}
-            >
-                <ActivityIndicator
-                    size={Dimensions.get("window").width / 3}
-                    color="#2D7F83"
-                />
-            </View>
+            <ActivityIndicator
+                size={Dimensions.get("window").width / 4}
+                color="#2D7F83"
+                style={styles.spinner}
+            />
         );
     }
 
     renderContent() {
-        const { dialogTitle, dialogText, close, onSubmit, children } = this.props;
+        const { dialogText, children } = this.props;
         return (
-            <View
-                style={styles.contentDialog}
-            >
-                <View style={styles.dialogPadding}>
-                    <Text style={styles.title}>{dialogTitle}</Text>
-                    <Text style={styles.text}>{dialogText}</Text>
-                    {children}
-                </View>
-
-                <View style={styles.buttonBar}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={close}
-                    >
-                        <Text style={styles.cancelButton}>CANCEL</Text>
-                    </TouchableOpacity>
-                    <View style={styles.buttonDivider}></View>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={onSubmit}
-                    >
-                        <Text style={styles.submitButton}>SUBMIT</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+            <>
+                <Text style={styles.text}>{dialogText}</Text>
+                {children}
+            </>
         );
     }
 }
@@ -84,20 +85,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-    spinnerDialog: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        width: Dimensions.get("window").width - 60,
-        maxHeight: 300,
-        marginLeft: 30,
-        marginRight: 30,
-        backgroundColor: "#edecee",
-        elevation: 24,
-        minWidth: 280,
-        borderRadius: 5,
-    },
-    contentDialog: {
+    dialog: {
         marginLeft: 30,
         marginRight: 30,
         backgroundColor: "#edecee",
@@ -107,6 +95,7 @@ const styles = StyleSheet.create({
     },
     dialogPadding: {
         padding: 24,
+        width: Dimensions.get("window").width - 60,
     },
     title: {
         fontWeight: "bold",
@@ -117,6 +106,9 @@ const styles = StyleSheet.create({
     },
     text: {
         color: "#34313A",
+    },
+    spinner: {
+        marginTop: 15,
     },
     buttonBar: {
         flex: 1,
