@@ -4,8 +4,7 @@ import { Alert, Picker } from "react-native";
 
 import { BaseInputDialog } from "./BaseInputDialog";
 
-import { feedPet } from "../../items/feedPet";
-import { IPet, PetParser } from "../../items/PetParser";
+import { PetFeeder } from "../../items/PetFeeder";
 import { IHabiticaData } from "../../userData/IHabiticaData";
 import { getUserData } from "../../userData/userData";
 
@@ -15,7 +14,7 @@ interface IFeedPetDialogProps {
 
 interface IFeedPetDialogState {
     userData: Promise<IHabiticaData>;
-    petList: IPet[] | undefined;
+    feeder: PetFeeder | undefined;
     speciesOptions: Array<{ id: string, name: string }> | undefined;
     speciesInput: string;
     typeOptions: Array<{ id: string, name: string }> | undefined;
@@ -31,7 +30,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
         super(props);
         this.state = {
             userData: getUserData(),
-            petList: [],
+            feeder: undefined,
             speciesOptions: [this.speciesPlaceholder],
             speciesInput: "",
             typeOptions: [this.typePlaceholder],
@@ -41,15 +40,15 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
     }
 
     async componentDidMount() {
-        const petList = new PetParser(await this.state.userData).parsePets();
+        const feeder = new PetFeeder(await this.state.userData);
 
-        const speciesOptions = petList.map(pet => {
-                return { id: pet.species, name: pet.species };
+        const speciesOptions = feeder.petList.map(pet => {
+                return { id: pet.species, name: pet.displayName };
             });
         speciesOptions.sort((a, b) => a.name.localeCompare(b.name));
         speciesOptions.unshift(this.speciesPlaceholder);
 
-        this.setState({ petList, speciesOptions, loading: false });
+        this.setState({ feeder, speciesOptions, loading: false });
     }
 
     render() {
@@ -92,7 +91,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
     private handleSpeciesChange = (speciesInput: string) => {
         const newState: any = { speciesInput };
 
-        const pet = this.state.petList!.find(p => p.species === speciesInput);
+        const pet = this.state.feeder!.petList.find(p => p.species === speciesInput);
         if (!pet) {
             newState.typeOptions = [this.typePlaceholder];
         } else {
@@ -137,7 +136,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
 
         const food = (await this.state.userData).items.food;
         this.setState({ loading: true });
-        Alert.alert(`Feeding ${speciesInput}`, await feedPet(speciesInput, typeInput, food));
+        Alert.alert(await this.state.feeder!.feedPet(speciesInput, typeInput));
         this.setState({ loading: false });
         this.props.close();
     }
