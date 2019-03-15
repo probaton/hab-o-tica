@@ -16,7 +16,7 @@ export default class Home extends React.Component {
                 <View style={styles.container}>
                     <View style={styles.column}>
                         <TileButton
-                            text="Feed pets"
+                            text="Feed Pet"
                             onPress={this.toggleFeedPetDialog}
                         />
                     </View>

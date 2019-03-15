@@ -59,11 +59,11 @@ export default class LogoutIcon extends React.Component<ILogoutIconProps> {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 13,
+        marginTop: 44,
         position: "absolute",
         right: 0,
     },
     logout: {
-        height: 30,
+        height: 36,
     },
 });
