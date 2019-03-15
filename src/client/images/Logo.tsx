@@ -17,9 +17,11 @@ export default class Logo extends React.Component {
 
 const styles = StyleSheet.create({
     logo: {
-        marginTop: 7,
+        marginTop: 24,
         flex: 1,
         height: undefined,
         width: undefined,
+        marginLeft: 60,
+        marginRight: 60,
     },
 });

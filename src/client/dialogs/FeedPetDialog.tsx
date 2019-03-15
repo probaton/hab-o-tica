@@ -53,7 +53,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
     }
 
     render() {
-        const dialogText = "Feed a pet with food it really likes until you run out or it turns into a mount.";
+        const dialogText = "Feed a pet with food it really likes until you run out or it grows into a mount.";
 
         const { speciesOptions, typeOptions, loading } = this.state;
 

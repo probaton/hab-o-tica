@@ -1,5 +1,5 @@
 import { callHabApi } from "../requests/HabiticaRequest";
-import { IFood, IHabiticaData } from "../userData/IHabiticaData";
+import { IFood } from "../userData/IHabiticaData";
 
 export function feedPet(species: string, petType: string, food: IFood): Promise<any> {
     const likedFoodTypes = mapLikedFoodTypes(petType);
@@ -11,7 +11,7 @@ export function feedPet(species: string, petType: string, food: IFood): Promise<
             const servingType = servings[i];
             await callFeedApi(species, petType, servingType!).catch(e => {
                 resolve(e.message === "You already have that mount. Try feeding another pet."
-                    ? `${species} grew into a mount after ${i} feeding${s(i)}`
+                    ? `Congratulations! Your ${species} grew into a mount after ${i} feeding${s(i)}`
                     : `Feeding failed after ${i} serving${s(i)}: \n${e.message}`);
             });
             i++;
