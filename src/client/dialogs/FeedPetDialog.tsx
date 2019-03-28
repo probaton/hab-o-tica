@@ -52,7 +52,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
     render() {
         const dialogText = "Feed a pet with food it really likes until you run out or it grows into a mount.";
 
-        const { speciesOptions, typeOptions, loading } = this.state;
+        const { speciesOptions, typeOptions, loading, speciesInput, typeInput } = this.state;
 
         const speciesPickerOptions = speciesOptions!
             .map((species) => <Picker.Item label={species.name} key={species.id} value={species.id} color="#34313A"/>);
@@ -71,14 +71,14 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
                 <Picker
                     enabled={speciesOptions && speciesOptions.length > 1}
                     onValueChange={this.handleSpeciesChange}
-                    selectedValue={this.state.speciesInput}
+                    selectedValue={speciesInput}
                 >
                     {speciesPickerOptions}
                 </Picker>
                 <Picker
                     enabled={typeOptions && typeOptions.length > 1}
                     onValueChange={this.handleTypeChange}
-                    selectedValue={this.state.typeInput}
+                    selectedValue={typeInput}
                 >
                     {typePickerOptions}
                 </Picker>
