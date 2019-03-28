@@ -6,7 +6,7 @@ import { Authenticate } from "./Authenticate";
 import { getVerifiedCredentials } from "../store/CredentialStore";
 import Home from "./Home";
 import Logo from "./images/Logo";
-import LogoutIcon from "./images/LogoutIcon";
+import HamburgerButton from "./menus/HamburgerButton";
 
 export default class App extends React.Component {
     state = {
@@ -22,7 +22,7 @@ export default class App extends React.Component {
             <View style={styles.body}>
                 <View style={styles.topBar}>
                     <Logo/>
-                    {this.renderLogoutIcon()}
+                    {this.renderHamburgerButton()}
                 </View>
                 {this.renderContent()}
             </View>
@@ -48,11 +48,9 @@ export default class App extends React.Component {
         this.setState({ view });
     }
 
-    private renderLogoutIcon() {
+    private renderHamburgerButton() {
         return this.state.view === "home"
-            ?   <LogoutIcon
-                    onLogout={this.setViewState}
-                />
+            ? <HamburgerButton/>
             : null;
     }
 
