@@ -23,7 +23,8 @@
       "**/*"
     ],
     "android": {
-        "package": "com.dexx.habotica"
+        "package": "com.dexx.habotica",
+        "permissions": []
     },
     "ios": {
       "supportsTablet": true

@@ -80,7 +80,7 @@ export class Authenticate extends Component<IAuthenticateProps> {
 
     private onSubmit = async () => {
         const { userInput, tokenInput } = this.state.credentials;
-        verifyCredentialsAndReturnUserName({ userId: userInput, apiToken: tokenInput })
+        verifyCredentialsAndReturnUserName({ userId: userInput.trim(), apiToken: tokenInput.trim() })
             .then(userName => {
                 if (userName === "Invalid credentials") {
                     Alert.alert("Oops", "There doesn't seem to be an account with those credentials. "

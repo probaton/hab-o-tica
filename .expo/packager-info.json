@@ -3,7 +3,7 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerNgrokUrl": "https://x3-u5v.probaton.habotica.exp.direct",
+  "packagerNgrokUrl": "https://packager.x3-u5v.probaton.habotica.exp.direct",
+  "ngrokPid": 28432
 }
