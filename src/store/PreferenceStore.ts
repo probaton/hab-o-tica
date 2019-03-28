@@ -7,6 +7,7 @@ export function setLastSkill(skill: SkillId): Promise<boolean> {
     });
 }
 
-export function getLastSkill(): Promise<string | null> {
-    return AsyncStorage.getItem("lastSkill");
+export async function getLastSkill(): Promise<SkillId | undefined> {
+    const result = await AsyncStorage.getItem("lastSkill");
+    return result as SkillId | undefined;
 }

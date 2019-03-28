@@ -7,9 +7,10 @@ import { BaseInputDialog } from "./BaseInputDialog";
 
 import { getClassSkills, getSkillById, SkillId, spamSkill } from "../../skills/useSkill";
 import { getLastSkill, setLastSkill } from "../../store/PreferenceStore";
-import { getUserData } from "../../userData/userData";
+import { IHabiticaData } from "../../userData/IHabiticaData";
 
 interface ISpamSkillDialogProps {
+    userData: Promise<IHabiticaData>;
     close: () => void;
 }
 
@@ -33,11 +34,11 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
 
     async componentDidMount() {
         let newState: any;
-        const habiticaClass = (await getUserData()).stats.class;
+        const habiticaClass = (await this.props.userData).stats.class;
         const lastSkill = await getLastSkill();
         if (lastSkill) {
             const skillOptions = getClassSkills(habiticaClass);
-            newState = { skillOptions, skillInput: lastSkill as SkillId };
+            newState = { skillOptions, skillInput: lastSkill };
         } else {
             const skillOptions = this.state.skillOptions.concat(getClassSkills(habiticaClass));
             newState = { skillOptions };
@@ -81,12 +82,12 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
         );
     }
 
-    private setSkillInput = (skillInput: string) => {
+    private setSkillInput = (skillInput: SkillId | "placeholder") => {
         if (skillInput !== "placeholder") {
             const newOptions = this.state.skillOptions.filter(option => option.id !== "placeholder");
-            this.setState({ skillOptions: newOptions, skillInput: skillInput as SkillId });
+            this.setState({ skillOptions: newOptions, skillInput });
         } else {
-            this.setState({ skillInput: skillInput as SkillId });
+            this.setState({ skillInput });
         }
     }
 

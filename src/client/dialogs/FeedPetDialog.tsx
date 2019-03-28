@@ -6,14 +6,13 @@ import { BaseInputDialog } from "./BaseInputDialog";
 
 import { PetFeeder } from "../../items/PetFeeder";
 import { IHabiticaData } from "../../userData/IHabiticaData";
-import { getUserData } from "../../userData/userData";
 
 interface IFeedPetDialogProps {
+    userData: Promise<IHabiticaData>;
     close: () => void;
 }
 
 interface IFeedPetDialogState {
-    userData: Promise<IHabiticaData>;
     feeder: PetFeeder | undefined;
     speciesOptions: Array<{ id: string, name: string }> | undefined;
     speciesInput: string;
@@ -29,7 +28,6 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
     constructor(props: IFeedPetDialogProps) {
         super(props);
         this.state = {
-            userData: getUserData(),
             feeder: undefined,
             speciesOptions: [this.speciesPlaceholder],
             speciesInput: "",
@@ -40,7 +38,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
     }
 
     async componentDidMount() {
-        const feeder = new PetFeeder(await this.state.userData);
+        const feeder = new PetFeeder(await this.props.userData);
 
         const speciesOptions = feeder.petList.map(pet => {
                 return { id: pet.species, name: pet.displayName };
@@ -134,7 +132,6 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
             return Alert.alert("No type selected");
         }
 
-        const food = (await this.state.userData).items.food;
         this.setState({ loading: true });
         Alert.alert(await this.state.feeder!.feedPet(speciesInput, typeInput));
         this.setState({ loading: false });
