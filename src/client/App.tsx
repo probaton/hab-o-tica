@@ -2,11 +2,11 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { Authenticate } from "./Authenticate";
-
-import { getVerifiedCredentials } from "../store/CredentialStore";
 import Home from "./Home";
 import Logo from "./images/Logo";
 import HamburgerButton from "./menus/HamburgerButton";
+
+import { getVerifiedCredentials } from "../store/CredentialStore";
 
 export default class App extends React.Component {
     state = {
@@ -50,7 +50,7 @@ export default class App extends React.Component {
 
     private renderHamburgerButton() {
         return this.state.view === "home"
-            ? <HamburgerButton/>
+            ? <HamburgerButton onLogout={this.setViewState}/>
             : null;
     }
 
