@@ -14,14 +14,11 @@ export default class HamburgerButton extends React.Component<any, IHamburgerButt
             menuVisible: false,
         };
     }
+
     render() {
         return (
-            <View
-                style={styles.container}
-            >
-                <TouchableNativeFeedback
-                    onPress={this.toggleMenu}
-                >
+            <View style={styles.container}>
+                <TouchableNativeFeedback onPress={this.toggleMenu}>
                     <View>
                         <Hamburger/>
                     </View>
