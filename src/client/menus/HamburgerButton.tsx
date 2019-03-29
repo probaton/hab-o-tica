@@ -3,11 +3,15 @@ import { StyleSheet, TouchableNativeFeedback, View } from "react-native";
 import Hamburger from "../images/Hamburger";
 import HamburgerMenu from "./HamburgerMenu";
 
+interface IHamburgerButtonProps {
+    onLogout: () => void;
+}
+
 interface IHamburgerButtonState {
     menuVisible: boolean;
 }
 
-export default class HamburgerButton extends React.Component<any, IHamburgerButtonState> {
+export default class HamburgerButton extends React.Component<IHamburgerButtonProps, IHamburgerButtonState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -30,7 +34,7 @@ export default class HamburgerButton extends React.Component<any, IHamburgerButt
 
     private renderMenu() {
         return this.state.menuVisible
-            ? <HamburgerMenu close={this.toggleMenu}/>
+            ? <HamburgerMenu onLogout = {this.props.onLogout} close={this.toggleMenu}/>
             : null;
     }
 
