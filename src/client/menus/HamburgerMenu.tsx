@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Modal, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface IHamburgerMenuProps {
     close: () => void;
@@ -7,6 +7,8 @@ interface IHamburgerMenuProps {
 
 export default class HamburgerMenu extends React.Component<IHamburgerMenuProps> {
     render() {
+        const adjustedStyle = StyleSheet.flatten([styles.dialog, { top: 100 - StatusBar.currentHeight! }]);
+
         return (
             <Modal
                 animationType="fade"
@@ -18,9 +20,7 @@ export default class HamburgerMenu extends React.Component<IHamburgerMenuProps> 
                     activeOpacity={1}
                     onPress={this.props.close}
                 >
-                    <View
-                        style={styles.dialog}
-                    >
+                    <View style={adjustedStyle}>
                         <View style={styles.dialogPadding}>
                             <Text style={styles.text}>Yay!</Text>
                         </View>
@@ -33,24 +33,18 @@ export default class HamburgerMenu extends React.Component<IHamburgerMenuProps> 
 
 const styles = StyleSheet.create({
     overlay: {
-        flex: 1,
         width: "100%",
         height: "100%",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
     },
     dialog: {
-        marginLeft: 30,
-        marginRight: 30,
+        position: "absolute",
+        right: 6,
         backgroundColor: "#edecee",
         elevation: 24,
-        minWidth: 280,
         borderRadius: 5,
     },
     dialogPadding: {
         padding: 24,
-        width: Dimensions.get("window").width - 60,
     },
     text: {
         color: "#34313A",
