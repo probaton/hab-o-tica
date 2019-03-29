@@ -9,7 +9,7 @@ interface IInputProps {
     dark?: boolean;
     placeholder?: string;
     onSubmitEditing?: () => void;
-    setNextInput?: (input: any) => void;
+    setNextInput?: React.RefObject<TextInput>;
     returnKeyType?: ReturnKeyTypeOptions;
 }
 

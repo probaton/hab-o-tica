@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import { Alert, NativeComponent, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 import { Input } from "./controls/Input";
 
@@ -10,15 +10,22 @@ interface IAuthenticateProps {
     onValidCredentials: () => {};
 }
 
-export class Authenticate extends Component<IAuthenticateProps> {
-    tokenInput: NativeComponent | undefined = undefined;
+interface IAuthenticateState {
+    credentials: { userInput: string, tokenInput: string };
+}
 
-    state = {
-        credentials: {
-            userInput: "",
-            tokenInput: "",
-        },
-    };
+export class Authenticate extends Component<IAuthenticateProps, IAuthenticateState> {
+    private tokenInput = React.createRef<TextInput>();
+
+    constructor(props: IAuthenticateProps) {
+        super(props);
+        this.state = {
+            credentials: {
+                userInput: "",
+                tokenInput: "",
+            },
+        };
+    }
 
     render() {
         const dialogMessage =
@@ -38,7 +45,7 @@ export class Authenticate extends Component<IAuthenticateProps> {
                     keyboardType={"default"}
                     placeholder="User ID"
                     dark={true}
-                    onSubmitEditing={() => { (this.tokenInput as any).focus(); }}
+                    onSubmitEditing={this.focusNext}
                     returnKeyType="next"
                 />
                 <Input
@@ -47,7 +54,7 @@ export class Authenticate extends Component<IAuthenticateProps> {
                     keyboardType={"default"}
                     placeholder="API token"
                     dark={true}
-                    setNextInput={(input) => this.tokenInput = input}
+                    setNextInput={this.tokenInput}
                     returnKeyType="done"
                     onSubmitEditing={this.onSubmit}
                 />
@@ -76,6 +83,13 @@ export class Authenticate extends Component<IAuthenticateProps> {
             state.credentials.userInput = userInput;
             return state;
         });
+    }
+
+    private focusNext = () => {
+        const node = this.tokenInput.current;
+        if (node) {
+            node.focus();
+        }
     }
 
     private onSubmit = async () => {
