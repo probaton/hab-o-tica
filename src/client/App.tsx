@@ -97,10 +97,7 @@ export default class App extends React.Component<any, IAppState> {
     }
 
     private refreshUserData = () => {
-        const now = new Date().getTime();
-        if (now - this.state.userData!.lastUpdate > 180000) {
-            this.setState({ userData: { lastUpdate: now, data: getUserData() } });
-        }
+        this.setState({ userData: { lastUpdate: new Date().getTime(), data: getUserData() } });
     }
 }
 
