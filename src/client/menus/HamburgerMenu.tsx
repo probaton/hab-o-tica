@@ -48,7 +48,7 @@ export default class HamburgerMenu extends React.Component<IHamburgerMenuProps, 
                     <View style={adjustedStyle}>
                         <View style={styles.body}>
                             <HamburgerMenuItem
-                                icon={require("../images/LogoutIcon.png")}
+                                icon={require("../images/RefreshIcon.png")}
                                 caption="Refresh"
                                 onPress={this.refresh}
                             />
