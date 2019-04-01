@@ -53,7 +53,7 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
     }
 
     private openSpamSkillDialog = () => {
-        this.props.refresh();
+        this.refreshUserData();
         this.setState({ openDialog: "spamSkill" });
     }
 
@@ -64,8 +64,14 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
     }
 
     private openFeedPetDialog = () => {
-        this.props.refresh();
+        this.refreshUserData();
         this.setState({ openDialog: "feedPet" });
+    }
+
+    private refreshUserData = async () => {
+        if (new Date().getTime() - this.props.userData.lastUpdate > 180000) {
+            this.props.refresh();
+        }
     }
 
     private closeDialogs = () => {
