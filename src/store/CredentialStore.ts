@@ -9,9 +9,9 @@ export async function getCredentials(): Promise<ICredentials> {
     });
 }
 
-export function setCredentials(userId: string, apiToken: string): Promise<boolean> {
+export function setCredentials(credentials: ICredentials): Promise<boolean> {
     return new Promise<boolean> (resolve => {
-        return AsyncStorage.multiSet([["userId", userId], ["apiToken", apiToken]]).then(() => { resolve(true); });
+        return AsyncStorage.multiSet([["userId", credentials.userId], ["apiToken", credentials.apiToken]]).then(() => { resolve(true); });
     });
 }
 
@@ -27,24 +27,18 @@ export function setVerifiedCredentials(value: boolean): Promise<boolean> {
     });
 }
 
-export async function verifyCredentialsAndReturnUserName(credentials: ICredentials): Promise<string> {
-    await setCredentials(credentials.userId, credentials.apiToken);
-    return new Promise<string> (resolve => {
-        _getUserName()
-            .then(async userName => {
-                if (userName === "Invalid credentials") {
-                    await setVerifiedCredentials(false);
-                    resolve(userName);
-                } else {
-                    await setVerifiedCredentials(true);
-                    resolve(userName);
-                }
-            });
+export async function verifyCredentialsAndReturnUserData(credentials: ICredentials): Promise<IHabiticaData> {
+    return new Promise<IHabiticaData> (async (resolve) => {
+        const userData = await _getUserData(credentials);
+        if (userData) {
+            await setVerifiedCredentials(true);
+            await setCredentials(credentials);
+        }
+        resolve(userData);
     });
 }
 
-async function _getUserName(): Promise<string> {
-    const credentials = await getCredentials();
+async function _getUserData(credentials: ICredentials): Promise<IHabiticaData | undefined> {
     const options = {
         method: "GET",
         headers: {
@@ -55,9 +49,9 @@ async function _getUserName(): Promise<string> {
 
     return fetch("https://habitica.com/export/userData.json", options).then(async response => {
         if (response.ok) {
-            return (await response.json() as IHabiticaData).auth.local.username;
+            return await response.json() as IHabiticaData;
         }
-        return("Invalid credentials");
+        return(undefined);
     });
 }
 

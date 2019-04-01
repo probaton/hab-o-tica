@@ -1,20 +1,21 @@
 import React from "react";
 import { Component } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 import { Input } from "./controls/Input";
 
-import { verifyCredentialsAndReturnUserName } from "../store/CredentialStore";
+import { verifyCredentialsAndReturnUserData } from "../store/CredentialStore";
+import { IHabiticaData } from "../userData/IHabiticaData";
 
 interface IAuthenticateProps {
-    onValidCredentials: () => {};
+    onValidCredentials: (userData: Promise<IHabiticaData>) => void;
 }
 
 interface IAuthenticateState {
     credentials: { userInput: string, tokenInput: string };
 }
 
-export class Authenticate extends Component<IAuthenticateProps, IAuthenticateState> {
+export default class Authenticate extends Component<IAuthenticateProps, IAuthenticateState> {
     private tokenInput = React.createRef<TextInput>();
 
     constructor(props: IAuthenticateProps) {
@@ -94,16 +95,8 @@ export class Authenticate extends Component<IAuthenticateProps, IAuthenticateSta
 
     private onSubmit = async () => {
         const { userInput, tokenInput } = this.state.credentials;
-        verifyCredentialsAndReturnUserName({ userId: userInput.trim(), apiToken: tokenInput.trim() })
-            .then(userName => {
-                if (userName === "Invalid credentials") {
-                    Alert.alert("Oops", "There doesn't seem to be an account with those credentials. "
-                        + "Are you sure you pasted the correct values to the correct fields?");
-                } else {
-                    Alert.alert(`Welcome, ${userName}!`);
-                    this.props.onValidCredentials();
-                }
-            });
+        const userData = verifyCredentialsAndReturnUserData({ userId: userInput.trim(), apiToken: tokenInput.trim() });
+        this.props.onValidCredentials(userData);
     }
 }
 

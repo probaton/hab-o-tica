@@ -7,6 +7,7 @@ import { HamburgerMenuItem } from "./HamburgerMenuItem";
 import { setCredentials, setVerifiedCredentials } from "../../store/CredentialStore";
 
 interface IHamburgerMenuProps {
+    refresh: () => void;
     onLogout: () => void;
     close: () => void;
 }
@@ -48,6 +49,11 @@ export default class HamburgerMenu extends React.Component<IHamburgerMenuProps, 
                         <View style={styles.body}>
                             <HamburgerMenuItem
                                 icon={require("../images/LogoutIcon.png")}
+                                caption="Refresh"
+                                onPress={this.refresh}
+                            />
+                            <HamburgerMenuItem
+                                icon={require("../images/LogoutIcon.png")}
                                 caption="Log out"
                                 onPress={this.toggleLogoutConfirmation}
                             />
@@ -59,18 +65,27 @@ export default class HamburgerMenu extends React.Component<IHamburgerMenuProps, 
     }
 
     private renderLogoutConfirmation = () => {
-        return this.state.logoutConfirmationVisible
-            ?   <BaseInputDialog
+        if (this.state.logoutConfirmationVisible) {
+            return (
+                <BaseInputDialog
                     dialogTitle="Logout"
                     dialogText="Are you sure you want to wipe your credentials?"
                     onSubmit={this.logout}
                     close={this.toggleLogoutConfirmation}
                 />
-            : null;
+            );
+        } else {
+            return null;
+        }
+    }
+
+    private refresh = () => {
+        this.props.refresh();
+        this.props.close();
     }
 
     private logout = async () => {
-        await setCredentials("", "");
+        await setCredentials({ userId: "", apiToken: "" });
         await setVerifiedCredentials(false);
         this.props.onLogout();
         this.toggleLogoutConfirmation();
@@ -96,8 +111,8 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     body: {
-        paddingTop: 8,
-        paddingBottom: 8,
+        paddingTop: 4,
+        paddingBottom: 4,
         paddingLeft: 12,
         paddingRight: 12,
     },
