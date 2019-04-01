@@ -4,6 +4,7 @@ import Hamburger from "../images/Hamburger";
 import HamburgerMenu from "./HamburgerMenu";
 
 interface IHamburgerButtonProps {
+    refresh: () => void;
     onLogout: () => void;
 }
 
@@ -33,9 +34,17 @@ export default class HamburgerButton extends React.Component<IHamburgerButtonPro
     }
 
     private renderMenu() {
-        return this.state.menuVisible
-            ? <HamburgerMenu onLogout = {this.props.onLogout} close={this.toggleMenu}/>
-            : null;
+        if (this.state.menuVisible) {
+            return (
+                <HamburgerMenu
+                    onLogout={this.props.onLogout}
+                    refresh={this.props.refresh}
+                    close={this.toggleMenu}
+                />
+            );
+        } else {
+            return null;
+        }
     }
 
     private toggleMenu = () => {
