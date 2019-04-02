@@ -6,6 +6,7 @@ export async function callHabApi(apiSuffix: string, method: "POST" | "GET", body
     const options = {
         method,
         headers: {
+            "x-client": "probaton-habotica",
             "x-api-user": credentials.userId,
             "x-api-key": credentials.apiToken,
         },
