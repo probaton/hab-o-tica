@@ -36,12 +36,14 @@ export class PetFeeder {
 
         return new Promise<string> (async (resolve) => {
             let i = 0;
-            while (i < servings.length) {
+            let run = true;
+            while (i < servings.length && run) {
                 const servingType = servings[i];
                 await this.callFeedApi(species, petType, servingType!).catch(e => {
                     resolve(e.message === "You already have that mount. Try feeding another pet."
                         ? `Congratulations! Your ${this.parseSpeciesDisplayName(species)} grew into a mount after ${i} feeding${this.s(i)}`
                         : `Feeding failed after ${i} serving${this.s(i)}: \n${e.message}`);
+                    run = false;
                 });
                 i++;
             }
