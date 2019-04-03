@@ -75,6 +75,7 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
     }
 
     private closeDialogs = () => {
+        this.props.refresh();
         this.setState({ openDialog: undefined });
     }
 }
