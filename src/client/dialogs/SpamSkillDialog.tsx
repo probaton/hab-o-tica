@@ -104,21 +104,14 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
         if (!Number.isInteger(count) || count < 1) {
             return Alert.alert("Invalid number");
         }
-
-        const skillInput = this.state.skillInput;
-        if (!skillInput || skillInput === "placeholder") {
-            return Alert.alert("No skill selected");
-        }
-
-        this.setState({ loading: true });
-        const skill = getSkillById(skillInput);
-        Alert.alert(skill.name, await spamSkill(skill.id, +this.state.usesInput));
-        setLastSkill(skill.id);
-        this.setState({ loading: false });
-        this.props.close();
+        this.useSkill(count);
     }
 
     private spamUntilOom = async () => {
+        this.useSkill(-1);
+    }
+
+    private async useSkill(count: number) {
         const skillInput = this.state.skillInput;
         if (!skillInput || skillInput === "placeholder") {
             return Alert.alert("No skill selected");
@@ -126,10 +119,8 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
 
         this.setState({ loading: true });
         const skill = getSkillById(skillInput);
-        Alert.alert(skill.name, await spamSkill(skill.id, -1));
+        this.setState({ loading: false, isResolvedMessage: await spamSkill(skill.id, count) });
         setLastSkill(skill.id);
-        this.setState({ loading: false });
-        this.props.close();
     }
 }
 
