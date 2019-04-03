@@ -19,6 +19,7 @@ interface ISpamSkillDialogState {
     usesInput: string;
     skillOptions: Array<{ id: string, name: string }>;
     loading: boolean;
+    isResolvedMessage?: string;
 }
 
 export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkillDialogState> {
@@ -34,7 +35,9 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
 
     async componentDidMount() {
         let newState: any;
-        const habiticaClass = (await this.props.userData).stats.class;
+        const userData = await this.props.userData;
+
+        const habiticaClass = userData.stats.class;
         const lastSkill = await getLastSkill();
         if (lastSkill) {
             const skillOptions = getClassSkills(habiticaClass);
@@ -42,6 +45,10 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
         } else {
             const skillOptions = this.state.skillOptions.concat(getClassSkills(habiticaClass));
             newState = { skillOptions };
+        }
+
+        if (userData.stats.lvl <= 10) {
+            newState.isResolvedMessage = "Your character won't have skills until you reach level 11";
         }
         newState.loading = false;
         this.setState(newState);
@@ -58,6 +65,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
                 close={this.props.close}
                 onSubmit={this.onSubmit}
                 loading={this.state.loading}
+                isResolvedMessage={this.state.isResolvedMessage}
             >
                 <Picker
                     enabled={this.state.skillOptions.length > 1}

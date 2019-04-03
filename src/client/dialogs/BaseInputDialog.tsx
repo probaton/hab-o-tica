@@ -7,11 +7,12 @@ interface IBaseInputDialogProps {
     close: () => void;
     onSubmit: () => void;
     loading?: boolean;
+    isResolvedMessage?: string;
 }
 
 export class BaseInputDialog extends Component<IBaseInputDialogProps> {
     render() {
-        const { dialogTitle, close, onSubmit, loading } = this.props;
+        const { dialogTitle, close, isResolvedMessage } = this.props;
         return (
             <Modal
                 animationType="fade"
@@ -21,6 +22,7 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
                 <TouchableOpacity
                     style={styles.overlay}
                     activeOpacity={1}
+                    onPress={isResolvedMessage ? close : undefined}
                 >
                     <View
                         style={styles.dialog}
@@ -36,18 +38,10 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={close}
-                                disabled={loading}
                             >
-                                <Text style={styles.cancelButton}>CANCEL</Text>
+                                <Text style={styles.buttonText}>{isResolvedMessage ? "OK" : "CANCEL"}</Text>
                             </TouchableOpacity>
-                            <View style={styles.buttonDivider}></View>
-                            <TouchableOpacity
-                                style={styles.button}
-                                onPress={onSubmit}
-                                disabled={loading}
-                            >
-                                <Text style={styles.submitButton}>SUBMIT</Text>
-                            </TouchableOpacity>
+                            {this.renderSubmitButton()}
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -55,7 +49,7 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
         );
     }
 
-    renderLoadingSpinner() {
+    private renderLoadingSpinner() {
         return (
             <ActivityIndicator
                 size={Dimensions.get("window").width / 4}
@@ -65,14 +59,31 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
         );
     }
 
-    renderContent() {
-        const { dialogText, children } = this.props;
+    private renderContent() {
+        const { dialogText, children, isResolvedMessage } = this.props;
         return (
             <>
-                <Text style={styles.text}>{dialogText}</Text>
-                {children}
+                <Text style={styles.text}>{isResolvedMessage || dialogText}</Text>
+                {isResolvedMessage ? null : children}
             </>
         );
+    }
+
+    private renderSubmitButton() {
+        const { onSubmit, loading, isResolvedMessage } = this.props;
+        if (!isResolvedMessage) {
+            return (
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={onSubmit}
+                        disabled={loading}
+                    >
+                        <Text style={styles.buttonText}>SUBMIT</Text>
+                    </TouchableOpacity>
+            );
+        } else {
+            return null;
+        }
     }
 }
 
@@ -118,21 +129,13 @@ const styles = StyleSheet.create({
         paddingTop: 8,
         paddingBottom: 8,
     },
-    buttonDivider: {
-        width: 0,
-    },
     button: {
         paddingRight: 8,
         minWidth: 64,
         height: 36,
         color: "#34313A",
     },
-    cancelButton: {
-        textAlign: "right",
-        color: "#009688",
-        padding: 8,
-    },
-    submitButton: {
+    buttonText: {
         textAlign: "right",
         color: "#009688",
         padding: 8,
