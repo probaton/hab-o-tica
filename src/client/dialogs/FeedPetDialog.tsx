@@ -19,6 +19,7 @@ interface IFeedPetDialogState {
     typeOptions: Array<{ id: string, name: string }> | undefined;
     typeInput: string;
     loading: boolean;
+    isResolvedMessage?: string;
 }
 
 export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialogState> {
@@ -52,7 +53,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
     render() {
         const dialogText = "Feed a pet with food it really likes until you run out or it grows into a mount.";
 
-        const { speciesOptions, typeOptions, loading, speciesInput, typeInput } = this.state;
+        const { speciesOptions, typeOptions, loading, speciesInput, typeInput, isResolvedMessage } = this.state;
 
         const speciesPickerOptions = speciesOptions!
             .map((species) => <Picker.Item label={species.name} key={species.id} value={species.id} color="#34313A"/>);
@@ -67,6 +68,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
                 close={this.props.close}
                 onSubmit={this.onSubmit}
                 loading={loading}
+                isResolvedMessage={isResolvedMessage}
             >
                 <Picker
                     enabled={speciesOptions && speciesOptions.length > 1}
@@ -133,8 +135,9 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
         }
 
         this.setState({ loading: true });
-        Alert.alert(await this.state.feeder!.feedPet(speciesInput, typeInput));
-        this.setState({ loading: false });
-        this.props.close();
+        this.setState({
+            loading: false,
+            isResolvedMessage: await this.state.feeder!.feedPet(speciesInput, typeInput),
+        });
     }
 }
