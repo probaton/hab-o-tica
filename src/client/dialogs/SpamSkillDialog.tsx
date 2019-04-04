@@ -6,7 +6,7 @@ import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
 
 import { getClassSkills, getSkillById, SkillId, spamSkill } from "../../skills/useSkill";
-import { getLastSkill, setLastSkill } from "../../store/PreferenceStore";
+import { getLastUsedSkill, setLastUsedSkill } from "../../store/PreferenceStore";
 import { IHabiticaData } from "../../userData/IHabiticaData";
 
 interface ISpamSkillDialogProps {
@@ -34,23 +34,28 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
     }
 
     async componentDidMount() {
-        let newState: any;
+        const newState = {};
         const userData = await this.props.userData;
 
         const habiticaClass = userData.stats.class;
-        const lastSkill = await getLastSkill();
-        if (lastSkill) {
-            const skillOptions = getClassSkills(habiticaClass);
-            newState = { skillOptions, skillInput: lastSkill };
-        } else {
-            const skillOptions = this.state.skillOptions.concat(getClassSkills(habiticaClass));
-            newState = { skillOptions };
-        }
+        let lastSkill = await getLastUsedSkill();
 
         if (userData.stats.lvl <= 10) {
-            newState.isResolvedMessage = "Your character won't have skills until you reach level 11";
+            Object.assign(newState, { isResolvedMessage: "Your character won't have skills until you reach level 11." });
+            if (lastSkill) {
+                setLastUsedSkill();
+                lastSkill = undefined;
+            }
         }
-        newState.loading = false;
+
+        if (lastSkill) {
+            const skillOptions = getClassSkills(habiticaClass);
+            Object.assign(newState, { skillOptions, skillInput: lastSkill });
+        } else {
+            const skillOptions = this.state.skillOptions.concat(getClassSkills(habiticaClass));
+            Object.assign(newState, { skillOptions });
+        }
+        Object.assign(newState, { loading: false });
         this.setState(newState);
     }
 
@@ -120,7 +125,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
         this.setState({ loading: true });
         const skill = getSkillById(skillInput);
         this.setState({ loading: false, isResolvedMessage: await spamSkill(skill.id, count) });
-        setLastSkill(skill.id);
+        setLastUsedSkill(skill.id);
     }
 }
 
