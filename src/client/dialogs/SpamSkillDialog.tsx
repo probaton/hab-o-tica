@@ -6,8 +6,8 @@ import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
 
 import { getClassSkills, getSkillById, SkillId, spamSkill } from "../../skills/useSkill";
-import { getLastUsedSkill, setLastUsedSkill } from "../../store/PreferenceStore";
-import { IHabiticaData } from "../../userData/IHabiticaData";
+import LastUsedSkillStore from "../../store/LastUsedSkillStore";
+import IHabiticaData from "../../userData/IHabiticaData";
 
 interface ISpamSkillDialogProps {
     userData: Promise<IHabiticaData>;
@@ -15,53 +15,44 @@ interface ISpamSkillDialogProps {
 }
 
 interface ISpamSkillDialogState {
-    skillInput: SkillId | "" | "placeholder";
-    usesInput: string;
+    skillInput?: SkillId | "placeholder";
+    usesInput?: string;
     skillOptions: Array<{ id: string, name: string }>;
-    loading: boolean;
+    doneLoading?: boolean;
     isResolvedMessage?: string;
 }
 
 export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkillDialogState> {
     constructor(props: ISpamSkillDialogProps) {
         super(props);
-        this.state = {
-            skillInput: "",
-            usesInput: "",
-            skillOptions: [{ id: "placeholder", name: "Select a skill..." }],
-            loading: true,
-        };
+        this.state = { skillOptions: [{ id: "placeholder", name: "Select a skill..." }] };
     }
 
     async componentDidMount() {
-        const newState = {};
+        const newState: ISpamSkillDialogState = this.state;
         const userData = await this.props.userData;
 
-        const habiticaClass = userData.stats.class;
-        let lastSkill = await getLastUsedSkill();
-
         if (userData.stats.lvl <= 10) {
-            Object.assign(newState, { isResolvedMessage: "Your character won't have skills until you reach level 11." });
-            if (lastSkill) {
-                setLastUsedSkill();
-                lastSkill = undefined;
+            newState.isResolvedMessage = "Your character won't have skills until you reach level 11.";
+            LastUsedSkillStore.clear();
+        } else {
+            newState.skillInput = await LastUsedSkillStore.get() || "placeholder";
+            const classSkills = getClassSkills(userData.stats.class);
+            if (newState.skillInput === "placeholder") {
+                newState.skillOptions = this.state.skillOptions.concat(classSkills);
+            } else {
+                newState.skillOptions = classSkills;
             }
         }
-
-        if (lastSkill) {
-            const skillOptions = getClassSkills(habiticaClass);
-            Object.assign(newState, { skillOptions, skillInput: lastSkill });
-        } else {
-            const skillOptions = this.state.skillOptions.concat(getClassSkills(habiticaClass));
-            Object.assign(newState, { skillOptions });
-        }
-        Object.assign(newState, { loading: false });
+        newState.doneLoading = true;
         this.setState(newState);
     }
 
     render() {
-        const pickerOptions = this.state.skillOptions
-            .map((skill) => <Picker.Item label={skill.name} key={skill.id} value={skill.id} color="#34313A"/>);
+        const { skillOptions, skillInput, doneLoading } = this.state;
+        const pickerOptions = skillOptions
+            ? skillOptions.map((skill) => <Picker.Item label={skill.name} key={skill.id} value={skill.id} color="#34313A"/>)
+            : [];
 
         return (
             <BaseInputDialog
@@ -69,12 +60,12 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
                 dialogText="Use a skill on the most beneficial task a set number of times or until you're out of mana."
                 close={this.props.close}
                 onSubmit={this.onSubmit}
-                loading={this.state.loading}
+                loading={!doneLoading}
                 isResolvedMessage={this.state.isResolvedMessage}
             >
                 <Picker
-                    enabled={this.state.skillOptions.length > 1}
-                    selectedValue={this.state.skillInput}
+                    enabled={skillOptions && skillOptions.length > 1}
+                    selectedValue={skillInput}
                     onValueChange={this.setSkillInput}
                 >
                     {pickerOptions}
@@ -97,7 +88,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
 
     private setSkillInput = (skillInput: SkillId | "placeholder") => {
         if (skillInput !== "placeholder") {
-            const newOptions = this.state.skillOptions.filter(option => option.id !== "placeholder");
+            const newOptions = this.state.skillOptions!.filter(option => option.id !== "placeholder");
             this.setState({ skillOptions: newOptions, skillInput });
         } else {
             this.setState({ skillInput });
@@ -105,7 +96,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
     }
 
     private onSubmit = async () => {
-        const count = +this.state.usesInput;
+        const count = +this.state.usesInput!;
         if (!Number.isInteger(count) || count < 1) {
             return Alert.alert("Invalid number");
         }
@@ -122,10 +113,10 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
             return Alert.alert("No skill selected");
         }
 
-        this.setState({ loading: true });
+        this.setState({ doneLoading: false });
         const skill = getSkillById(skillInput);
-        this.setState({ loading: false, isResolvedMessage: await spamSkill(skill.id, count) });
-        setLastUsedSkill(skill.id);
+        this.setState({ doneLoading: true, isResolvedMessage: await spamSkill(skill.id, count) });
+        LastUsedSkillStore.set(skill.id);
     }
 }
 

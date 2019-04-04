@@ -5,7 +5,7 @@ import { FeedPetDialog } from "./dialogs/FeedPetDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
 import { TileButton } from "./TileButton";
 
-import { IHabiticaData } from "../userData/IHabiticaData";
+import IHabiticaData from "../userData/IHabiticaData";
 
 interface IHomeProps {
     userData: { lastUpdate: number, data: Promise<IHabiticaData> };

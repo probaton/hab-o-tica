@@ -18,7 +18,7 @@ export async function spamSkill(skillId: SkillId, count = -1): Promise<any> {
     const skill = getSkillById(skillId);
     let habitId = "";
     if (skill.habit !== "none") {
-        const habits = (await getUserData()).tasks.habits.sort((a, b) => a.value - b.value);
+        const habits = (await getUserData()).tasks.habits.sort((a: any, b: any) => a.value - b.value);
         habitId = skill.habit === "lowest" ? habits[0].id : habits[habits.length - 1].id;
     }
 

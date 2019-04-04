@@ -5,7 +5,7 @@ import { Alert, Picker } from "react-native";
 import { BaseInputDialog } from "./BaseInputDialog";
 
 import { PetFeeder } from "../../items/PetFeeder";
-import { IHabiticaData } from "../../userData/IHabiticaData";
+import IHabiticaData from "../../userData/IHabiticaData";
 
 interface IFeedPetDialogProps {
     userData: Promise<IHabiticaData>;

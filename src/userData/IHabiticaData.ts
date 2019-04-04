@@ -1,4 +1,4 @@
-export interface IHabiticaData {
+export default interface IHabiticaData {
     auth: {
         local: {
             username: string;
