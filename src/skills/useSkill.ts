@@ -44,7 +44,7 @@ function s(i: number): "s" | "" {
 
 export type SkillId =
     "fireball" |
-    "mpHeal" |
+    "mpheal" |
     "earth" |
     "frost" |
     "smash" |
@@ -69,7 +69,7 @@ export interface ISkill {
 
 export const skills: ISkill[] = [
     { id: "fireball",           name: "Burst of Flames",    habit: "highest",   class: "wizard" },
-    { id: "mpHeal",             name: "Ethereal Surge",     habit: "none",      class: "wizard" },
+    { id: "mpheal",             name: "Ethereal Surge",     habit: "none",      class: "wizard" },
     { id: "earth",              name: "Earthquake",         habit: "none",      class: "wizard" },
     { id: "frost",              name: "Chilling Frost",     habit: "none",      class: "wizard" },
     { id: "smash",              name: "Brutal Smash",       habit: "lowest",    class: "warrior" },
