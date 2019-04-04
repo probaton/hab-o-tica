@@ -71,18 +71,17 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
 
     private renderSubmitButton() {
         const { onSubmit, loading, isResolvedMessage } = this.props;
-        if (!isResolvedMessage) {
+        if (isResolvedMessage || loading) {
+            return null;
+        } else {
             return (
                     <TouchableOpacity
                         style={styles.button}
                         onPress={onSubmit}
-                        disabled={loading}
                     >
                         <Text style={styles.buttonText}>SUBMIT</Text>
                     </TouchableOpacity>
             );
-        } else {
-            return null;
         }
     }
 }
