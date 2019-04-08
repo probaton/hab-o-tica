@@ -1,5 +1,5 @@
 import { callHabApi } from "../requests/HabiticaRequest";
-import { IHabiticaData } from "../userData/IHabiticaData";
+import IHabiticaData from "../userData/IHabiticaData";
 import { IFood } from "../userData/IHabiticaData";
 
 export interface IPet {
@@ -33,6 +33,10 @@ export class PetFeeder {
     feedPet(species: string, petType: string): Promise<string> {
         const likedFoodTypes = this.mapLikedFoodTypes(petType);
         const servings = this.mapServings(likedFoodTypes);
+
+        if (servings.length === 0) {
+            return new Promise<string>(resolve => { resolve(`You don't have any food suitable for ${petType} pets.`); });
+        }
 
         return new Promise<string> (async (resolve) => {
             let i = 0;

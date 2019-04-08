@@ -7,7 +7,7 @@ import Logo from "./images/Logo";
 import HamburgerButton from "./menus/HamburgerButton";
 
 import { getVerifiedCredentials } from "../store/CredentialStore";
-import { IHabiticaData } from "../userData/IHabiticaData";
+import IHabiticaData from "../userData/IHabiticaData";
 import { getUserData } from "../userData/userData";
 
 interface IAppState {

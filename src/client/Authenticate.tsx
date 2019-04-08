@@ -5,7 +5,7 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-nativ
 import { Input } from "./controls/Input";
 
 import { verifyCredentialsAndReturnUserData } from "../store/CredentialStore";
-import { IHabiticaData } from "../userData/IHabiticaData";
+import IHabiticaData from "../userData/IHabiticaData";
 
 interface IAuthenticateProps {
     onValidCredentials: (userData: Promise<IHabiticaData>) => void;

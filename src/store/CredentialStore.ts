@@ -1,5 +1,5 @@
 import { AsyncStorage } from "react-native";
-import { IHabiticaData } from "../userData/IHabiticaData";
+import IHabiticaData from "../userData/IHabiticaData";
 
 export async function getCredentials(): Promise<ICredentials> {
     return new Promise<ICredentials> (resolve => {
