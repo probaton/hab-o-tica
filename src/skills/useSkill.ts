@@ -27,9 +27,13 @@ export async function spamSkill(skillId: SkillId, count = -1): Promise<any> {
         let run = true;
         while ((count === -1 || i < count) && run) {
             await callSkillApi(skillId, habitId).catch(e => {
-                resolve(e.message === "Not enough mana."
-                ? `Cast ${skill.name} ${i} time${s(i)} before running out of mana`
-                : `${skill.name} failed after ${i} cast${s(i)}: \n${e.message}`);
+                let customMessage = "";
+                if (e.message === "Not enough mana.") {
+                    customMessage = i > 0
+                        ? `Cast ${skill.name} ${i} time${s(i)} before running out of mana`
+                        : `Tried to use ${skill.name}, but you don't seem to have enough mana`;
+                }
+                resolve(customMessage || `${skill.name} failed after ${i} cast${s(i)}: \n${e.message}`);
                 run = false;
             });
             i++;
