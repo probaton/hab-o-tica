@@ -5,7 +5,7 @@ import { Alert, Picker, StyleSheet, Text, TouchableOpacity } from "react-native"
 import { Input } from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
 
-import { getClassSkills, getSkillById, SkillId, spamSkill } from "../../skills/useSkill";
+import { getUserSkills, SkillId, spamSkill } from "../../skills/useSkill";
 import LastUsedSkillStore from "../../store/LastUsedSkillStore";
 import IHabiticaData from "../../userData/IHabiticaData";
 
@@ -15,9 +15,9 @@ interface ISpamSkillDialogProps {
 }
 
 interface ISpamSkillDialogState {
+    skillOptions: Array<{ id: string, name: string }>;
     skillInput?: SkillId | "placeholder";
     usesInput?: string;
-    skillOptions: Array<{ id: string, name: string }>;
     doneLoading?: boolean;
     isResolvedMessage?: string;
 }
@@ -37,7 +37,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
             LastUsedSkillStore.clear();
         } else {
             newState.skillInput = await LastUsedSkillStore.get() || "placeholder";
-            const classSkills = getClassSkills(userData.stats.class);
+            const classSkills = getUserSkills(userData);
             if (newState.skillInput === "placeholder") {
                 newState.skillOptions = this.state.skillOptions.concat(classSkills);
             } else {
@@ -114,9 +114,8 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
         }
 
         this.setState({ doneLoading: false });
-        const skill = getSkillById(skillInput);
-        this.setState({ doneLoading: true, isResolvedMessage: await spamSkill(skill.id, count) });
-        LastUsedSkillStore.set(skill.id);
+        this.setState({ doneLoading: true, isResolvedMessage: await spamSkill(skillInput, count) });
+        LastUsedSkillStore.set(skillInput);
     }
 }
 
