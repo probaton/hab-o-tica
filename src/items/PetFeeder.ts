@@ -72,6 +72,7 @@ export class PetFeeder {
             likedFoodTypes.push(foodType.likedFood);
             likedFoodTypes.push("Candy_" + foodType.petType);
             likedFoodTypes.push("Cake_" + foodType.petType);
+            likedFoodTypes.push("Pie_" + foodType.petType);
         });
         return likedFoodTypes;
     }
