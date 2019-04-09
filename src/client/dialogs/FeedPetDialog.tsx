@@ -1,11 +1,10 @@
 import React from "react";
 import { Component } from "react";
-import { Alert, Picker } from "react-native";
-
-import { BaseInputDialog } from "./BaseInputDialog";
+import { Alert, Dimensions, Picker, StyleSheet } from "react-native";
 
 import { PetFeeder } from "../../items/PetFeeder";
 import IHabiticaData from "../../userData/IHabiticaData";
+import Interaction from "../Interaction";
 
 interface IFeedPetDialogProps {
     userData: Promise<IHabiticaData>;
@@ -62,7 +61,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
             .map((type) => <Picker.Item label={type.name} key={type.id} value={type.id} color="#34313A"/>);
 
         return (
-            <BaseInputDialog
+            <Interaction
                 dialogTitle="Feed Pet"
                 dialogText={dialogText}
                 close={this.props.close}
@@ -71,6 +70,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
                 isResolvedMessage={isResolvedMessage}
             >
                 <Picker
+                    style={styles.picker}
                     enabled={speciesOptions && speciesOptions.length > 1}
                     onValueChange={this.handleSpeciesChange}
                     selectedValue={speciesInput}
@@ -78,13 +78,14 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
                     {speciesPickerOptions}
                 </Picker>
                 <Picker
+                    style={styles.picker}
                     enabled={typeOptions && typeOptions.length > 1}
                     onValueChange={this.handleTypeChange}
                     selectedValue={typeInput}
                 >
                     {typePickerOptions}
                 </Picker>
-            </BaseInputDialog>
+            </Interaction>
         );
     }
 
@@ -141,3 +142,9 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
         });
     }
 }
+
+const styles = StyleSheet.create({
+    picker: {
+        width: Dimensions.get("window").width - 100,
+    },
+});
