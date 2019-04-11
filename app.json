@@ -12,9 +12,9 @@
     "orientation": "portrait",
     "icon": "./assets/androidIcon.png",
     "splash": {
-      "image": "./assets/haboticaSplash.png",
+      "image": "./assets/androidIcon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#006165"
+      "backgroundColor": "#78ceae"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -29,6 +29,7 @@
     },
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "primaryColor": "#78ceae"
   }
 }

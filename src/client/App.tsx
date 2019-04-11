@@ -103,11 +103,11 @@ export default class App extends React.Component<any, IAppState> {
 
 const styles = StyleSheet.create({
     body: {
-        backgroundColor: "#006165",
+        backgroundColor: "#78ceae",
         flex: 1,
     },
     topBar: {
-        backgroundColor: "#2D7F83",
+        backgroundColor: "#4f8973ff",
         maxHeight: 100,
         flex: 1,
     },
