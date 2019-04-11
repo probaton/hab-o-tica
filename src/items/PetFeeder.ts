@@ -99,6 +99,15 @@ export class PetFeeder {
 
     private isFeedable(petId: string): boolean {
         const unfeedablePets = [
+            "Wolf-Veggie",
+            "TigerCub-Veggie",
+            "PandaCub-Veggie",
+            "LionCub-Veggie",
+            "Fox-Veggie",
+            "FlyingPig-Veggie",
+            "Dragon-Veggie",
+            "Cactus-Veggie",
+            "BearCub-Veggie",
             "Wolf-Veteran",
             "Wolf-Cerberus",
             "Dragon-Hydra",
