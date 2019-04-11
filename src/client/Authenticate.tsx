@@ -111,13 +111,13 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 20,
         textAlign: "left",
-        color: "#edecee",
+        color: "#F9F9F9",
         marginBottom: 20,
     },
     text: {
         textAlign: "center",
         paddingTop: 15,
-        color: "#edecee",
+        color: "#F9F9F9",
     },
     button: {
         paddingRight: 8,
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     },
     submitButton: {
         textAlign: "right",
-        color: "#edecee",
+        color: "#F9F9F9",
         padding: 8,
         marginBottom: 5,
     },

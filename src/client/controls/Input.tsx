@@ -45,10 +45,10 @@ const styles = StyleSheet.create({
     dark: {
         textAlign: "left",
         fontSize: 16,
-        color: "#edecee",
+        color: "#F9F9F9",
         marginTop: 8,
         borderBottomWidth: 2,
-        borderColor: "#edecee",
+        borderColor: "#F9F9F9",
         minWidth: Dimensions.get("window").width - 100,
     },
 });

@@ -17,9 +17,11 @@ export default class Interaction extends React.Component<IProps> {
             <View
                 style={styles.container}
             >
+                <View style={styles.titleBar}>
+                    <Text style={styles.title}>{dialogTitle}</Text>
+                </View>
                 <View style={styles.padding}>
                     <View style={styles.body}>
-                        <Text style={styles.title}>{dialogTitle}</Text>
                         {loading
                             ? this.renderLoadingSpinner()
                             : this.renderContent()
@@ -79,7 +81,7 @@ export default class Interaction extends React.Component<IProps> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#edecee",
+        backgroundColor: "#F9F9F9",
         borderRadius: 5,
         elevation: 2,
         margin: 8,
@@ -93,10 +95,44 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    title: {},
-    buttonBar: {},
-    text: {},
-    spinner: {},
-    button: {},
-    buttonText: {},
+    titleBar: {
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        paddingTop: 24,
+        alignItems: "center",
+        backgroundColor: "#EDECEE",
+    },
+    title: {
+        fontWeight: "bold",
+        fontSize: 32,
+        color: "#6e6976ff",
+        paddingBottom: 8,
+    },
+    text: {
+        color: "#34313A",
+    },
+    spinner: {
+        marginTop: 15,
+    },
+    buttonBar: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "center",
+        maxHeight: 52,
+        paddingTop: 8,
+        paddingBottom: 8,
+    },
+    button: {
+        margin: 5,
+        minWidth: 64,
+        height: 36,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    buttonText: {
+        fontSize: 24,
+        textAlign: "center",
+        color: "#009688",
+        padding: 12,
+    },
 });
