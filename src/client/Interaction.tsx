@@ -1,6 +1,8 @@
 import React from "react";
 import { ActivityIndicator, Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import XButton from "./images/XButton";
+
 interface IProps {
     dialogText: string;
     dialogTitle: string;
@@ -19,6 +21,11 @@ export default class Interaction extends React.Component<IProps> {
             >
                 <View style={styles.titleBar}>
                     <Text style={styles.title}>{dialogTitle}</Text>
+                    <View style={styles.xButton}>
+                        <TouchableOpacity onPress={close}>
+                                <XButton/>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.padding}>
                     <View style={styles.body}>
@@ -107,6 +114,11 @@ const styles = StyleSheet.create({
         fontSize: 32,
         color: "#6e6976ff",
         paddingBottom: 8,
+    },
+    xButton: {
+        marginTop: 20,
+        position: "absolute",
+        right: 12,
     },
     text: {
         color: "#34313A",
