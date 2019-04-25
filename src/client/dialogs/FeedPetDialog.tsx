@@ -1,10 +1,10 @@
 import React from "react";
-import { Component } from "react";
 import { Alert, Dimensions, Picker, StyleSheet } from "react-native";
 
 import { PetFeeder } from "../../items/PetFeeder";
 import IHabiticaData from "../../userData/IHabiticaData";
 import Interaction from "../Interaction";
+import { ServingsOverview } from "./ServingsOverview";
 
 interface IFeedPetDialogProps {
     userData: Promise<IHabiticaData>;
@@ -21,7 +21,7 @@ interface IFeedPetDialogState {
     isResolvedMessage?: string;
 }
 
-export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialogState> {
+export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPetDialogState> {
     speciesPlaceholder = { id: "placeholder", name: "Select a pet..." };
     typePlaceholder = { id: "placeholder", name: "Select a type..." };
 
@@ -69,6 +69,7 @@ export class FeedPetDialog extends Component<IFeedPetDialogProps, IFeedPetDialog
                 loading={loading}
                 isResolvedMessage={isResolvedMessage}
             >
+                <ServingsOverview servingsMap={hardCodedServings}/>
                 <Picker
                     style={styles.picker}
                     enabled={speciesOptions && speciesOptions.length > 1}
@@ -148,3 +149,17 @@ const styles = StyleSheet.create({
         width: Dimensions.get("window").width - 100,
     },
 });
+
+const hardCodedServings = [
+    { type: "Base", amount: 3 },
+    { type: "White", amount: 6 },
+    { type: "Desert", amount: 2 },
+    { type: "Red", amount: 2 },
+    { type: "Shade", amount: 2 },
+    { type: "Skeleton", amount: 2 },
+    { type: "Zombie", amount: 2 },
+    { type: "CottonCandyPink", amount: 2 },
+    { type: "CottonCandyBlue", amount: 2 },
+    { type: "Golden", amount: 2 },
+    { type: "Other", amount: 2 },
+];
