@@ -1,8 +1,9 @@
 import { callHabApi } from "../requests/HabiticaRequest";
 import IHabiticaData from "../userData/IHabiticaData";
-import { IFood } from "../userData/IHabiticaData";
+import { initializeServingsPerType, PetType, ServingsPerType } from "./servingsHelpers";
+import { UnfeedablePets } from "./UnfeedablePets";
 
-export interface IPet {
+interface IPet {
     species: string;
     displayName: string;
     types: string[];
@@ -11,13 +12,13 @@ export interface IPet {
 export class PetFeeder {
     petData: any;
     mountData: any;
-    foodData: IFood;
+    servingsPerType: ServingsPerType;
     petList: IPet[] = [];
 
     constructor(userData: IHabiticaData) {
         this.petData = userData.items.pets;
         this.mountData = userData.items.mounts;
-        this.foodData = userData.items.food;
+        this.servingsPerType = initializeServingsPerType();
 
         for (const petId of Object.keys(this.petData)) {
             if (this.isFeedable(petId)) {
@@ -28,11 +29,12 @@ export class PetFeeder {
                     : this.petList.push(pet);
             }
         }
+
+        this.mapServingsPerType(userData.items.food);
     }
 
-    feedPet(species: string, petType: string): Promise<string> {
-        const likedFoodTypes = this.mapLikedFoodTypes(petType);
-        const servings = this.mapServings(likedFoodTypes);
+    feedPet(species: string, petType: PetType): Promise<string> {
+        const servings = this.servingsPerType[petType];
 
         if (servings.length === 0) {
             return new Promise<string>(resolve => { resolve(`You don't have any food suitable for ${petType} pets.`); });
@@ -55,42 +57,40 @@ export class PetFeeder {
         });
     }
 
-    private mapLikedFoodTypes(petType: string): string[] {
-        const petToFoodMap = [
-            { petType: "Base", likedFood: "Meat" },
-            { petType: "White", likedFood: "Milk" },
-            { petType: "Desert", likedFood: "Potatoe" },
-            { petType: "Red", likedFood: "Strawberry" },
-            { petType: "Shade", likedFood: "Chocolate" },
-            { petType: "Skeleton", likedFood: "Fish" },
-            { petType: "Zombie", likedFood: "RottenMeat" },
-            { petType: "CottonCandyPink", likedFood: "CottonCandyPink" },
-            { petType: "CottonCandyBlue", likedFood: "CottonCandyBlue" },
-            { petType: "Golden", likedFood: "Honey" },
-        ];
-
-        const petFoodMatch = petToFoodMap.find(foodType => foodType.petType === petType);
-        const petFoodMatches = petFoodMatch ? [petFoodMatch] : petToFoodMap;
-        const likedFoodTypes: string[] = [];
-        petFoodMatches.forEach(foodType => {
-            likedFoodTypes.push(foodType.likedFood);
-            likedFoodTypes.push("Candy_" + foodType.petType);
-            likedFoodTypes.push("Cake_" + foodType.petType);
-            likedFoodTypes.push("Pie_" + foodType.petType);
-        });
-        return likedFoodTypes;
-    }
-
-    private mapServings(likedFoodTypes: string[]): string[] {
-        const servings: string[] = [];
-        likedFoodTypes.forEach(food => {
-            for (let i = (this.foodData as any)[food]; i > 0; i--) servings.push(food);
-        });
-        return servings;
-    }
-
     private callFeedApi(species: string, type: string, food: string): Promise<any> {
         return callHabApi(`/api/v3/user/feed/${species}-${type}/${food}`, "POST");
+    }
+
+    private mapServingsPerType(larder: any): void {
+        Object.keys(larder).forEach((foodType: string) => {
+            if (foodType === "Meat" || foodType.endsWith("Base")) {
+                this.convertFoodTypeToServings("Base", foodType, larder);
+            } else if (foodType === "Milk" || foodType.endsWith("White")) {
+                this.convertFoodTypeToServings("White", foodType, larder);
+            } else if (foodType === "Potatoe" || foodType.endsWith("Desert")) {
+                this.convertFoodTypeToServings("Desert", foodType, larder);
+            } else if (foodType === "Strawberry" || foodType.endsWith("Red")) {
+                this.convertFoodTypeToServings("Red", foodType, larder);
+            } else if (foodType === "Chocolate" || foodType.endsWith("Shade")) {
+                this.convertFoodTypeToServings("Shade", foodType, larder);
+            } else if (foodType === "Fish" || foodType.endsWith("Skeleton")) {
+                this.convertFoodTypeToServings("Skeleton", foodType, larder);
+            } else if (foodType === "RottenMeat" || foodType.endsWith("Zombie")) {
+                this.convertFoodTypeToServings("Zombie", foodType, larder);
+            } else if (foodType === "CottonCandyPink" || foodType.endsWith("CottonCandyPink")) {
+                this.convertFoodTypeToServings("CottonCandyPink", foodType, larder);
+            } else if (foodType === "CottonCandyBlue" || foodType.endsWith("CottonCandyBlue")) {
+                this.convertFoodTypeToServings("CottonCandyBlue", foodType, larder);
+            } else if (foodType === "Honey" || foodType.endsWith("Golden")) {
+                this.convertFoodTypeToServings("Golden", foodType, larder);
+            }
+        });
+    }
+
+    private convertFoodTypeToServings(petType: PetType, foodType: string, larder: any) {
+        for (let i = larder[foodType]; i > 0; i--) {
+            this.servingsPerType[petType].push(foodType);
+        }
     }
 
     private s(i: number): "s" | "" {
@@ -98,43 +98,10 @@ export class PetFeeder {
     }
 
     private isFeedable(petId: string): boolean {
-        const unfeedablePets = [
-            "Wolf-Veggie",
-            "TigerCub-Veggie",
-            "PandaCub-Veggie",
-            "LionCub-Veggie",
-            "Fox-Veggie",
-            "FlyingPig-Veggie",
-            "Dragon-Veggie",
-            "Cactus-Veggie",
-            "BearCub-Veggie",
-            "Wolf-Veteran",
-            "Wolf-Cerberus",
-            "Dragon-Hydra",
-            "Turkey-Base",
-            "BearCub-Polar",
-            "MantisShrimp-Base",
-            "JackOLantern-Base",
-            "Mammoth-Base",
-            "Tiger-Veteran",
-            "Phoenix-Base",
-            "Turkey-Gilded",
-            "MagicalBee-Base",
-            "Lion-Veteran",
-            "Gryphon-RoyalPurple",
-            "JackOLantern-Ghost",
-            "Jackalope-RoyalPurple",
-            "Orca-Base",
-            "Bear-Veteran",
-            "Hippogriff-Hopeful",
-            "Fox-Veteran",
-            "JackOLantern-Glow",
-        ];
-
         const petNr = this.petData[petId];
         if (petNr === -1) {
             return false;
-        } else if (unfeedablePets.indexOf(petId) > -1) {
+        } else if (UnfeedablePets.indexOf(petId) > -1) {
             return false;
         } else if (petNr === 5) {
             return !this.mountData.hasOwnProperty(petId);

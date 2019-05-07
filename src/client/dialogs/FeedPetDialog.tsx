@@ -2,6 +2,7 @@ import React from "react";
 import { Alert, Dimensions, Picker, StyleSheet } from "react-native";
 
 import { PetFeeder } from "../../items/PetFeeder";
+import { PetType } from "../../items/servingsHelpers";
 import IHabiticaData from "../../userData/IHabiticaData";
 import Interaction from "../Interaction";
 import { ServingsOverview } from "./ServingsOverview";
@@ -52,7 +53,7 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
     render() {
         const dialogText = "Feed a pet with food it really likes until you run out or it grows into a mount.";
 
-        const { speciesOptions, typeOptions, loading, speciesInput, typeInput, isResolvedMessage } = this.state;
+        const { feeder, speciesOptions, typeOptions, loading, speciesInput, typeInput, isResolvedMessage } = this.state;
 
         const speciesPickerOptions = speciesOptions!
             .map((species) => <Picker.Item label={species.name} key={species.id} value={species.id} color="#34313A"/>);
@@ -69,7 +70,7 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
                 loading={loading}
                 isResolvedMessage={isResolvedMessage}
             >
-                <ServingsOverview servingsMap={hardCodedServings}/>
+                <ServingsOverview servingsMap={feeder ? feeder.servingsPerType : undefined}/>
                 <Picker
                     style={styles.picker}
                     enabled={speciesOptions && speciesOptions.length > 1}
@@ -139,7 +140,7 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
         this.setState({ loading: true });
         this.setState({
             loading: false,
-            isResolvedMessage: await this.state.feeder!.feedPet(speciesInput, typeInput),
+            isResolvedMessage: await this.state.feeder!.feedPet(speciesInput, (typeInput as PetType)),
         });
     }
 }
@@ -149,17 +150,3 @@ const styles = StyleSheet.create({
         width: Dimensions.get("window").width - 100,
     },
 });
-
-const hardCodedServings = [
-    { type: "Base", amount: 3 },
-    { type: "White", amount: 6 },
-    { type: "Desert", amount: 2 },
-    { type: "Red", amount: 2 },
-    { type: "Shade", amount: 2 },
-    { type: "Skeleton", amount: 2 },
-    { type: "Zombie", amount: 2 },
-    { type: "CottonCandyPink", amount: 2 },
-    { type: "CottonCandyBlue", amount: 2 },
-    { type: "Golden", amount: 2 },
-    { type: "Other", amount: 2 },
-];

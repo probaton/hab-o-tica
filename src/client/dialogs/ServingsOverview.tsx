@@ -1,18 +1,17 @@
 import React from "react";
-import { StyleSheet, View, Text, ImageBackground } from "react-native";
+import { ImageBackground, StyleSheet, Text, View } from "react-native";
+
+import { PetType, ServingsPerType } from "../../items/servingsHelpers";
 
 interface IProps {
-    servingsMap: Array<{
-        type: "Base" |"White" | "Desert" |  "Red" | "Shade" | "Skeleton" | "Zombie" | "CottonCandyPink" | "CottonCandyBlue" | "Golden" | "Other",
-        amount: number,
-    }>;
+    servingsMap: ServingsPerType | undefined;
 }
 
 export class ServingsOverview extends React.Component<IProps> {
     render() {
         return (
             <View style={styles.servingsOverview}>
-                <Text>Currently available food</Text>
+                <Text style={styles.title}>Currently available food</Text>
                 <View style={styles.servingRow}>
                     <View style={styles.serving}>
                         <ImageBackground
@@ -46,8 +45,6 @@ export class ServingsOverview extends React.Component<IProps> {
                             {this.renderAmount("Red")}
                         </ImageBackground>
                     </View>
-                </View>
-                <View style={styles.servingRow}>
                     <View style={styles.serving}>
                         <ImageBackground
                             source={require("../images/petTypes/Shade.png")}
@@ -56,6 +53,8 @@ export class ServingsOverview extends React.Component<IProps> {
                             {this.renderAmount("Shade")}
                         </ImageBackground>
                     </View>
+                </View>
+                <View style={styles.servingRow}>
                     <View style={styles.serving}>
                         <ImageBackground
                             source={require("../images/petTypes/Skeleton.png")}
@@ -80,8 +79,6 @@ export class ServingsOverview extends React.Component<IProps> {
                             {this.renderAmount("CottonCandyPink")}
                         </ImageBackground>
                     </View>
-                </View>
-                <View style={styles.servingRow}>
                     <View style={styles.serving}>
                         <ImageBackground
                             source={require("../images/petTypes/CottonCandyBlue.png")}
@@ -98,14 +95,6 @@ export class ServingsOverview extends React.Component<IProps> {
                             {this.renderAmount("Golden")}
                         </ImageBackground>
                     </View>
-                    <View style={styles.serving}>
-                        <ImageBackground
-                            source={require("../images/petTypes/Other.png")}
-                            style={styles.typeImage}
-                        >
-                            {this.renderAmount("Other")}
-                        </ImageBackground>
-                    </View>
                 </View>
             </View>
 
@@ -113,9 +102,10 @@ export class ServingsOverview extends React.Component<IProps> {
 
     }
 
-    renderAmount(type: "Base" | "White" | "Desert" |  "Red" | "Shade" | "Skeleton" | "Zombie" | "CottonCandyPink" | "CottonCandyBlue" | "Golden" | "Other") {
-        const amount = this.props.servingsMap.find(serving => serving.type === type)!.amount;
-        return <Text>x{amount}</Text>;
+    renderAmount(type: PetType) {
+        const servingsPerType = this.props.servingsMap;
+        const amount = servingsPerType ? servingsPerType[type].length : 0;
+        return <Text style={styles.servingsAmount}>x{amount}</Text>;
     }
 }
 
@@ -124,6 +114,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#EDECEE",
         borderRadius: 5,
         alignItems: "center",
+        margin: 10,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "#6e6976ff",
+        padding: 5,
     },
     servingRow: {
         flexDirection: "row",
@@ -135,8 +132,11 @@ const styles = StyleSheet.create({
     typeImage: {
         alignItems: "center",
         justifyContent: "center",
-        height: 36,
-        width: 36,
+        height: 48,
+        width: 48,
+    },
+    servingsAmount: {
+        fontSize: 20,
     },
 });
 
