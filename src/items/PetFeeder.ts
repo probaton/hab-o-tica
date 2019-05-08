@@ -1,19 +1,14 @@
 import { callHabApi } from "../requests/HabiticaRequest";
 import IHabiticaData from "../userData/IHabiticaData";
-import { initializeServingsPerType, PetType, ServingsPerType } from "./servingsHelpers";
+import { initializeServingsPerType, PetType, ServingsPerType, ISpeciesMap, IPetTypeMap } from "./servingsHelpers";
 import { UnfeedablePets } from "./UnfeedablePets";
-
-interface IPet {
-    species: string;
-    displayName: string;
-    types: string[];
-}
 
 export class PetFeeder {
     petData: any;
     mountData: any;
     servingsPerType: ServingsPerType;
-    petList: IPet[] = [];
+    speciesList: ISpeciesMap[] = [];
+    petTypeList: IPetTypeMap[] = [];
 
     constructor(userData: IHabiticaData) {
         this.petData = userData.items.pets;
@@ -22,11 +17,25 @@ export class PetFeeder {
 
         for (const petId of Object.keys(this.petData)) {
             if (this.isFeedable(petId)) {
-                const pet = this.parsePetId(petId);
-                const lastIndex = this.petList.findIndex(p => p.species === pet.species);
-                lastIndex > -1
-                    ? this.petList[lastIndex].types.push(pet.types[0])
-                    : this.petList.push(pet);
+                const petValues = petId.split("-");
+                const species = petValues[0];
+                const petType = petValues[1];
+
+                const lastSpeciesIndex = this.speciesList.findIndex(p => p.name === species);
+                if (lastSpeciesIndex > -1) {
+                    this.speciesList[lastSpeciesIndex].types.push(petType);
+                } else {
+                    const displayName = this.parseDisplayName(species);
+                    this.speciesList.push({ name: species, types: [petType], displayName });
+                }
+
+                const lastPetTypeIndex = this.petTypeList.findIndex(p => p.name === petType);
+                if (lastPetTypeIndex > -1) {
+                    this.petTypeList[lastPetTypeIndex].species.push(species);
+                } else {
+                    const displayName = this.parseDisplayName(petType);
+                    this.petTypeList.push({ name: petType, species: [species], displayName });
+                }
             }
         }
 
@@ -47,7 +56,7 @@ export class PetFeeder {
                 const servingType = servings[i];
                 await this.callFeedApi(species, petType, servingType!).catch(e => {
                     resolve(e.message === "You already have that mount. Try feeding another pet."
-                        ? `Congratulations! Your ${this.parseSpeciesDisplayName(species)} grew into a mount after ${i} feeding${this.s(i)}`
+                        ? `Congratulations! Your ${this.parseDisplayName(species)} grew into a mount after ${i} feeding${this.s(i)}`
                         : `Feeding failed after ${i} serving${this.s(i)}: \n${e.message}`);
                     run = false;
                 });
@@ -110,14 +119,7 @@ export class PetFeeder {
         }
     }
 
-    private parsePetId(rawPet: string): IPet {
-        const petValues = rawPet.split("-");
-        const species = petValues[0];
-        const displayName = this.parseSpeciesDisplayName(species);
-        return { species, types: [petValues[1]], displayName };
-    }
-
-    private parseSpeciesDisplayName(species: string): string {
+    private parseDisplayName(species: string): string {
         return species.substr(0, 1) + species.substr(1).replace(/([A-Z])/g, " $1");
     }
 }

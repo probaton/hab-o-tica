@@ -14,8 +14,10 @@ interface IFeedPetDialogProps {
 
 interface IFeedPetDialogState {
     feeder: PetFeeder | undefined;
+    defaultSpeciesOptions: Array<{ id: string, name: string }> | undefined;
     speciesOptions: Array<{ id: string, name: string }> | undefined;
     speciesInput: string;
+    defaultTypeOptions: Array<{ id: string, name: string }> | undefined;
     typeOptions: Array<{ id: string, name: string }> | undefined;
     typeInput: string;
     loading: boolean;
@@ -30,8 +32,10 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
         super(props);
         this.state = {
             feeder: undefined,
+            defaultSpeciesOptions: [this.speciesPlaceholder],
             speciesOptions: [this.speciesPlaceholder],
             speciesInput: "",
+            defaultTypeOptions: [this.typePlaceholder],
             typeOptions: [this.typePlaceholder],
             typeInput: "",
             loading: true,
@@ -41,13 +45,26 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
     async componentDidMount() {
         const feeder = new PetFeeder(await this.props.userData);
 
-        const speciesOptions = feeder.petList.map(pet => {
-                return { id: pet.species, name: pet.displayName };
+        const speciesOptions = feeder.speciesList.map(pet => {
+                return { id: pet.name, name: pet.displayName };
             });
         speciesOptions.sort((a, b) => a.name.localeCompare(b.name));
         speciesOptions.unshift(this.speciesPlaceholder);
 
-        this.setState({ feeder, speciesOptions, loading: false });
+        const typeOptions = feeder.petTypeList.map(type => {
+            return { id: type.name, name: type.displayName };
+        });
+        typeOptions.sort((a, b) => a.name.localeCompare(b.name));
+        typeOptions.unshift(this.typePlaceholder);
+
+        this.setState({
+            feeder,
+            defaultSpeciesOptions: speciesOptions,
+            speciesOptions,
+            defaultTypeOptions: typeOptions,
+            typeOptions,
+            loading: false,
+        });
     }
 
     render() {
@@ -73,7 +90,6 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
                 <ServingsOverview servingsMap={feeder ? feeder.servingsPerType : undefined}/>
                 <Picker
                     style={styles.picker}
-                    enabled={speciesOptions && speciesOptions.length > 1}
                     onValueChange={this.handleSpeciesChange}
                     selectedValue={speciesInput}
                 >
@@ -81,7 +97,6 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
                 </Picker>
                 <Picker
                     style={styles.picker}
-                    enabled={typeOptions && typeOptions.length > 1}
                     onValueChange={this.handleTypeChange}
                     selectedValue={typeInput}
                 >
@@ -94,24 +109,21 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
     private handleSpeciesChange = (speciesInput: string) => {
         const newState: any = { speciesInput };
 
-        const pet = this.state.feeder!.petList.find(p => p.species === speciesInput);
-        if (!pet) {
-            newState.typeOptions = [this.typePlaceholder];
-        } else {
-            let newTypeOptions;
-
-            const selectedPetTypes = pet.types.map(type => {
+        const species = this.state.feeder!.speciesList.find(p => p.name === speciesInput);
+        if (species) {
+            const newTypeOptions = species.types.map(type => {
                 return { id: type, name: type };
-            });
-            if (selectedPetTypes.length === 1) {
-                newTypeOptions = selectedPetTypes;
-            } else {
-                newTypeOptions = selectedPetTypes.sort((a, b) => a.name.localeCompare(b.name));
-                newTypeOptions.unshift(this.typePlaceholder);
+            }).sort((a, b) => a.name.localeCompare(b.name));
+
+            if (newTypeOptions.length === 1) {
+                newState.typeInput = newTypeOptions[0].name;
             }
 
+            newTypeOptions.unshift(this.typePlaceholder);
             newState.typeOptions = newTypeOptions;
-            newState.speciesOptions = this.state.speciesOptions!.filter(option => option.id !== "placeholder");
+        } else {
+            newState.typeOptions = this.state.defaultTypeOptions;
+            newState.typeInput = this.typePlaceholder.name;
         }
 
         this.setState(newState);
@@ -119,9 +131,22 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
 
     private handleTypeChange = (typeInput: string) => {
         const newState: any = { typeInput };
-        if (typeInput !== "placeholder") {
-            const newTypeOptions = this.state.typeOptions!.filter(option => option.id !== "placeholder");
-            newState.typeOptions = newTypeOptions;
+
+        const type = this.state.feeder!.petTypeList.find(t => t.name === typeInput);
+        if (type) {
+            const newSpeciesOptions = type.species.map(species => {
+                return { id: species, name: species };
+            }).sort((a, b) => a.name.localeCompare(b.name));
+
+            if (newSpeciesOptions.length === 1) {
+                newState.speciesInput = newSpeciesOptions[0].name;
+            }
+
+            newSpeciesOptions.unshift(this.speciesPlaceholder);
+            newState.speciesOptions = newSpeciesOptions;
+        } else {
+            newState.speciesOptions = this.state.defaultSpeciesOptions;
+            newState.speciesInput = this.speciesPlaceholder;
         }
         this.setState(newState);
     }
