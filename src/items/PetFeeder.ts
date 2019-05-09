@@ -1,40 +1,33 @@
 import { callHabApi } from "../requests/HabiticaRequest";
 import IHabiticaData from "../userData/IHabiticaData";
-import { initializeServingsPerType, PetType, ServingsPerType, ISpeciesMap, IPetTypeMap } from "./servingsHelpers";
+import { initializeServingsPerType, PetType, ServingsPerType, IPetMap } from "./servingsHelpers";
 import { UnfeedablePets } from "./UnfeedablePets";
 
 export class PetFeeder {
-    petData: any;
+    petData: string[];
     mountData: any;
     servingsPerType: ServingsPerType;
-    speciesList: ISpeciesMap[] = [];
-    petTypeList: IPetTypeMap[] = [];
+    speciesList: string[] = [];
+    petTypeList: string[] = [];
 
     constructor(userData: IHabiticaData) {
-        this.petData = userData.items.pets;
+        this.petData = [];
         this.mountData = userData.items.mounts;
         this.servingsPerType = initializeServingsPerType();
 
-        for (const petId of Object.keys(this.petData)) {
-            if (this.isFeedable(petId)) {
+        for (const petId of Object.keys(userData.items.pets)) {
+            if (this.isFeedable(petId, userData.items.pets)) {
+                this.petData.push(petId);
                 const petValues = petId.split("-");
-                const species = petValues[0];
-                const petType = petValues[1];
 
-                const lastSpeciesIndex = this.speciesList.findIndex(p => p.name === species);
-                if (lastSpeciesIndex > -1) {
-                    this.speciesList[lastSpeciesIndex].types.push(petType);
-                } else {
-                    const displayName = this.parseDisplayName(species);
-                    this.speciesList.push({ name: species, types: [petType], displayName });
+                const species = petValues[0];
+                if (this.speciesList.indexOf(species) === -1) {
+                    this.speciesList.push(species);
                 }
 
-                const lastPetTypeIndex = this.petTypeList.findIndex(p => p.name === petType);
-                if (lastPetTypeIndex > -1) {
-                    this.petTypeList[lastPetTypeIndex].species.push(species);
-                } else {
-                    const displayName = this.parseDisplayName(petType);
-                    this.petTypeList.push({ name: petType, species: [species], displayName });
+                const petType = petValues[1];
+                if (this.petTypeList.indexOf(petType) === -1) {
+                    this.petTypeList.push(petType);
                 }
             }
         }
@@ -106,8 +99,8 @@ export class PetFeeder {
         return i === 1 ? "" : "s";
     }
 
-    private isFeedable(petId: string): boolean {
-        const petNr = this.petData[petId];
+    private isFeedable(petId: string, rawPetData: any): boolean {
+        const petNr = rawPetData[petId];
         if (petNr === -1) {
             return false;
         } else if (UnfeedablePets.indexOf(petId) > -1) {

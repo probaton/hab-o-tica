@@ -1,8 +1,8 @@
 import React from "react";
-import { Alert, Dimensions, Picker, StyleSheet } from "react-native";
+import { Alert, Dimensions, Picker, StyleSheet, Button, Text } from "react-native";
 
 import { PetFeeder } from "../../items/PetFeeder";
-import { PetType } from "../../items/servingsHelpers";
+import { PetType, IPetMap, IPickerOption } from "../../items/servingsHelpers";
 import IHabiticaData from "../../userData/IHabiticaData";
 import Interaction from "../Interaction";
 import { ServingsOverview } from "./ServingsOverview";
@@ -14,29 +14,27 @@ interface IFeedPetDialogProps {
 
 interface IFeedPetDialogState {
     feeder: PetFeeder | undefined;
-    defaultSpeciesOptions: Array<{ id: string, name: string }> | undefined;
-    speciesOptions: Array<{ id: string, name: string }> | undefined;
+    defaultSpeciesOptions: IPickerOption[];
     speciesInput: string;
-    defaultTypeOptions: Array<{ id: string, name: string }> | undefined;
-    typeOptions: Array<{ id: string, name: string }> | undefined;
+    defaultTypeOptions: IPickerOption[];
     typeInput: string;
     loading: boolean;
     isResolvedMessage?: string;
+    selectionState: "none" | "species" | "type" | "both";
 }
 
 export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPetDialogState> {
-    speciesPlaceholder = { id: "placeholder", name: "Select a pet..." };
-    typePlaceholder = { id: "placeholder", name: "Select a type..." };
+    speciesPlaceholder = { id: "placeholder", label: "Select a pet..." };
+    typePlaceholder = { id: "placeholder", label: "Select a type..." };
 
     constructor(props: IFeedPetDialogProps) {
         super(props);
         this.state = {
+            selectionState: "none",
             feeder: undefined,
             defaultSpeciesOptions: [this.speciesPlaceholder],
-            speciesOptions: [this.speciesPlaceholder],
             speciesInput: "",
             defaultTypeOptions: [this.typePlaceholder],
-            typeOptions: [this.typePlaceholder],
             typeInput: "",
             loading: true,
         };
@@ -44,25 +42,13 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
 
     async componentDidMount() {
         const feeder = new PetFeeder(await this.props.userData);
-
-        const speciesOptions = feeder.speciesList.map(pet => {
-                return { id: pet.name, name: pet.displayName };
-            });
-        speciesOptions.sort((a, b) => a.name.localeCompare(b.name));
-        speciesOptions.unshift(this.speciesPlaceholder);
-
-        const typeOptions = feeder.petTypeList.map(type => {
-            return { id: type.name, name: type.displayName };
-        });
-        typeOptions.sort((a, b) => a.name.localeCompare(b.name));
-        typeOptions.unshift(this.typePlaceholder);
+        const speciesOptions = this.convertToOptions("species", feeder.speciesList);
+        const typeOptions = this.convertToOptions("type", feeder.petTypeList);
 
         this.setState({
             feeder,
             defaultSpeciesOptions: speciesOptions,
-            speciesOptions,
             defaultTypeOptions: typeOptions,
-            typeOptions,
             loading: false,
         });
     }
@@ -70,13 +56,7 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
     render() {
         const dialogText = "Feed a pet with food it really likes until you run out or it grows into a mount.";
 
-        const { feeder, speciesOptions, typeOptions, loading, speciesInput, typeInput, isResolvedMessage } = this.state;
-
-        const speciesPickerOptions = speciesOptions!
-            .map((species) => <Picker.Item label={species.name} key={species.id} value={species.id} color="#34313A"/>);
-
-        const typePickerOptions = typeOptions!
-            .map((type) => <Picker.Item label={type.name} key={type.id} value={type.id} color="#34313A"/>);
+        const { feeder, loading, isResolvedMessage } = this.state;
 
         return (
             <Interaction
@@ -88,67 +68,93 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
                 isResolvedMessage={isResolvedMessage}
             >
                 <ServingsOverview servingsMap={feeder ? feeder.servingsPerType : undefined}/>
-                <Picker
-                    style={styles.picker}
-                    onValueChange={this.handleSpeciesChange}
-                    selectedValue={speciesInput}
-                >
-                    {speciesPickerOptions}
-                </Picker>
-                <Picker
-                    style={styles.picker}
-                    onValueChange={this.handleTypeChange}
-                    selectedValue={typeInput}
-                >
-                    {typePickerOptions}
-                </Picker>
+                {this.renderPetPicker()}
             </Interaction>
         );
     }
 
-    private handleSpeciesChange = (speciesInput: string) => {
-        const newState: any = { speciesInput };
-
-        const species = this.state.feeder!.speciesList.find(p => p.name === speciesInput);
-        if (species) {
-            const newTypeOptions = species.types.map(type => {
-                return { id: type, name: type };
-            }).sort((a, b) => a.name.localeCompare(b.name));
-
-            if (newTypeOptions.length === 1) {
-                newState.typeInput = newTypeOptions[0].name;
+    private renderPetPicker() {
+        switch (this.state.selectionState) {
+            case ("none"): {
+                return (
+                    <>
+                        <Picker
+                            style={styles.picker}
+                            onValueChange={this.handleInitialSpeciesChange}
+                            selectedValue={this.state.speciesInput}
+                        >
+                            {this.generatePickerItems(this.state.defaultSpeciesOptions)}
+                        </Picker>
+                        <Text>Or</Text>
+                        <Picker
+                            style={styles.picker}
+                            onValueChange={this.handleInitialTypeChange}
+                            selectedValue={this.state.typeInput}
+                        >
+                            {this.generatePickerItems(this.state.defaultTypeOptions)}
+                        </Picker>
+                    </>
+                );
             }
-
-            newTypeOptions.unshift(this.typePlaceholder);
-            newState.typeOptions = newTypeOptions;
-        } else {
-            newState.typeOptions = this.state.defaultTypeOptions;
-            newState.typeInput = this.typePlaceholder.name;
+            case ("species"): {
+                const types: string[] = [];
+                this.state.feeder!.petData.forEach(petId => {
+                    if (petId.startsWith(this.state.speciesInput + "-")) {
+                        types.push(petId.split("-")[1]);
+                    }
+                });
+                const options = this.convertToOptions("type", types);
+                return (
+                    <Picker
+                        style={styles.picker}
+                        onValueChange={this.handleSecondaryTypeChange}
+                        selectedValue={this.state.typeInput}
+                    >
+                        {this.generatePickerItems(options)}
+                    </Picker>
+                );
+            }
+            case ("type"): {
+                const species: string[] = [];
+                this.state.feeder!.petData.forEach(petId => {
+                    if (petId.endsWith("-" + this.state.typeInput)) {
+                        species.push(petId.split("-")[0]);
+                    }
+                });
+                const options = this.convertToOptions("species", species);
+                return (
+                    <Picker
+                        style={styles.picker}
+                        onValueChange={this.handleSecondarySpeciesChange}
+                        selectedValue={this.state.speciesInput}
+                    >
+                        {this.generatePickerItems(options)}
+                    </Picker>
+                );
+            }
+            case ("both"): {
+                const petDisplayName = `${this.parseDisplayName(this.state.typeInput)} ${this.parseDisplayName(this.state.speciesInput)}`;
+                return <Text>Are you sure you want to feed your {petDisplayName}?</Text>;
+            }
         }
-
-        this.setState(newState);
     }
 
-    private handleTypeChange = (typeInput: string) => {
-        const newState: any = { typeInput };
+    private handleInitialSpeciesChange = (speciesInput: string) => {
+        const selectionState = speciesInput === this.speciesPlaceholder.id ? "none" : "species";
+        this.setState({ speciesInput, selectionState });
+    }
 
-        const type = this.state.feeder!.petTypeList.find(t => t.name === typeInput);
-        if (type) {
-            const newSpeciesOptions = type.species.map(species => {
-                return { id: species, name: species };
-            }).sort((a, b) => a.name.localeCompare(b.name));
+    private handleSecondarySpeciesChange = (speciesInput: string) => {
+        this.setState({ speciesInput, selectionState: "both" });
+    }
 
-            if (newSpeciesOptions.length === 1) {
-                newState.speciesInput = newSpeciesOptions[0].name;
-            }
+    private handleInitialTypeChange = (typeInput: string) => {
+        const selectionState = typeInput === this.typePlaceholder.id ? "none" : "type";
+        this.setState({ typeInput, selectionState });
+    }
 
-            newSpeciesOptions.unshift(this.speciesPlaceholder);
-            newState.speciesOptions = newSpeciesOptions;
-        } else {
-            newState.speciesOptions = this.state.defaultSpeciesOptions;
-            newState.speciesInput = this.speciesPlaceholder;
-        }
-        this.setState(newState);
+    private handleSecondaryTypeChange = (typeInput: string) => {
+        this.setState({ typeInput, selectionState: "both" });
     }
 
     private onSubmit = async () => {
@@ -167,6 +173,23 @@ export class FeedPetDialog extends React.Component<IFeedPetDialogProps, IFeedPet
             loading: false,
             isResolvedMessage: await this.state.feeder!.feedPet(speciesInput, (typeInput as PetType)),
         });
+    }
+
+    private generatePickerItems(options: IPickerOption[]) {
+        return options.map((variant) => <Picker.Item label={variant.label} key={variant.id} value={variant.id} color="#34313A"/>);
+    }
+
+    private parseDisplayName(species: string): string {
+        return species.substr(0, 1) + species.substr(1).replace(/([A-Z])/g, " $1");
+    }
+
+    private convertToOptions(speciesOrType: "species" | "type", variants: string[]): IPickerOption[] {
+        const options = variants
+            .map(species => ({ id: species, label: this.parseDisplayName(species) }))
+            .sort((a, b) => a.label.localeCompare(b.label));
+        const placeholder = speciesOrType === "species" ? this.speciesPlaceholder : this.typePlaceholder;
+        options.unshift(placeholder);
+        return options;
     }
 }
 
