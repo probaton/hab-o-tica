@@ -17,14 +17,11 @@ interface IState {
 }
 
 export default class PetPicker extends React.Component<IProps, IState> {
-    speciesPlaceholder = <Picker.Item label={"Select a pet..."} key={"placeholder"} value={"placeholder"} color="#34313A"/>;
-    typePlaceholder = <Picker.Item label={"Select a type..."} key={"placeholder"} value={"placeholder"} color="#34313A"/>;
-
     constructor(props: IProps) {
         super(props);
+
         const speciesOptions = this.generatePickerItems("species", props.feeder.speciesList);
         const typeOptions = this.generatePickerItems("type", props.feeder.petTypeList);
-
         this.state = {
             selectionState: "none",
             speciesOptions,
@@ -159,7 +156,9 @@ export default class PetPicker extends React.Component<IProps, IState> {
     }
 
     private generatePickerItems(speciesOrType: "species" | "type", variants: string[]): React.ReactElement[] {
-        const items = speciesOrType === "species" ? [this.speciesPlaceholder] : [this.typePlaceholder];
+        const items = speciesOrType === "species"
+            ? [<Picker.Item label={"Select a pet..."} key={"placeholder"} value={"placeholder"} color="#34313A"/>]
+            : [<Picker.Item label={"Select a type..."} key={"placeholder"} value={"placeholder"} color="#34313A"/>];
         variants.sort((a, b) => a.localeCompare(b))
             .forEach((variant) => items.push(<Picker.Item label={this.parseDisplayName(variant)} key={variant} value={variant} color="#34313A"/>));
         return items;
