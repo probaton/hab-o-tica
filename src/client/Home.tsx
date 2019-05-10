@@ -13,59 +13,71 @@ interface IHomeProps {
 }
 
 interface IHomeState {
-    openDialog: "feedPet" | "spamSkill" | undefined;
+    viewState?: "feedPet" | "spamSkill";
 }
 
 export default class Home extends React.Component<IHomeProps, IHomeState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            openDialog: undefined,
+            viewState: undefined,
         };
     }
 
     render() {
         return (
-                <View style={styles.container}>
-                    <View style={styles.column}>
-                        <TileButton
-                            text="Feed Pet"
-                            onPress={this.openFeedPetDialog}
-                        />
-                    </View>
+            <>
+                {this.renderContent()}
+            </>
+        );
+    }
 
-                    <View style={styles.column}>
-                        <TileButton
-                            text="Use Skill"
-                            onPress={this.openSpamSkillDialog}
-                        />
-                    </View>
-                    {this.renderSpamSkillDialog()}
-                    {this.renderFeedPetDialog()}
+    private renderContent() {
+        switch (this.state.viewState) {
+            case "feedPet": return this.renderFeedPetDialog();
+            case "spamSkill": return this.renderSpamSkillDialog();
+            case undefined: return this.renderButtons();
+        }
+    }
+
+    private renderButtons() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.column}>
+                    <TileButton
+                        text="Feed Pet"
+                        onPress={this.openFeedPetDialog}
+                    />
                 </View>
+
+                <View style={styles.column}>
+                    <TileButton
+                        text="Use Skill"
+                        onPress={this.openSpamSkillDialog}
+                    />
+                </View>
+            </View>
         );
     }
 
     private renderSpamSkillDialog() {
-        return this.state.openDialog === "spamSkill"
+        return this.state.viewState === "spamSkill"
             ? <SpamSkillDialog userData={this.props.userData.data} close={this.closeDialogs}/>
             : null;
     }
 
     private openSpamSkillDialog = () => {
         this.refreshUserData();
-        this.setState({ openDialog: "spamSkill" });
+        this.setState({ viewState: "spamSkill" });
     }
 
     private renderFeedPetDialog() {
-        return this.state.openDialog === "feedPet"
-            ? <FeedPetDialog userData={this.props.userData.data} close={this.closeDialogs}/>
-            : null;
+        return <FeedPetDialog userData={this.props.userData.data} close={this.closeDialogs}/>;
     }
 
     private openFeedPetDialog = () => {
         this.refreshUserData();
-        this.setState({ openDialog: "feedPet" });
+        this.setState({ viewState: "feedPet" });
     }
 
     private refreshUserData = async () => {
@@ -76,7 +88,7 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
 
     private closeDialogs = () => {
         this.props.refresh();
-        this.setState({ openDialog: undefined });
+        this.setState({ viewState: undefined });
     }
 }
 

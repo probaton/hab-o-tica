@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import { KeyboardTypeOptions, ReturnKeyTypeOptions, StyleSheet, TextInput } from "react-native";
+import { Dimensions, KeyboardTypeOptions, ReturnKeyTypeOptions, StyleSheet, TextInput } from "react-native";
 
 interface IInputProps {
     onChangeText: (input: string) => void;
@@ -40,15 +40,15 @@ const styles = StyleSheet.create({
         marginTop: 8,
         borderBottomWidth: 2,
         borderColor: "#009688",
-        minWidth: 200,
+        minWidth: Dimensions.get("window").width - 100,
     },
     dark: {
         textAlign: "left",
         fontSize: 16,
-        color: "#edecee",
+        color: "#F9F9F9",
         marginTop: 8,
         borderBottomWidth: 2,
-        borderColor: "#edecee",
-        minWidth: 200,
+        borderColor: "#F9F9F9",
+        minWidth: Dimensions.get("window").width - 100,
     },
 });

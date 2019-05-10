@@ -1,13 +1,14 @@
 import React from "react";
 import { Component } from "react";
-import { Alert, Picker, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, Dimensions, Picker, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import { Input } from "../controls/Input";
-import { BaseInputDialog } from "./BaseInputDialog";
 
 import { getUserSkills, SkillId, spamSkill } from "../../skills/useSkill";
 import LastUsedSkillStore from "../../store/LastUsedSkillStore";
 import IHabiticaData from "../../userData/IHabiticaData";
+import Interaction from "../Interaction";
+import { BaseInputDialog } from "./BaseInputDialog";
 
 interface ISpamSkillDialogProps {
     userData: Promise<IHabiticaData>;
@@ -64,6 +65,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
                 isResolvedMessage={this.state.isResolvedMessage}
             >
                 <Picker
+                    style={styles.picker}
                     enabled={skillOptions && skillOptions.length > 1}
                     selectedValue={skillInput}
                     onValueChange={this.setSkillInput}
@@ -129,5 +131,7 @@ const styles = StyleSheet.create({
         color: "#009688",
         padding: 8,
     },
-
+    picker: {
+        width: Dimensions.get("window").width - 100,
+    },
 });

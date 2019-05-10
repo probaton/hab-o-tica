@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     dialog: {
         position: "absolute",
         right: 6,
-        backgroundColor: "#edecee",
+        backgroundColor: "#F9F9F9",
         elevation: 24,
         borderRadius: 5,
     },

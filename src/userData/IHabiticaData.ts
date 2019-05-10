@@ -22,47 +22,13 @@ export default interface IHabiticaData {
     };
     lastCron: string;
     items: {
-        food: IFood;
+        food: any;
         pets: any;
         mounts: any;
     };
 }
 
 export type HabiticaClass = "wizard" | "healer" | "warrior" | "rogue";
-
-export interface IFood {
-    Meat: number;
-    Milk: number;
-    Potatoe: number;
-    Strawberry: number;
-    Chocolate: number;
-    Fish: number;
-    RottenMeat: number;
-    CottonCandyBlue: number;
-    CottonCandyPink: number;
-    Honey: number;
-    Cake_Base: number;
-    Cake_White: number;
-    Cake_Desert: number;
-    Cake_Red: number;
-    Cake_Shade: number;
-    Cake_Skeleton: number;
-    Cake_Zombie: number;
-    Cake_CottonCandyPink: number;
-    Cake_CottonCandyBlue: number;
-    Cake_Golden: number;
-    Candy_Base: number;
-    Candy_White: number;
-    Candy_Desert: number;
-    Candy_Red: number;
-    Candy_Shade: number;
-    Candy_Skeleton: number;
-    Candy_Zombie: number;
-    Candy_CottonCandyPink: number;
-    Candy_CottonCandyBlue: number;
-    Candy_Golden: number;
-    Saddle: number;
-}
 
 export interface IHabit {
     _id: string;
