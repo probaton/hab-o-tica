@@ -50,7 +50,7 @@ export default class ServingsOverview extends React.Component<IProps> {
                             source={require("../images/petTypes/Shade.png")}
                             style={styles.typeImage}
                         >
-                            {this.renderAmount("Shade")}
+                            {this.renderAmountShade()}
                         </ImageBackground>
                     </View>
                 </View>
@@ -107,6 +107,12 @@ export default class ServingsOverview extends React.Component<IProps> {
         const amount = servingsPerType ? servingsPerType[type].length : 0;
         return <Text style={styles.servingsAmount}>x{amount}</Text>;
     }
+
+    renderAmountShade() {
+        const servingsPerType = this.props.servingsMap;
+        const amount = servingsPerType ? servingsPerType.Shade.length : 0;
+        return <Text style={styles.servingsAmountDark}>x{amount}</Text>;
+    }
 }
 
 const styles = StyleSheet.create({
@@ -136,6 +142,10 @@ const styles = StyleSheet.create({
         width: 48,
     },
     servingsAmount: {
+        fontSize: 20,
+    },
+    servingsAmountDark: {
+        color: "#FFFFFF",
         fontSize: 20,
     },
 });
