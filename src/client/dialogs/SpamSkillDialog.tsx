@@ -8,6 +8,7 @@ import { getUserSkills, SkillId, spamSkill } from "../../skills/useSkill";
 import LastUsedSkillStore from "../../store/LastUsedSkillStore";
 import IHabiticaData from "../../userData/IHabiticaData";
 import Interaction from "../Interaction";
+import { BaseInputDialog } from "./BaseInputDialog";
 
 interface ISpamSkillDialogProps {
     userData: Promise<IHabiticaData>;
@@ -55,7 +56,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
             : [];
 
         return (
-            <Interaction
+            <BaseInputDialog
                 dialogTitle="Use Skill"
                 dialogText="Use a skill on the most beneficial task a set number of times or until you're out of mana."
                 close={this.props.close}
@@ -83,7 +84,7 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
                     keyboardType={"numeric"}
                     placeholder="Number of uses"
                 />
-            </Interaction>
+            </BaseInputDialog>
         );
     }
 
