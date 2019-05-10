@@ -119,14 +119,15 @@ const styles = StyleSheet.create({
     servingsOverview: {
         backgroundColor: "#EDECEE",
         borderRadius: 5,
-        alignItems: "center",
-        margin: 10,
+        margin: 25,
+        padding: 12,
     },
     title: {
+        textAlign: "center",
         fontSize: 20,
         fontWeight: "bold",
         color: "#6e6976ff",
-        padding: 5,
+        paddingBottom: 5,
     },
     servingRow: {
         flexDirection: "row",
