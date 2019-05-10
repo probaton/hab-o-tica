@@ -1,9 +1,9 @@
 import { callHabApi } from "../requests/HabiticaRequest";
 import IHabiticaData from "../userData/IHabiticaData";
-import { initializeServingsPerType, PetType, ServingsPerType, IPetMap } from "./servingsHelpers";
+import { initializeServingsPerType, PetType, ServingsPerType } from "./servingsHelpers";
 import { UnfeedablePets } from "./UnfeedablePets";
 
-export class PetFeeder {
+export default class PetFeeder {
     petData: string[];
     mountData: any;
     servingsPerType: ServingsPerType;

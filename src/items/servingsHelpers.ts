@@ -1,16 +1,5 @@
 export type PetType = "Base" | "White" | "Desert" | "Red" | "Shade" | "Skeleton" | "Zombie" | "CottonCandyPink" | "CottonCandyBlue" | "Golden";
 
-export interface IPickerOption {
-    id: string;
-    label: string;
-}
-
-export interface IPetMap {
-    name: string;
-    displayName: string;
-    variants: string[];
-}
-
 export type ServingsPerType = {
     Base: string[],
     White: string[],

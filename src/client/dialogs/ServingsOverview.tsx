@@ -7,7 +7,7 @@ interface IProps {
     servingsMap: ServingsPerType | undefined;
 }
 
-export class ServingsOverview extends React.Component<IProps> {
+export default class ServingsOverview extends React.Component<IProps> {
     render() {
         return (
             <View style={styles.servingsOverview}>
