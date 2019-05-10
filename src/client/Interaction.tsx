@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: "#34313A",
+        textAlign: "center",
     },
     spinner: {
         marginTop: 15,
