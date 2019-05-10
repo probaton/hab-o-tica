@@ -107,7 +107,7 @@ export default class PetPicker extends React.Component<IProps, IState> {
         const petDisplayName = `${this.parseDisplayName(this.state.typeInput)} ${this.parseDisplayName(this.state.speciesInput)}`;
         return (
             <>
-                <Text>Are you sure you want to feed your {petDisplayName}?</Text>
+                <Text style={styles.confirmationMessage}>Are you sure you want to feed your {petDisplayName}?</Text>
                 {this.renderBackButton()}
             </>
         );
@@ -181,5 +181,8 @@ const styles = StyleSheet.create({
     buttonText: {
         textAlign: "center",
         color: "#009688",
+    },
+    confirmationMessage: {
+        textAlign: "center",
     },
 });
