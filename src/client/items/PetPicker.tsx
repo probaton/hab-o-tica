@@ -1,11 +1,11 @@
 import React from "react";
-import { Dimensions, Picker, StyleSheet, Text } from "react-native";
+import { Dimensions, Picker, StyleSheet, Text, TouchableOpacity } from "react-native";
 import PetFeeder from "../../items/PetFeeder";
 
 interface IProps {
     feeder: PetFeeder;
-    handleSpeciesChange: (species: string) => void;
-    handleTypeChange: (type: string) => void;
+    handleSpeciesChange: (species?: string) => void;
+    handleTypeChange: (type?: string) => void;
 }
 
 interface IState {
@@ -71,13 +71,16 @@ export default class PetPicker extends React.Component<IProps, IState> {
             .map(petId => petId.split("-")[0]);
         const options = this.generatePickerItems("species", species);
         return (
-            <Picker
-                style={styles.picker}
-                onValueChange={this.handleSecondarySpeciesChange}
-                selectedValue={this.state.speciesInput}
-            >
-                {options}
-            </Picker>
+            <>
+                <Picker
+                    style={styles.picker}
+                    onValueChange={this.handleSecondarySpeciesChange}
+                    selectedValue={this.state.speciesInput}
+                >
+                    {options}
+                </Picker>
+                {this.renderBackButton()}
+            </>
         );
     }
 
@@ -87,19 +90,48 @@ export default class PetPicker extends React.Component<IProps, IState> {
             .map(petId => petId.split("-")[1]);
         const options = this.generatePickerItems("type", types);
         return (
-            <Picker
-                style={styles.picker}
-                onValueChange={this.handleSecondaryTypeChange}
-                selectedValue={this.state.typeInput}
-            >
-                {options}
-            </Picker>
+            <>
+                <Picker
+                    style={styles.picker}
+                    onValueChange={this.handleSecondaryTypeChange}
+                    selectedValue={this.state.typeInput}
+                >
+                    {options}
+                </Picker>
+                {this.renderBackButton()}
+            </>
         );
     }
 
     private renderConfirmationMessage() {
         const petDisplayName = `${this.parseDisplayName(this.state.typeInput)} ${this.parseDisplayName(this.state.speciesInput)}`;
-        return <Text>Are you sure you want to feed your {petDisplayName}?</Text>;
+        return (
+            <>
+                <Text>Are you sure you want to feed your {petDisplayName}?</Text>
+                {this.renderBackButton()}
+            </>
+        );
+    }
+
+    private renderBackButton() {
+        return (
+            <TouchableOpacity
+                style={styles.backButton}
+                onPress={this.resetSelection}
+            >
+                <Text style={styles.buttonText}>Go back</Text>
+            </TouchableOpacity>
+        );
+    }
+
+    private resetSelection = () => {
+        this.setState({
+            selectionState: "none",
+            speciesInput: "",
+            typeInput: "",
+        });
+        this.props.handleSpeciesChange(undefined);
+        this.props.handleTypeChange(undefined);
     }
 
     private handleInitialSpeciesChange = (speciesInput: string) => {
@@ -141,5 +173,13 @@ export default class PetPicker extends React.Component<IProps, IState> {
 const styles = StyleSheet.create({
     picker: {
         width: Dimensions.get("window").width - 100,
+    },
+    backButton: {
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    buttonText: {
+        textAlign: "center",
+        color: "#009688",
     },
 });
