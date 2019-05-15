@@ -11,6 +11,7 @@ export type ServingsPerType = {
     CottonCandyPink: string[],
     CottonCandyBlue: string[],
     Golden: string[],
+    Other: string[],
 };
 
 export function initializeServingsPerType(): ServingsPerType {
@@ -25,5 +26,6 @@ export function initializeServingsPerType(): ServingsPerType {
         CottonCandyPink: [],
         CottonCandyBlue: [],
         Golden: [],
+        Other: [],
     };
 }

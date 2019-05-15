@@ -36,7 +36,7 @@ export default class PetFeeder {
     }
 
     feedPet(species: string, petType: PetType): Promise<string> {
-        const servings = this.servingsPerType[petType];
+        const servings = this.servingsPerType[petType] || this.servingsPerType.Other;
 
         if (servings.length === 0) {
             return new Promise<string>(resolve => { resolve(`You don't have any food suitable for ${petType} pets.`); });
@@ -92,6 +92,7 @@ export default class PetFeeder {
     private convertFoodTypeToServings(petType: PetType, foodType: string, larder: any) {
         for (let i = larder[foodType]; i > 0; i--) {
             this.servingsPerType[petType].push(foodType);
+            this.servingsPerType.Other.push(foodType);
         }
     }
 
