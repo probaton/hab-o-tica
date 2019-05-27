@@ -1,15 +1,19 @@
 import { getCredentials } from "../store/CredentialStore";
 
-
 export async function callHabApi(apiSuffix: string, method: "POST" | "GET", body?: any): Promise<any> {
     const credentials = await getCredentials();
+    const headers: any = {
+        "x-client": "probaton-habotica",
+        "x-api-user": credentials.userId,
+        "x-api-key": credentials.apiToken,
+    };
+    if (body) {
+        headers["Content-Type"] = "application/json";
+    }
     const options = {
         method,
-        headers: {
-            "x-client": "probaton-habotica",
-            "x-api-user": credentials.userId,
-            "x-api-key": credentials.apiToken,
-        },
+        headers,
+        body: JSON.stringify(body),
     };
 
     return fetch(`https://habitica.com${apiSuffix}`, options).then(async response => {

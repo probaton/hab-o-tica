@@ -1,6 +1,6 @@
 import { callHabApi } from "../requests/HabiticaRequest";
 
-export function newToDo(text: string) {
+export function newToDo(text: string): void {
     const body = {
         text,
         type: "todo",
