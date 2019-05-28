@@ -101,13 +101,13 @@ export default class PetFeeder {
     }
 
     private isFeedable(petId: string, rawPetData: any): boolean {
-        const petNr = rawPetData[petId];
-        if (petNr === -1) {
+        const petValue = rawPetData[petId];
+        if (petValue === -1 || UnfeedablePets.indexOf(petId) > -1) {
             return false;
-        } else if (UnfeedablePets.indexOf(petId) > -1) {
-            return false;
-        } else if (petNr === 5) {
-            return !this.mountData.hasOwnProperty(petId);
+        } else if (petValue === 5) {
+            // Returns undefined for pets without a mount, true for pets with one, and null for mounts set free with a kennel key.
+            const matchingMount = this.mountData[petId];
+            return !matchingMount;
         } else {
             return true;
         }
