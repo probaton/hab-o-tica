@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
+import IHabiticaData from "../userData/IHabiticaData";
+
 import { FeedPetDialog } from "./dialogs/FeedPetDialog";
+import { LootArmoireDialog } from "./dialogs/LootArmoireDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
 import { TileButton } from "./TileButton";
-
-import IHabiticaData from "../userData/IHabiticaData";
 
 interface IHomeProps {
     userData: { lastUpdate: number, data: Promise<IHabiticaData> };
@@ -13,7 +14,7 @@ interface IHomeProps {
 }
 
 interface IHomeState {
-    viewState?: "feedPet" | "spamSkill";
+    viewState?: "feedPet" | "spamSkill" | "lootArmoire";
 }
 
 export default class Home extends React.Component<IHomeProps, IHomeState> {
@@ -36,6 +37,7 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
         switch (this.state.viewState) {
             case "feedPet": return this.renderFeedPetDialog();
             case "spamSkill": return this.renderSpamSkillDialog();
+            case "lootArmoire": return this.renderLootArmoireDialog();
             case undefined: return this.renderButtons();
         }
     }
@@ -47,6 +49,10 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
                     <TileButton
                         text="Feed Pet"
                         onPress={this.openFeedPetDialog}
+                    />
+                    <TileButton
+                        text="Armoire"
+                        onPress={this.openLootArmoireDialog}
                     />
                 </View>
 
@@ -78,6 +84,15 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
     private openFeedPetDialog = () => {
         this.refreshUserData();
         this.setState({ viewState: "feedPet" });
+    }
+
+    private renderLootArmoireDialog() {
+        return <LootArmoireDialog userData={this.props.userData.data} close={this.closeDialogs}/>;
+    }
+
+    private openLootArmoireDialog = () => {
+        this.refreshUserData();
+        this.setState({ viewState: "lootArmoire" });
     }
 
     private refreshUserData = async () => {

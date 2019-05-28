@@ -4,8 +4,8 @@ import { Dimensions, KeyboardTypeOptions, ReturnKeyTypeOptions, StyleSheet, Text
 
 interface IInputProps {
     onChangeText: (input: string) => void;
-    autoFocus: boolean;
     keyboardType: KeyboardTypeOptions;
+    autoFocus?: boolean;
     dark?: boolean;
     placeholder?: string;
     onSubmitEditing?: () => void;

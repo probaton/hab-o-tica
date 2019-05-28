@@ -7,7 +7,6 @@ import { Input } from "../controls/Input";
 import { getUserSkills, SkillId, spamSkill } from "../../skills/useSkill";
 import LastUsedSkillStore from "../../store/LastUsedSkillStore";
 import IHabiticaData from "../../userData/IHabiticaData";
-import Interaction from "../Interaction";
 import { BaseInputDialog } from "./BaseInputDialog";
 
 interface ISpamSkillDialogProps {
