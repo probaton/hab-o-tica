@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 
-import { lootArmoire } from "../../items/lootArmoire";
+import { spamArmoire } from "../../items/lootArmoire";
 import IHabiticaData from "../../userData/IHabiticaData";
 
 import { Input } from "../controls/Input";
@@ -30,6 +30,7 @@ export class LootArmoireDialog extends React.Component<IProps, IState> {
         const newState: IState = this.state;
         const userData = await this.props.userData;
         newState.currentGold = Math.round(userData.stats.gp);
+        newState.isResolvedMessage = newState.currentGold < 100 ? "You need at least 100 gold." : undefined;
         newState.doneLoading = true;
         this.setState(newState);
     }
@@ -61,8 +62,12 @@ export class LootArmoireDialog extends React.Component<IProps, IState> {
     }
 
     private onSubmit = async () => {
+        const count = +this.state.quantityInput!;
+        if (!Number.isInteger(count) || count < 1) {
+            return Alert.alert("Invalid number");
+        }
         this.setState({ doneLoading: false });
-        this.setState({ doneLoading: true, isResolvedMessage: (await lootArmoire()) });
+        this.setState({ doneLoading: true, isResolvedMessage: await spamArmoire(count) });
     }
 }
 
