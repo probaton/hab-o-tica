@@ -1,4 +1,6 @@
 import { AsyncStorage } from "react-native";
+
+import { getEnv } from "../config";
 import IHabiticaData from "../userData/IHabiticaData";
 
 export async function getCredentials(): Promise<ICredentials> {
@@ -47,7 +49,7 @@ async function _getUserData(credentials: ICredentials): Promise<IHabiticaData | 
         },
     };
 
-    return fetch("https://habitica.com/export/userData.json", options).then(async response => {
+    return fetch(`${getEnv()}/export/userData.json`, options).then(async response => {
         if (response.ok) {
             return await response.json() as IHabiticaData;
         }

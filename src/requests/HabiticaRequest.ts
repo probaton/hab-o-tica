@@ -1,3 +1,4 @@
+import { getEnv } from "../config";
 import { getCredentials } from "../store/CredentialStore";
 
 export async function callHabApi(apiSuffix: string, method: "POST" | "GET", body?: any): Promise<any> {
@@ -16,7 +17,7 @@ export async function callHabApi(apiSuffix: string, method: "POST" | "GET", body
         body: JSON.stringify(body),
     };
 
-    return fetch(`https://habitica.com${apiSuffix}`, options).then(async response => {
+    return fetch(`${getEnv()}${apiSuffix}`, options).then(async response => {
         if (response.ok) {
             return response.json();
         }
