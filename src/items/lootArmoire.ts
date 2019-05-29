@@ -5,11 +5,11 @@ import { callHabApi } from "../requests/HabiticaRequest";
  * Loots the armoire a given number of times or until gold runs out.
  * @param count The number of times to loot.
  */
-export async function spamArmoire(count: number): Promise<any> {
+export async function spamArmoire(condition: (lootCount: number) => Promise<boolean>): Promise<any> {
     return new Promise<string> (async (resolve) => {
         let i = 0;
         let run = true;
-        while (i < count && run) {
+        while ((await condition(i)) && run) {
             await callHabApi("/api/v3/user/buy-armoire", "POST").catch(e => {
                 let customMessage = "";
                 if (e.message === "Not Enough Gold") {

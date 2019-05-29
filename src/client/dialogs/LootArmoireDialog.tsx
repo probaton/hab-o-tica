@@ -1,8 +1,9 @@
 import React from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { spamArmoire } from "../../items/lootArmoire";
 import IHabiticaData from "../../userData/IHabiticaData";
+import { getUserData } from "../../userData/userData";
 
 import { Input } from "../controls/Input";
 import Gold from "../images/Gold";
@@ -37,7 +38,7 @@ export class LootArmoireDialog extends React.Component<IProps, IState> {
 
     render() {
         const dialogText =
-            "Specify the number of times to loot the armoire, or keep looting until there are either no more items to loot or gold to spend.";
+            "Loot the armoire a specific number of times, until you're out of gold, or until there is no more gear to loot.";
 
         return (
             <BaseInputDialog
@@ -52,13 +53,30 @@ export class LootArmoireDialog extends React.Component<IProps, IState> {
                     <Gold/>
                     <Text style={styles.goldText}>{this.state.currentGold.toString()}</Text>
                 </View>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={this.getAllGear}
+                >
+                    <Text style={styles.spamButton}>LOOT ALL REMAINING GEAR!</Text>
+                </TouchableOpacity>
                 <Input
                     onChangeText={quantityInput => this.setState({ quantityInput })}
                     keyboardType="numeric"
+                    placeholder="Number of uses"
                     autoFocus={true}
                 ></Input>
             </BaseInputDialog>
         );
+    }
+
+    private getAllGear = async () => {
+        if ((await this.props.userData).flags.armoireEmpty) {
+            this.setState({ isResolvedMessage: "You already own all armoire gear." });
+        } else {
+            const condition = async () => !((await getUserData()).flags.armoireEmpty);
+            this.setState({ doneLoading: false });
+            this.setState({ doneLoading: true, isResolvedMessage: await spamArmoire(condition) });
+        }
     }
 
     private onSubmit = async () => {
@@ -66,8 +84,9 @@ export class LootArmoireDialog extends React.Component<IProps, IState> {
         if (!Number.isInteger(count) || count < 1) {
             return Alert.alert("Invalid number");
         }
+        const condition = (lootCount: number) => new Promise<boolean>(resolve => resolve(lootCount < count));
         this.setState({ doneLoading: false });
-        this.setState({ doneLoading: true, isResolvedMessage: await spamArmoire(count) });
+        this.setState({ doneLoading: true, isResolvedMessage: await spamArmoire(condition) });
     }
 }
 
@@ -79,5 +98,14 @@ const styles = StyleSheet.create({
     },
     goldText: {
         marginLeft: 8,
+    },
+    button: {
+        height: 36,
+        color: "#34313A",
+        alignSelf: "center",
+    },
+    spamButton: {
+        color: "#009688",
+        padding: 8,
     },
 });
