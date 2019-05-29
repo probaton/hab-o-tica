@@ -1,4 +1,4 @@
-secret/
+.expo/
 node_modules/
 out/
 yarn-error.log

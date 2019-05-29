@@ -1,9 +1,0 @@
-{
-  "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://zb-pd4.probaton.habotica.exp.direct",
-  "packagerNgrokUrl": "https://packager.zb-pd4.probaton.habotica.exp.direct",
-  "ngrokPid": 22260,
-  "devToolsPort": 19002,
-  "packagerPort": 19001,
-  "packagerPid": 22123
-}
