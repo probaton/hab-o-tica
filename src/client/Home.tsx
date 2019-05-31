@@ -6,6 +6,7 @@ import IHabiticaData from "../userData/IHabiticaData";
 import { FeedPetDialog } from "./dialogs/FeedPetDialog";
 import { LootArmoireDialog } from "./dialogs/LootArmoireDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
+import { WardrobeDialog } from "./dialogs/WardrobeDialog";
 import { TileButton } from "./TileButton";
 
 interface IHomeProps {
@@ -14,17 +15,16 @@ interface IHomeProps {
 }
 
 interface IHomeState {
-    viewState?: "feedPet" | "spamSkill" | "lootArmoire";
+    viewState?: HomeViewState;
 }
 
-export default class Home extends React.Component<IHomeProps, IHomeState> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            viewState: undefined,
-        };
-    }
+type HomeViewState = "feedPet" | "spamSkill" | "lootArmoire" | "wardrobe";
 
+export default class Home extends React.Component<IHomeProps, IHomeState> {
+    constructor(props: IHomeProps) {
+        super(props);
+        this.state = { viewState: undefined };
+    }
     render() {
         return (
             <>
@@ -35,9 +35,10 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
 
     private renderContent() {
         switch (this.state.viewState) {
-            case "feedPet": return this.renderFeedPetDialog();
-            case "spamSkill": return this.renderSpamSkillDialog();
-            case "lootArmoire": return this.renderLootArmoireDialog();
+            case "feedPet": return <FeedPetDialog userData={this.props.userData.data} close={this.closeDialogs}/>;
+            case "spamSkill": return <SpamSkillDialog userData={this.props.userData.data} close={this.closeDialogs}/>;
+            case "lootArmoire": return <LootArmoireDialog userData={this.props.userData.data} close={this.closeDialogs}/>;
+            case "wardrobe": return <WardrobeDialog userData={this.props.userData.data} close={this.closeDialogs}/>;
             case undefined: return this.renderButtons();
         }
     }
@@ -48,51 +49,31 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
                 <View style={styles.column}>
                     <TileButton
                         text="Feed Pet"
-                        onPress={this.openFeedPetDialog}
+                        onPress={() => this.openDialog("feedPet")}
                     />
                     <TileButton
                         text="Armoire"
-                        onPress={this.openLootArmoireDialog}
+                        onPress={() => this.openDialog("lootArmoire")}
                     />
                 </View>
 
                 <View style={styles.column}>
                     <TileButton
                         text="Use Skill"
-                        onPress={this.openSpamSkillDialog}
+                        onPress={() => this.openDialog("spamSkill")}
+                    />
+                    <TileButton
+                        text="Wardrobe"
+                        onPress={() => this.openDialog("wardrobe")}
                     />
                 </View>
             </View>
         );
     }
 
-    private renderSpamSkillDialog() {
-        return this.state.viewState === "spamSkill"
-            ? <SpamSkillDialog userData={this.props.userData.data} close={this.closeDialogs}/>
-            : null;
-    }
-
-    private openSpamSkillDialog = () => {
+    private openDialog(viewState: HomeViewState) {
         this.refreshUserData();
-        this.setState({ viewState: "spamSkill" });
-    }
-
-    private renderFeedPetDialog() {
-        return <FeedPetDialog userData={this.props.userData.data} close={this.closeDialogs}/>;
-    }
-
-    private openFeedPetDialog = () => {
-        this.refreshUserData();
-        this.setState({ viewState: "feedPet" });
-    }
-
-    private renderLootArmoireDialog() {
-        return <LootArmoireDialog userData={this.props.userData.data} close={this.closeDialogs}/>;
-    }
-
-    private openLootArmoireDialog = () => {
-        this.refreshUserData();
-        this.setState({ viewState: "lootArmoire" });
+        this.setState({ viewState });
     }
 
     private refreshUserData = async () => {
