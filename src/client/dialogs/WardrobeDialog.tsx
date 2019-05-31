@@ -1,9 +1,11 @@
 import React from "react";
-import { Alert } from "react-native";
 
-import IHabiticaData from "../../userData/IHabiticaData";
-
+import ItemSelector from "../controls/ItemSelector";
 import Interaction from "../Interaction";
+
+import { IOutfit } from "../../items/IOutfit";
+import WardrobeStore from "../../store/WardrobeStore";
+import IHabiticaData from "../../userData/IHabiticaData";
 
 interface IProps {
     userData: Promise<IHabiticaData>;
@@ -12,7 +14,7 @@ interface IProps {
 
 interface IState {
     viewState?: "overview" | "add";
-    gearTypeInput?: string;
+    wardrobe?: IOutfit[];
     loading: boolean;
     isResolvedMessage?: string;
 }
@@ -24,7 +26,14 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
     }
 
     async componentDidMount() {
-        this.setState({ loading: false });
+        const newState: IState = { loading: false };
+        const wardrobe = await WardrobeStore.get();
+        if (wardrobe) {
+            newState.wardrobe = wardrobe;
+        } else {
+            newState.isResolvedMessage = "You have no saved outfits.";
+        }
+        this.setState(newState);
     }
 
     render() {
@@ -41,8 +50,27 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
                 loading={loading}
                 isResolvedMessage={isResolvedMessage}
             >
+                {this.renderWardrobeOverview()}
             </Interaction>
         );
+    }
+
+    private renderWardrobeOverview() {
+        if (this.state.wardrobe) {
+            return <ItemSelector title="Saved outfits" itemNames={this.parseItemNames()} onItemClick={this.onItemClick}/>;
+        }
+    }
+
+    private onItemClick = (itemName: string) => {
+        this.setState({ isResolvedMessage: "Clicky-click" });
+    }
+
+    private parseItemNames(): string[] {
+        if (this.state.wardrobe) {
+            return this.state.wardrobe.map(outfit => outfit.name);
+        } else {
+            return [];
+        }
     }
 
     private onSubmit = async () => {

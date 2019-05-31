@@ -3,11 +3,11 @@ import { Component } from "react";
 import { Alert, Dimensions, Picker, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import { Input } from "../controls/Input";
+import { BaseInputDialog } from "./BaseInputDialog";
 
 import { getUserSkills, SkillId, spamSkill } from "../../skills/useSkill";
 import LastUsedSkillStore from "../../store/LastUsedSkillStore";
 import IHabiticaData from "../../userData/IHabiticaData";
-import { BaseInputDialog } from "./BaseInputDialog";
 
 interface ISpamSkillDialogProps {
     userData: Promise<IHabiticaData>;
