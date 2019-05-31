@@ -17,6 +17,9 @@ export default interface IHabiticaData {
         mp: number;
         hp: number;
     };
+    flags: {
+        armoireEmpty: boolean;
+    };
     tasks: {
         habits: IHabit[];
     };

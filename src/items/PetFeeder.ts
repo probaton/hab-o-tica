@@ -1,6 +1,8 @@
+import { s, spacify } from "../helpers/stringUtils";
+import { initializeServingsPerType, PetType, ServingsPerType } from "./servingsHelpers";
+
 import { callHabApi } from "../requests/HabiticaRequest";
 import IHabiticaData from "../userData/IHabiticaData";
-import { initializeServingsPerType, PetType, ServingsPerType } from "./servingsHelpers";
 import { UnfeedablePets } from "./UnfeedablePets";
 
 export default class PetFeeder {
@@ -49,13 +51,13 @@ export default class PetFeeder {
                 const servingType = servings[i];
                 await this.callFeedApi(species, petType, servingType!).catch(e => {
                     resolve(e.message === "You already have that mount. Try feeding another pet."
-                        ? `Congratulations! Your ${this.parseDisplayName(species)} grew into a mount after ${i} feeding${this.s(i)}`
-                        : `Feeding failed after ${i} serving${this.s(i)}: \n${e.message}`);
+                        ? `Congratulations! Your ${spacify(species)} grew into a mount after ${i} feeding${s(i)}`
+                        : `Feeding failed after ${i} serving${s(i)}: \n${e.message}`);
                     run = false;
                 });
                 i++;
             }
-            resolve(`Fed ${species} ${i} time${this.s(i)}`);
+            resolve(`Fed ${species} ${i} time${s(i)}`);
         });
     }
 
@@ -96,10 +98,6 @@ export default class PetFeeder {
         }
     }
 
-    private s(i: number): "s" | "" {
-        return i === 1 ? "" : "s";
-    }
-
     private isFeedable(petId: string, rawPetData: any): boolean {
         const petValue = rawPetData[petId];
         if (petValue === -1 || UnfeedablePets.indexOf(petId) > -1) {
@@ -111,9 +109,5 @@ export default class PetFeeder {
         } else {
             return true;
         }
-    }
-
-    private parseDisplayName(species: string): string {
-        return species.substr(0, 1) + species.substr(1).replace(/([A-Z])/g, " $1");
     }
 }

@@ -1,3 +1,4 @@
+import { s } from "../helpers/stringUtils";
 import { callHabApi } from "../requests/HabiticaRequest";
 import IHabiticaData, { HabiticaClass } from "../userData/IHabiticaData";
 import { getUserData } from "../userData/userData";
@@ -40,10 +41,6 @@ export async function spamSkill(skillId: SkillId, count = -1): Promise<any> {
         }
         resolve(`Succesfully cast ${skill.name} ${i} time${s(i)}`);
     });
-}
-
-function s(i: number): "s" | "" {
-    return i === 1 ? "" : "s";
 }
 
 export type SkillId =
