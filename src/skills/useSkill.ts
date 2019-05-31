@@ -1,4 +1,4 @@
-import { s } from "../helpers/pluralizer";
+import { s } from "../helpers/stringUtils";
 import { callHabApi } from "../requests/HabiticaRequest";
 import IHabiticaData, { HabiticaClass } from "../userData/IHabiticaData";
 import { getUserData } from "../userData/userData";

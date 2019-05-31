@@ -75,10 +75,7 @@ export class LootArmoireDialog extends React.Component<IProps, IState> {
         } else {
             const condition = async () => !((await getUserData()).flags.armoireEmpty);
             this.setState({ doneLoading: false });
-            const looter = new ArmoireLooter();
-            const message = await looter.spamArmoire(condition);
-            this.report(looter);
-            this.setState({ doneLoading: true, isResolvedMessage: message });
+            this.setState({ doneLoading: true, isResolvedMessage: await new ArmoireLooter().spamArmoire(condition) });
         }
     }
 
@@ -89,16 +86,7 @@ export class LootArmoireDialog extends React.Component<IProps, IState> {
         }
         const condition = (lootCount: number) => new Promise<boolean>(resolve => resolve(lootCount < count));
         this.setState({ doneLoading: false });
-        const looter = new ArmoireLooter();
-        const message = await looter.spamArmoire(condition);
-        this.report(looter);
-        this.setState({ doneLoading: true, isResolvedMessage: message });
-    }
-
-    private report(looter: ArmoireLooter) {
-        console.log(">>>> xp", looter.xpGain);
-        console.log(">>>> food", looter.foodGain);
-        console.log(">>>> gear", looter.gearGain);
+        this.setState({ doneLoading: true, isResolvedMessage: await new ArmoireLooter().spamArmoire(condition) });
     }
 }
 
