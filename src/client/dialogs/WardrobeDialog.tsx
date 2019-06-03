@@ -64,7 +64,7 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
 
     private onItemClick = async (outfitName: string) => {
         const outfit = this.state.wardrobe!.find(o => o.name === outfitName);
-        const message = outfit ? await new Outfitter(outfit).equipAll() : "Outfit not found";
+        const message = outfit ? await new Outfitter(outfit, await this.props.userData).equipAll() : "Outfit not found";
         this.setState({ isResolvedMessage: message });
     }
 

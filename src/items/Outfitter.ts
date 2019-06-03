@@ -1,22 +1,25 @@
 import { callHabApi } from "../requests/HabiticaRequest";
-import { IOutfit } from "./IOutfit";
+import IHabiticaData from "../userData/IHabiticaData";
+import { createOutfit, IOutfit } from "./IOutfit";
 
 export default class Outfitter {
-    outfit: IOutfit;
+    newOutfit: IOutfit;
+    currentOutfit: IOutfit;
 
-    constructor(outfit: IOutfit) {
-        this.outfit = outfit;
+    constructor(outfit: IOutfit, userData: IHabiticaData) {
+        this.newOutfit = outfit;
+        this.currentOutfit = createOutfit("current", userData.items.gear.costume);
     }
 
     async equipAll(): Promise<string> {
-        return this.equipItem(this.outfit.armor);
+        return this.equipItem("armor", this.newOutfit.armor);
     }
 
-    async equipItem(item?: string): Promise<string> {
-        if (item) {
+    async equipItem(slot: "armor" | "head" | "shield" | "body" | "weapon" | "eyeWear" | "headAccessory" | "back", item?: string): Promise<string> {
+        if (item !== this.currentOutfit[slot]) {
             callHabApi(`/api/v3/user/equip/costume/${item}`, "POST");
             return `Successfully equipped ${item}`;
         }
-        return "The outfit doesn't include that slot";
+        return "That item is already equipped";
     }
 }
