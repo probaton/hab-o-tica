@@ -38,14 +38,14 @@ export default interface IHabiticaData {
 export type HabiticaClass = "wizard" | "healer" | "warrior" | "rogue";
 
 export interface IGearSet {
-    armor: string;
-    head: string;
-    shield: string;
-    body: string;
-    weapon: string;
-    eyewear: string;
-    headaccessory: string;
-    back: string;
+    armor?: string;
+    head?: string;
+    shield?: string;
+    body?: string;
+    weapon?: string;
+    eyewear?: string;
+    headaccessory?: string;
+    back?: string;
 }
 
 export interface IHabit {

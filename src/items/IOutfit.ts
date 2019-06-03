@@ -2,14 +2,14 @@ import { IGearSet } from "../userData/IHabiticaData";
 
 export interface IOutfit {
     name: string;
-    armor: string;
-    head: string;
-    shield: string;
-    body: string;
-    weapon: string;
-    eyeWear: string;
-    headAccessory: string;
-    back: string;
+    armor?: string;
+    head?: string;
+    shield?: string;
+    body?: string;
+    weapon?: string;
+    eyeWear?: string;
+    headAccessory?: string;
+    back?: string;
 }
 
 export function createOutfit(name: string, gearSet: IGearSet): IOutfit {

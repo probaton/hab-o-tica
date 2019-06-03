@@ -4,6 +4,7 @@ import ItemSelector from "../controls/ItemSelector";
 import Interaction from "../Interaction";
 
 import { IOutfit } from "../../items/IOutfit";
+import Outfitter from "../../items/Outfitter";
 import WardrobeStore from "../../store/WardrobeStore";
 import IHabiticaData from "../../userData/IHabiticaData";
 
@@ -61,8 +62,10 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
         }
     }
 
-    private onItemClick = (itemName: string) => {
-        this.setState({ isResolvedMessage: "Clicky-click" });
+    private onItemClick = async (outfitName: string) => {
+        const outfit = this.state.wardrobe!.find(o => o.name === outfitName);
+        const message = outfit ? await new Outfitter(outfit).equipAll() : "Outfit not found";
+        this.setState({ isResolvedMessage: message });
     }
 
     private parseItemNames(): string[] {

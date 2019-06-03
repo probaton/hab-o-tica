@@ -20,7 +20,7 @@ export default class ItemSelector extends React.Component<IProps> {
     }
 
     private renderItems() {
-        return this.props.itemNames.map(itemName => <ItemSelectorItem itemName={itemName} onClick={this.props.onItemClick}/>);
+        return this.props.itemNames.map(itemName => <ItemSelectorItem key={itemName} itemName={itemName} onClick={this.props.onItemClick}/>);
     }
 }
 
