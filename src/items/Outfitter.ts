@@ -1,18 +1,18 @@
 import { callHabApi } from "../requests/HabiticaRequest";
 import IHabiticaData from "../userData/IHabiticaData";
-import { createOutfit, IOutfit } from "./IOutfit";
+import { Outfit } from "./Outfit";
 
 export default class Outfitter {
     gearType: "equipped" | "costume";
-    newOutfit: IOutfit;
-    currentOutfit: IOutfit;
+    newOutfit: Outfit;
+    currentOutfit: Outfit;
     failMessage = "";
 
-    constructor(outfit: IOutfit, useCostume: boolean, userData: IHabiticaData) {
+    constructor(outfit: Outfit, useCostume: boolean, userData: IHabiticaData) {
         this.gearType = useCostume ? "costume" : "equipped";
         this.newOutfit = outfit;
         const gear = userData.items.gear;
-        this.currentOutfit = createOutfit("current", useCostume ? gear.costume : gear.equipped);
+        this.currentOutfit = new Outfit("current", useCostume ? gear.costume : gear.equipped);
     }
 
     async equipAll(): Promise<string> {

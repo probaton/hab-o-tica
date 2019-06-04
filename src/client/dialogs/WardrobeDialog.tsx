@@ -4,7 +4,7 @@ import ItemSelector from "../controls/ItemSelector";
 import Interaction from "../Interaction";
 
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { IOutfit, createOutfit } from "../../items/IOutfit";
+import { Outfit } from "../../items/Outfit";
 import Outfitter from "../../items/Outfitter";
 import WardrobeStore from "../../store/WardrobeStore";
 import IHabiticaData from "../../userData/IHabiticaData";
@@ -16,7 +16,7 @@ interface IProps {
 
 interface IState {
     viewState?: "overview" | "add";
-    wardrobe?: IOutfit[];
+    wardrobe?: Outfit[];
     loading: boolean;
     isResolvedMessage?: string;
     useCostume: boolean;
