@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     itemList: {
         backgroundColor: "#EDECEE",
         borderRadius: 5,
-        margin: 25,
+        margin: 8,
         padding: 12,
         alignItems: "center",
     },

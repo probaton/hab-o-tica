@@ -3,13 +3,16 @@ import IHabiticaData from "../userData/IHabiticaData";
 import { createOutfit, IOutfit } from "./IOutfit";
 
 export default class Outfitter {
+    gearType: "equipped" | "costume";
     newOutfit: IOutfit;
     currentOutfit: IOutfit;
     failMessage = "";
 
-    constructor(outfit: IOutfit, userData: IHabiticaData) {
+    constructor(outfit: IOutfit, useCostume: boolean, userData: IHabiticaData) {
+        this.gearType = useCostume ? "costume" : "equipped";
         this.newOutfit = outfit;
-        this.currentOutfit = createOutfit("current", userData.items.gear.costume);
+        const gear = userData.items.gear;
+        this.currentOutfit = createOutfit("current", useCostume ? gear.costume : gear.equipped);
     }
 
     async equipAll(): Promise<string> {
@@ -27,7 +30,7 @@ export default class Outfitter {
     async equipItem(slot: "armor" | "head" | "shield" | "body" | "weapon" | "eyeWear" | "headAccessory" | "back", item?: string): Promise<void> {
         if (item && item !== this.currentOutfit[slot]) {
             try {
-                await callHabApi(`/api/v3/user/equip/costume/${item}`, "POST");
+                await callHabApi(`/api/v3/user/equip/${this.gearType}/${item}`, "POST");
             } catch (e) {
                 this.failMessage += `Failed to equip ${item}: ${e.message}\n`;
             }
