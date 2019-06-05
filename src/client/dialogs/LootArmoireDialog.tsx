@@ -5,7 +5,7 @@ import ArmoireLooter from "../../items/ArmoireLooter";
 import IHabiticaData from "../../userData/IHabiticaData";
 import { getUserData } from "../../userData/userData";
 
-import { Input } from "../controls/Input";
+import Input from "../controls/Input";
 import Gold from "../images/Gold";
 import { BaseInputDialog } from "./BaseInputDialog";
 

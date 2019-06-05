@@ -2,7 +2,7 @@ import React from "react";
 import { Component } from "react";
 import { Alert, Dimensions, Picker, StyleSheet, Text, TouchableOpacity } from "react-native";
 
-import { Input } from "../controls/Input";
+import Input from "../controls/Input";
 import { BaseInputDialog } from "./BaseInputDialog";
 
 import { getUserSkills, SkillId, spamSkill } from "../../skills/useSkill";

@@ -4,7 +4,7 @@ import { Dimensions, KeyboardTypeOptions, ReturnKeyTypeOptions, StyleSheet, Text
 
 interface IInputProps {
     onChangeText: (input: string) => void;
-    keyboardType: KeyboardTypeOptions;
+    keyboardType?: KeyboardTypeOptions;
     autoFocus?: boolean;
     dark?: boolean;
     placeholder?: string;
@@ -13,7 +13,7 @@ interface IInputProps {
     returnKeyType?: ReturnKeyTypeOptions;
 }
 
-export class Input extends Component<IInputProps> {
+export default class Input extends Component<IInputProps> {
     render() {
         const { onChangeText, autoFocus, keyboardType, placeholder, dark, setNextInput, onSubmitEditing, returnKeyType } = this.props;
         return (

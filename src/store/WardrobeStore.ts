@@ -2,10 +2,6 @@ import { Outfit } from "../items/Outfit";
 import StoreItem from "./StoreItem";
 
 export default abstract class WardrobeStore {
-    static store() {
-        return new StoreItem("outfit");
-    }
-
     static async get(): Promise<Outfit[] | undefined> {
         const wardrobeString = await this.store().get();
         return wardrobeString ? JSON.parse(wardrobeString) as Promise<Outfit[] | undefined> : undefined;
@@ -24,5 +20,10 @@ export default abstract class WardrobeStore {
     private static set(outfit: Outfit[]) {
         this.store().set(JSON.stringify(outfit));
     }
+
+    private static store() {
+        return new StoreItem("outfit");
+    }
+
 }
 

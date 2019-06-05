@@ -1,9 +1,10 @@
 import React from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import Input from "../controls/Input";
 import ItemSelector from "../controls/ItemSelector";
 import Interaction from "../Interaction";
 
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Outfit } from "../../items/Outfit";
 import Outfitter from "../../items/Outfitter";
 import WardrobeStore from "../../store/WardrobeStore";
@@ -15,19 +16,22 @@ interface IProps {
 }
 
 interface IState {
-    viewState?: "overview" | "add";
     wardrobe?: Outfit[];
-    loading: boolean;
-    isResolvedMessage?: string;
     useCostume: boolean;
+    outfitNameInput: string;
+    loading: boolean;
+    showAddForm: boolean;
+    isResolvedMessage?: string;
 }
 
 export class WardrobeDialog extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            loading: true,
             useCostume: true,
+            outfitNameInput: "",
+            loading: true,
+            showAddForm: false,
         };
     }
 
@@ -37,51 +41,63 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
         if (wardrobe) {
             newState.wardrobe = wardrobe;
         } else {
-            newState.isResolvedMessage = "You have no saved outfits.";
+            newState.showAddForm = true;
         }
         newState.loading = false;
         this.setState(newState);
     }
 
     render() {
-        const dialogText = "Equip a stored outfit or save what you're currently wearing.";
-
-        const { loading, isResolvedMessage } = this.state;
-
         return (
             <Interaction
                 dialogTitle="Wardrobe"
-                dialogText={dialogText}
+                dialogText={"Equip a stored outfit or save what you're currently wearing."}
+                onSubmit={this.state.showAddForm ? this.submitOutfit : undefined}
                 close={this.props.close}
-                onSubmit={this.onSubmit}
-                loading={loading}
-                isResolvedMessage={isResolvedMessage}
+                loading={this.state.loading}
+                isResolvedMessage={this.state.isResolvedMessage}
             >
                 <View style={styles.gearTypeToggle}>
                     <TouchableOpacity
                         style={this.state.useCostume ? styles.passiveToggle : styles.activeToggle}
-                        onPress={this.onEquippedClick}
+                        onPress={() => this.setState({ useCostume: false })}
                     >
                         <Text style={this.state.useCostume ? styles.passiveToggleText : styles.activeToggleText}>Equipped</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={this.state.useCostume ? styles.activeToggle : styles.passiveToggle}
-                        onPress={this.onCostumeClick}
+                        onPress={() => this.setState({ useCostume: true })}
                     >
                         <Text style={this.state.useCostume ? styles.activeToggleText : styles.passiveToggleText}>Costume</Text>
                     </TouchableOpacity>
                 </View>
-                <ItemSelector title="Saved outfits" itemNames={this.parseItemNames()} onItemClick={this.onItemClick}/>
+                {this.state.showAddForm ? this.renderAddForm() : this.renderOverview()}
             </Interaction>
         );
     }
 
-    private onEquippedClick = () => {
-        this.setState({ useCostume: false });
+    private renderOverview() {
+        return (
+            <>
+                <ItemSelector title="Saved outfits" itemNames={this.parseItemNames()} onItemClick={this.onItemClick}/>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => this.setState({ showAddForm: true })}
+                >
+                    <Text style={styles.buttonText}>Save current outfit</Text>
+                </TouchableOpacity>
+            </>
+        );
     }
 
-    private onCostumeClick = () => {
-        this.setState({ useCostume: true });
+    private renderAddForm() {
+        return (
+            <Input
+                placeholder="Outfit name"
+                onChangeText={input => this.setState({ outfitNameInput: input })}
+                onSubmitEditing={this.submitOutfit}
+            />
+        );
     }
 
     private onItemClick = async (outfitName: string) => {
@@ -94,17 +110,19 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
         }
     }
 
-    private parseItemNames(): string[] {
-        if (this.state.wardrobe) {
-            return this.state.wardrobe.map(outfit => outfit.name);
+    private submitOutfit = async () => {
+        if (!this.state.outfitNameInput) {
+            Alert.alert("Invalid name");
         } else {
-            return [];
+            const gearType = this.state.useCostume ? "costume" : "equipped";
+            const rawCostume = (await this.props.userData).items.gear[gearType];
+            WardrobeStore.add(new Outfit(this.state.outfitNameInput, rawCostume));
+            this.props.close();
         }
     }
 
-    private onSubmit = async () => {
-        this.setState({ loading: true });
-        this.setState({ loading: false, isResolvedMessage: "w00t" });
+    private parseItemNames(): string[] {
+        return this.state.wardrobe ? this.state.wardrobe.map(outfit => outfit.name) : [];
     }
 }
 
@@ -137,6 +155,19 @@ const styles = StyleSheet.create({
         padding: 12,
     },
     passiveToggleText: {
+        fontSize: 18,
+        textAlign: "center",
+        color: "#009688",
+        padding: 12,
+    },
+    button: {
+        margin: 5,
+        minWidth: 64,
+        height: 36,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    buttonText: {
         fontSize: 18,
         textAlign: "center",
         color: "#009688",

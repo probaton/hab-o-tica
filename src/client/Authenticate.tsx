@@ -2,7 +2,7 @@ import React from "react";
 import { Component } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-import { Input } from "./controls/Input";
+import Input from "./controls/Input";
 
 import { verifyCredentialsAndReturnUserData } from "../store/CredentialStore";
 import IHabiticaData from "../userData/IHabiticaData";
