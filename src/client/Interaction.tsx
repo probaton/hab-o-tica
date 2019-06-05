@@ -7,7 +7,7 @@ interface IProps {
     dialogText: string;
     dialogTitle: string;
     close: () => void;
-    onSubmit: () => void;
+    onSubmit?: () => void;
     loading?: boolean;
     isResolvedMessage?: string;
 }
@@ -70,7 +70,7 @@ export default class Interaction extends React.Component<IProps> {
 
     private renderSubmitButton() {
         const { onSubmit, loading, isResolvedMessage } = this.props;
-        if (isResolvedMessage || loading) {
+        if (isResolvedMessage || loading || !onSubmit) {
             return null;
         } else {
             return (
