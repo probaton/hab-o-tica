@@ -111,13 +111,24 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
     }
 
     private submitOutfit = async () => {
-        if (!this.state.outfitNameInput) {
-            Alert.alert("Invalid name");
+        const outfitName = this.state.outfitNameInput.trim();
+        const nameValidationError = this.validateOutfitName(outfitName);
+        if (nameValidationError) {
+            Alert.alert("Invalid input", nameValidationError);
         } else {
             const gearType = this.state.useCostume ? "costume" : "equipped";
             const rawCostume = (await this.props.userData).items.gear[gearType];
-            WardrobeStore.add(new Outfit(this.state.outfitNameInput, rawCostume));
+            WardrobeStore.add(new Outfit(outfitName, rawCostume));
             this.props.close();
+        }
+    }
+
+    private validateOutfitName(outfitName: string): string | undefined {
+        if (outfitName === "") {
+            return "Name cannot be empty.";
+        }
+        if (this.state.wardrobe && this.state.wardrobe.find(o => o.name === outfitName)) {
+            return `You already have an outfit named ${outfitName}.`;
         }
     }
 
