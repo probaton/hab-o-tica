@@ -1,11 +1,12 @@
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 
 import ArmoireLooter from "../../items/ArmoireLooter";
 import IHabiticaData from "../../userData/IHabiticaData";
 import { getUserData } from "../../userData/userData";
 
 import Input from "../controls/Input";
+import TouchButton from "../controls/TouchButton";
 import Gold from "../images/Gold";
 import { BaseInputDialog } from "./BaseInputDialog";
 
@@ -53,12 +54,12 @@ export class LootArmoireDialog extends React.Component<IProps, IState> {
                     <Gold/>
                     <Text style={styles.goldText}>{this.state.currentGold.toString()}</Text>
                 </View>
-                <TouchableOpacity
-                    style={styles.button}
+                <TouchButton
                     onPress={this.getAllGear}
-                >
-                    <Text style={styles.spamButton}>LOOT ALL REMAINING GEAR!</Text>
-                </TouchableOpacity>
+                    buttonStyle={styles.button}
+                    captionStyle={styles.spamButton}
+                    caption="LOOT ALL REMAINING GEAR!"
+                />
                 <Input
                     onChangeText={quantityInput => this.setState({ quantityInput })}
                     keyboardType="numeric"

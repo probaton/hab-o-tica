@@ -1,8 +1,9 @@
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
 import Input from "../controls/Input";
 import ItemSelector from "../controls/ItemSelector";
+import TouchButton from "../controls/TouchButton";
 import Interaction from "../Interaction";
 
 import { Outfit } from "../../items/Outfit";
@@ -58,18 +59,18 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
                 isResolvedMessage={this.state.isResolvedMessage}
             >
                 <View style={styles.gearTypeToggle}>
-                    <TouchableOpacity
-                        style={this.state.useCostume ? styles.passiveToggle : styles.activeToggle}
+                    <TouchButton
                         onPress={() => this.setState({ useCostume: false })}
-                    >
-                        <Text style={this.state.useCostume ? styles.passiveToggleText : styles.activeToggleText}>Equipped</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={this.state.useCostume ? styles.activeToggle : styles.passiveToggle}
+                        caption="Equipped"
+                        buttonStyle={this.state.useCostume ? styles.passiveToggle : styles.activeToggle}
+                        captionStyle={this.state.useCostume ? styles.passiveToggleText : styles.activeToggleText}
+                    />
+                    <TouchButton
                         onPress={() => this.setState({ useCostume: true })}
-                    >
-                        <Text style={this.state.useCostume ? styles.activeToggleText : styles.passiveToggleText}>Costume</Text>
-                    </TouchableOpacity>
+                        caption="Costume"
+                        buttonStyle={this.state.useCostume ? styles.activeToggle : styles.passiveToggle}
+                        captionStyle={this.state.useCostume ? styles.activeToggleText : styles.passiveToggleText}
+                    />
                 </View>
                 {this.state.showAddForm ? this.renderAddForm() : this.renderOverview()}
             </Interaction>
@@ -80,12 +81,12 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
         return (
             <>
                 <ItemSelector title="Saved outfits" itemNames={this.parseItemNames()} onItemClick={this.onItemClick}/>
-                <TouchableOpacity
-                    style={styles.button}
+                <TouchButton
                     onPress={() => this.setState({ showAddForm: true })}
-                >
-                    <Text style={styles.buttonText}>Save current outfit</Text>
-                </TouchableOpacity>
+                    caption="Save current outfit"
+                    buttonStyle={styles.button}
+                    captionStyle={styles.buttonText}
+                />
             </>
         );
     }

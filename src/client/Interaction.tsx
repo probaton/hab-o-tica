@@ -1,6 +1,7 @@
 import React from "react";
 import { ActivityIndicator, Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import TouchButton from "./controls/TouchButton";
 import XButton from "./images/XButton";
 
 interface IProps {
@@ -35,12 +36,12 @@ export default class Interaction extends React.Component<IProps> {
                         }
                     </View>
                     <View style={styles.buttonBar}>
-                        <TouchableOpacity
-                            style={styles.button}
+                        <TouchButton
                             onPress={close}
-                        >
-                            <Text style={styles.buttonText}>{isResolvedMessage ? "OK" : "CANCEL"}</Text>
-                        </TouchableOpacity>
+                            caption={isResolvedMessage ? "OK" : "CANCEL"}
+                            buttonStyle={styles.button}
+                            captionStyle={styles.buttonText}
+                        />
                         {this.renderSubmitButton()}
                     </View>
                 </View>
@@ -74,12 +75,12 @@ export default class Interaction extends React.Component<IProps> {
             return null;
         } else {
             return (
-                <TouchableOpacity
-                    style={styles.button}
+                <TouchButton
                     onPress={onSubmit}
-                >
-                    <Text style={styles.buttonText}>SUBMIT</Text>
-                </TouchableOpacity>
+                    caption="SUBMIT"
+                    buttonStyle={styles.button}
+                    captionStyle={styles.buttonText}
+                />
             );
         }
     }

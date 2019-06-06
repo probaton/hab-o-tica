@@ -1,8 +1,9 @@
 import React from "react";
 import { Component } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
 import Input from "./controls/Input";
+import TouchButton from "./controls/TouchButton";
 
 import { verifyCredentialsAndReturnUserData } from "../store/CredentialStore";
 import IHabiticaData from "../userData/IHabiticaData";
@@ -60,12 +61,12 @@ export default class Authenticate extends Component<IAuthenticateProps, IAuthent
                     onSubmitEditing={this.onSubmit}
                 />
                 <Text style={styles.text}>{dialogMessage}</Text>
-                <TouchableOpacity
-                    style={styles.submitButton}
+                <TouchButton
                     onPress={this.onSubmit}
-                >
-                    <Text style={styles.submitButton}>SUBMIT</Text>
-                </TouchableOpacity>
+                    caption="SUBMIT"
+                    buttonStyle={styles.submitButton}
+                    captionStyle={styles.submitButton}
+                />
             </View>
         );
     }

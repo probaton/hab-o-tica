@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+
+import TouchButton from "./TouchButton";
 
 interface IProps {
     itemName: string;
@@ -8,22 +9,10 @@ interface IProps {
 
 export default class ItemSelectorItem extends React.Component<IProps> {
     render() {
-        return (
-            <TouchableOpacity
-                style={styles.button}
-                onPress={this.onClick}
-            >
-                <Text style={styles.buttonText}>{this.props.itemName}</Text>
-            </TouchableOpacity>
-        );
+        return <TouchButton onPress={this.onClick} caption={this.props.itemName}/>;
     }
 
     private onClick = () => {
         this.props.onClick(this.props.itemName);
     }
 }
-
-const styles = StyleSheet.create({
-    button: {},
-    buttonText: {},
-});

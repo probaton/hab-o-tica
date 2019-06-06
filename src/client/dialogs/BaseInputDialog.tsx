@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { ActivityIndicator, Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import TouchButton from "../controls/TouchButton";
+
 interface IBaseInputDialogProps {
     dialogText: string;
     dialogTitle: string;
@@ -35,12 +37,12 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
                             }
                         </View>
                         <View style={styles.buttonBar}>
-                            <TouchableOpacity
-                                style={styles.button}
+                            <TouchButton
                                 onPress={close}
-                            >
-                                <Text style={styles.buttonText}>{isResolvedMessage ? "OK" : "CANCEL"}</Text>
-                            </TouchableOpacity>
+                                caption={isResolvedMessage ? "OK" : "CANCEL"}
+                                buttonStyle={styles.button}
+                                captionStyle={styles.buttonText}
+                            />
                             {this.renderSubmitButton()}
                         </View>
                     </View>
@@ -73,16 +75,8 @@ export class BaseInputDialog extends Component<IBaseInputDialogProps> {
         const { onSubmit, loading, isResolvedMessage } = this.props;
         if (isResolvedMessage || loading) {
             return null;
-        } else {
-            return (
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={onSubmit}
-                    >
-                        <Text style={styles.buttonText}>SUBMIT</Text>
-                    </TouchableOpacity>
-            );
         }
+        return <TouchButton onPress={onSubmit} caption="SUBMIT" buttonStyle={styles.button} captionStyle={styles.buttonText}/>;
     }
 }
 
