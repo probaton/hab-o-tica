@@ -6,7 +6,7 @@ import ItemSelector from "../controls/ItemSelector";
 import TouchButton from "../controls/TouchButton";
 import Interaction from "../Interaction";
 
-import { Outfit } from "../../items/Outfit";
+import Outfit from "../../items/Outfit";
 import Outfitter from "../../items/Outfitter";
 import WardrobeStore from "../../store/WardrobeStore";
 import IHabiticaData from "../../userData/IHabiticaData";
@@ -38,12 +38,8 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
 
     async componentDidMount() {
         const newState: IState = this.state;
-        const wardrobe = await WardrobeStore.get();
-        if (wardrobe) {
-            newState.wardrobe = wardrobe;
-        } else {
-            newState.showAddForm = true;
-        }
+        newState.wardrobe = await WardrobeStore.get();
+        newState.showAddForm = newState.wardrobe.length === 0;
         newState.loading = false;
         this.setState(newState);
     }
@@ -80,7 +76,12 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
     private renderOverview() {
         return (
             <>
-                <ItemSelector title="Saved outfits" itemNames={this.parseItemNames()} onItemClick={this.onItemClick}/>
+                <ItemSelector
+                    title="Saved outfits"
+                    itemNames={this.parseItemNames()}
+                    onItemClick={this.onItemClick}
+                    onItemDelete={this.onItemDelete}
+                />
                 <TouchButton
                     onPress={() => this.setState({ showAddForm: true })}
                     caption="Save current outfit"
@@ -109,6 +110,16 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
         } else {
             this.setState({ isResolvedMessage: "Outfit not found." });
         }
+    }
+
+    private onItemDelete = async (outfitName: string) => {
+        this.setState({ loading: true });
+        const newState: any = {};
+        await WardrobeStore.remove(outfitName);
+        newState.wardrobe = await WardrobeStore.get();
+        newState.showAddForm = newState.wardrobe.length === 0;
+        newState.loading = false;
+        this.setState(newState);
     }
 
     private submitOutfit = async () => {

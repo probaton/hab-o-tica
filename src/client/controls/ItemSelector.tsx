@@ -7,6 +7,7 @@ interface IProps {
     title: string;
     itemNames: string[];
     onItemClick: (itemName: string) => void;
+    onItemDelete?: (itemName: string) => void;
 }
 
 export default class ItemSelector extends React.Component<IProps> {
@@ -20,7 +21,9 @@ export default class ItemSelector extends React.Component<IProps> {
     }
 
     private renderItems() {
-        return this.props.itemNames.map(itemName => <ItemSelectorItem key={itemName} itemName={itemName} onClick={this.props.onItemClick}/>);
+        return this.props.itemNames.map(itemName => {
+            return <ItemSelectorItem key={itemName} itemName={itemName} onClick={this.props.onItemClick} onDelete={this.props.onItemDelete}/>;
+        });
     }
 }
 
@@ -34,7 +37,7 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: "center",
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: "bold",
         color: "#6e6976ff",
         paddingBottom: 5,

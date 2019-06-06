@@ -1,6 +1,6 @@
 import { IGearSet } from "../userData/IHabiticaData";
 
-export class Outfit {
+export default class Outfit {
     name: string;
     armor?: string;
     head?: string;

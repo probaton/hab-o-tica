@@ -1,6 +1,6 @@
 import { callHabApi } from "../requests/HabiticaRequest";
 import IHabiticaData from "../userData/IHabiticaData";
-import { Outfit } from "./Outfit";
+import Outfit from "./Outfit";
 
 export default class Outfitter {
     gearType: "equipped" | "costume";
