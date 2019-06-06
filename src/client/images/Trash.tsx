@@ -16,7 +16,7 @@ export default class Trash extends React.Component {
 
 const styles = StyleSheet.create({
     image: {
-        height: 36,
-        width: 36,
+        height: 32,
+        width: 32,
     },
 });

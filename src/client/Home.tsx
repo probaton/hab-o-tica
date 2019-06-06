@@ -48,22 +48,22 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
             <View style={styles.container}>
                 <View style={styles.column}>
                     <TileButton
-                        text="Feed Pet"
+                        caption="Feed Pet"
                         onPress={() => this.openDialog("feedPet")}
                     />
                     <TileButton
-                        text="Armoire"
+                        caption="Armoire"
                         onPress={() => this.openDialog("lootArmoire")}
                     />
                 </View>
 
                 <View style={styles.column}>
                     <TileButton
-                        text="Use Skill"
+                        caption="Use Skill"
                         onPress={() => this.openDialog("spamSkill")}
                     />
                     <TileButton
-                        text="Wardrobe"
+                        caption="Wardrobe"
                         onPress={() => this.openDialog("wardrobe")}
                     />
                 </View>

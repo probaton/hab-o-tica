@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import ItemSelectorItem from "./ItemSelectorItem";
 
@@ -13,9 +13,11 @@ interface IProps {
 export default class ItemSelector extends React.Component<IProps> {
     render() {
         return (
-            <View style={styles.itemList}>
+            <View style={styles.container}>
                 <Text style={styles.title}>{this.props.title}</Text>
-                {this.renderItems()}
+                <ScrollView>
+                    {this.renderItems()}
+                </ScrollView>
             </View>
         );
     }
@@ -28,12 +30,13 @@ export default class ItemSelector extends React.Component<IProps> {
 }
 
 const styles = StyleSheet.create({
-    itemList: {
+    container: {
         backgroundColor: "#EDECEE",
         borderRadius: 5,
         margin: 8,
         padding: 12,
-        alignItems: "center",
+        flex: 1,
+        alignSelf: "stretch",
     },
     title: {
         textAlign: "center",
