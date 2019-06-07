@@ -7,7 +7,7 @@ import TouchButton from "../controls/TouchButton";
 import Interaction from "../Interaction";
 import OutfitMemberSelector from "../items/OutfitMemberSelector";
 
-import Outfit from "../../items/Outfit";
+import IOutfit from "../../items/IOutfit";
 import Outfitter from "../../items/Outfitter";
 import WardrobeStore from "../../store/WardrobeStore";
 import IHabiticaData from "../../userData/IHabiticaData";
@@ -18,7 +18,7 @@ interface IProps {
 }
 
 interface IState {
-    wardrobe?: Outfit[];
+    wardrobe?: IOutfit[];
     useCostume: boolean;
     outfitNameInput: string;
     loading: boolean;
@@ -127,7 +127,7 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
         } else {
             const gearType = this.state.useCostume ? "costume" : "equipped";
             const rawCostume = (await this.props.userData).items.gear[gearType];
-            WardrobeStore.add(new Outfit(outfitName, rawCostume));
+            WardrobeStore.add({ name: outfitName, gearSet: rawCostume });
             this.props.close();
         }
     }
