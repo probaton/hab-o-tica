@@ -5,6 +5,7 @@ import Input from "../controls/Input";
 import ItemSelector from "../controls/ItemSelector";
 import TouchButton from "../controls/TouchButton";
 import Interaction from "../Interaction";
+import OutfitMemberSelector from "../items/OutfitMemberSelector";
 
 import Outfit from "../../items/Outfit";
 import Outfitter from "../../items/Outfitter";
@@ -87,11 +88,14 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
 
     private renderAddForm() {
         return (
-            <Input
-                placeholder="Outfit name"
-                onChangeText={input => this.setState({ outfitNameInput: input })}
-                onSubmitEditing={this.submitOutfit}
-            />
+            <>
+                <Input
+                    placeholder="Outfit name"
+                    onChangeText={input => this.setState({ outfitNameInput: input })}
+                    onSubmitEditing={this.submitOutfit}
+                />
+                <OutfitMemberSelector/>
+            </>
         );
     }
 
