@@ -75,20 +75,13 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
 
     private renderOverview() {
         return (
-            <>
-                <ItemSelector
-                    title="Saved outfits"
-                    itemNames={this.parseItemNames()}
-                    onItemClick={this.onItemClick}
-                    onItemDelete={this.onItemDelete}
-                />
-                <TouchButton
-                    onPress={() => this.setState({ showAddForm: true })}
-                    caption="Save current outfit"
-                    buttonStyle={styles.button}
-                    captionStyle={styles.buttonText}
-                />
-            </>
+            <ItemSelector
+                title="Saved outfits"
+                itemNames={this.parseItemNames()}
+                onItemClick={this.onItemClick}
+                onItemDelete={this.onItemDelete}
+                addItem={() => this.setState({ showAddForm: true })}
+            />
         );
     }
 
@@ -178,19 +171,6 @@ const styles = StyleSheet.create({
         padding: 12,
     },
     passiveToggleText: {
-        fontSize: 18,
-        textAlign: "center",
-        color: "#009688",
-        padding: 12,
-    },
-    button: {
-        margin: 5,
-        minWidth: 64,
-        height: 36,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    buttonText: {
         fontSize: 18,
         textAlign: "center",
         color: "#009688",

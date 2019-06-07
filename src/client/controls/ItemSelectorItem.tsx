@@ -47,7 +47,10 @@ export default class ItemSelectorItem extends React.Component<IProps> {
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
-        margin: 3,
+        marginTop: 4,
+        marginBottom: 4,
+        marginLeft: 8,
+        marginRight: 8,
     },
     item: {
         flex: 1,

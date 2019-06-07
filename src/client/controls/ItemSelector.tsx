@@ -1,6 +1,7 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import Add from "../images/Add";
 import ItemSelectorItem from "./ItemSelectorItem";
 
 interface IProps {
@@ -8,18 +9,32 @@ interface IProps {
     itemNames: string[];
     onItemClick: (itemName: string) => void;
     onItemDelete?: (itemName: string) => void;
+    addItem?: () => void;
 }
 
 export default class ItemSelector extends React.Component<IProps> {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>{this.props.title}</Text>
+                <View style={styles.titleBar}>
+                    <Text style={styles.title}>{this.props.title}</Text>
+                    {this.renderAddButton()}
+                </View>
                 <ScrollView>
                     {this.renderItems()}
                 </ScrollView>
             </View>
         );
+    }
+
+    private renderAddButton() {
+        if (this.props.addItem) {
+            return (
+                <TouchableOpacity onPress={this.props.addItem} style={styles.addButton}>
+                    <Add/>
+                </TouchableOpacity>
+            );
+        }
     }
 
     private renderItems() {
@@ -33,16 +48,21 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#EDECEE",
         borderRadius: 5,
-        margin: 8,
-        padding: 12,
         flex: 1,
         alignSelf: "stretch",
+    },
+    titleBar: {
+        justifyContent: "center",
+        minHeight: 50,
     },
     title: {
         textAlign: "center",
         fontSize: 24,
         fontWeight: "bold",
         color: "#6e6976ff",
-        paddingBottom: 5,
+    },
+    addButton: {
+        position: "absolute",
+        right: 8,
     },
 });

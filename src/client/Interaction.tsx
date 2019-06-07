@@ -106,18 +106,17 @@ const styles = StyleSheet.create({
     titleBar: {
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        paddingTop: 24,
         alignItems: "center",
+        justifyContent: "center",
         backgroundColor: "#EDECEE",
+        minHeight: 55,
     },
     title: {
         fontWeight: "bold",
         fontSize: 32,
         color: "#6e6976ff",
-        paddingBottom: 8,
     },
     xButton: {
-        marginTop: 20,
         position: "absolute",
         right: 12,
     },
