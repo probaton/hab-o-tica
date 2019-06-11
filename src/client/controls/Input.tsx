@@ -26,7 +26,6 @@ export default class Input extends Component<IInputProps> {
                 onSubmitEditing={onSubmitEditing}
                 ref={setNextInput}
                 returnKeyType={returnKeyType || "default"}
-                blurOnSubmit={false}
             />
         );
     }

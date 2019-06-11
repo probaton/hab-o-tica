@@ -93,11 +93,7 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
     private renderAddForm() {
         return (
             <>
-                <Input
-                    placeholder="Outfit name"
-                    onChangeText={input => this.setState({ outfitNameInput: input })}
-                    onSubmitEditing={this.submitOutfit}
-                />
+                <Input placeholder="Outfit name" onChangeText={outfitNameInput => this.setState({ outfitNameInput })}/>
                 <OutfitMemberSelector updateGearSet={this.updateGearSet} gearChecklist={this.state.outfitSlotChecklist}/>
             </>
         );
