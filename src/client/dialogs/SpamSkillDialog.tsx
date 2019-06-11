@@ -1,13 +1,14 @@
 import React from "react";
 import { Component } from "react";
-import { Alert, Dimensions, Picker, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, Dimensions, Picker, StyleSheet } from "react-native";
 
-import { Input } from "../controls/Input";
+import Input from "../controls/Input";
+import TouchButton from "../controls/TouchButton";
+import { BaseInputDialog } from "./BaseInputDialog";
 
 import { getUserSkills, SkillId, spamSkill } from "../../skills/useSkill";
 import LastUsedSkillStore from "../../store/LastUsedSkillStore";
 import IHabiticaData from "../../userData/IHabiticaData";
-import { BaseInputDialog } from "./BaseInputDialog";
 
 interface ISpamSkillDialogProps {
     userData: Promise<IHabiticaData>;
@@ -71,12 +72,12 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
                 >
                     {pickerOptions}
                 </Picker>
-                <TouchableOpacity
-                    style={styles.button}
+                <TouchButton
                     onPress={this.spamUntilOom}
-                >
-                    <Text style={styles.spamButton}>SPAM UNTIL I'M OUT OF MANA!</Text>
-                </TouchableOpacity>
+                    buttonStyle={styles.button}
+                    captionStyle={styles.spamButton}
+                    caption="SPAM UNTIL I'M OUT OF MANA!"
+                />
                 <Input
                     onChangeText={input => this.setState({ usesInput: input })}
                     autoFocus={true}

@@ -1,6 +1,9 @@
 import React from "react";
-import { Dimensions, Picker, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Dimensions, Picker, StyleSheet, Text } from "react-native";
+
 import PetFeeder from "../../items/PetFeeder";
+
+import TouchButton from "../controls/TouchButton";
 
 interface IProps {
     feeder: PetFeeder;
@@ -112,12 +115,12 @@ export default class PetPicker extends React.Component<IProps, IState> {
 
     private renderBackButton() {
         return (
-            <TouchableOpacity
-                style={styles.backButton}
+            <TouchButton
                 onPress={this.resetSelection}
-            >
-                <Text style={styles.buttonText}>Go back</Text>
-            </TouchableOpacity>
+                caption="Go back"
+                buttonStyle={styles.backButton}
+                captionStyle={styles.buttonText}
+            />
         );
     }
 

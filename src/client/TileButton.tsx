@@ -1,25 +1,21 @@
 import React, { Component } from "react";
-import { Dimensions, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+
+import TouchButton from "./controls/TouchButton";
 
 interface ITileButtonProps {
-    text: string;
-    onPress?: () => void;
+    caption: string;
+    onPress: () => void;
 }
 
 export class TileButton extends Component<ITileButtonProps> {
-    render = () => {
-        return (
-            <TouchableOpacity
-                onPress={this.props.onPress}
-                style={styles.container}>
-                <Text style={styles.text}>{this.props.text}</Text>
-            </TouchableOpacity>
-        );
+    render() {
+        return <TouchButton onPress={this.props.onPress} caption={this.props.caption} buttonStyle={styles.button} captionStyle={styles.caption} />;
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
+    button: {
         alignItems: "center",
         justifyContent: "center",
         height: Dimensions.get("window").height / 4,
@@ -28,7 +24,7 @@ const styles = StyleSheet.create({
         elevation: 2,
         margin: 8,
     },
-    text: {
+    caption: {
         color: "#34313A",
         fontSize: 32,
     },

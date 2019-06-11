@@ -1,13 +1,14 @@
 import React from "react";
 import { ActivityIndicator, Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import TouchButton from "./controls/TouchButton";
 import XButton from "./images/XButton";
 
 interface IProps {
     dialogText: string;
     dialogTitle: string;
     close: () => void;
-    onSubmit: () => void;
+    onSubmit?: () => void;
     loading?: boolean;
     isResolvedMessage?: string;
 }
@@ -35,12 +36,12 @@ export default class Interaction extends React.Component<IProps> {
                         }
                     </View>
                     <View style={styles.buttonBar}>
-                        <TouchableOpacity
-                            style={styles.button}
+                        <TouchButton
                             onPress={close}
-                        >
-                            <Text style={styles.buttonText}>{isResolvedMessage ? "OK" : "CANCEL"}</Text>
-                        </TouchableOpacity>
+                            caption={isResolvedMessage ? "OK" : "CANCEL"}
+                            buttonStyle={styles.button}
+                            captionStyle={styles.buttonText}
+                        />
                         {this.renderSubmitButton()}
                     </View>
                 </View>
@@ -70,16 +71,16 @@ export default class Interaction extends React.Component<IProps> {
 
     private renderSubmitButton() {
         const { onSubmit, loading, isResolvedMessage } = this.props;
-        if (isResolvedMessage || loading) {
+        if (isResolvedMessage || loading || !onSubmit) {
             return null;
         } else {
             return (
-                <TouchableOpacity
-                    style={styles.button}
+                <TouchButton
                     onPress={onSubmit}
-                >
-                    <Text style={styles.buttonText}>SUBMIT</Text>
-                </TouchableOpacity>
+                    caption="SUBMIT"
+                    buttonStyle={styles.button}
+                    captionStyle={styles.buttonText}
+                />
             );
         }
     }
@@ -105,18 +106,17 @@ const styles = StyleSheet.create({
     titleBar: {
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        paddingTop: 24,
         alignItems: "center",
+        justifyContent: "center",
         backgroundColor: "#EDECEE",
+        minHeight: 55,
     },
     title: {
         fontWeight: "bold",
         fontSize: 32,
         color: "#6e6976ff",
-        paddingBottom: 8,
     },
     xButton: {
-        marginTop: 20,
         position: "absolute",
         right: 12,
     },
