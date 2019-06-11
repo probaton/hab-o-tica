@@ -2,39 +2,22 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { spacify } from "../../helpers/stringUtils";
+import GearChecklist from "../../items/GearChecklist";
+import { GearSlot } from "../../items/GearSlot";
+
 import CheckBoxButton from "../controls/CheckBoxButton";
 
-interface IState {
-    armor: boolean;
-    headGear: boolean;
-    offHand: boolean;
-    bodyAccessory: boolean;
-    mainHand: boolean;
-    eyewear: boolean;
-    headAccessory: boolean;
-    backAccessory: boolean;
+interface IProps {
+    gearChecklist: GearChecklist;
+    updateGearSet: (slot: GearSlot, value: boolean) => void;
 }
 
-export default class OutfitMemberSelector extends React.Component<any, IState> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            armor: true,
-            headGear: true,
-            offHand: true,
-            bodyAccessory: true,
-            mainHand: true,
-            eyewear: true,
-            headAccessory: true,
-            backAccessory: true,
-        };
-    }
-
+export default class OutfitMemberSelector extends React.Component<IProps> {
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.titleBar}>
-                    <Text style={styles.title}>Included item slots</Text>
+                    <Text style={styles.title}>Gear slots to include</Text>
                 </View>
             <View style={styles.columnManager}>
                 <View style={styles.column}>
@@ -56,16 +39,10 @@ export default class OutfitMemberSelector extends React.Component<any, IState> {
 
     private renderMemberCheckBox(slot: GearSlot) {
         const caption = spacify(slot[0].toUpperCase() + slot.slice(1));
-        const onPress = (value: boolean) => {
-            const newState: any = {};
-            newState[slot] = value;
-            this.setState(newState);
-        };
-        return <CheckBoxButton caption={caption} onPress={onPress} value={this.state[slot]}/>;
+        const onPress = (value: boolean) => this.props.updateGearSet(slot, value);
+        return <CheckBoxButton caption={caption} onPress={onPress} value={this.props.gearChecklist[slot]}/>;
     }
 }
-
-type GearSlot = "armor" | "headGear" | "offHand" | "bodyAccessory" | "mainHand" | "headAccessory" | "eyewear" | "backAccessory";
 
 const styles = StyleSheet.create({
     container: {
