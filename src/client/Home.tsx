@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import IHabiticaData from "../userData/IHabiticaData";
 
@@ -7,7 +7,10 @@ import { FeedPetDialog } from "./dialogs/FeedPetDialog";
 import { LootArmoireDialog } from "./dialogs/LootArmoireDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
 import { WardrobeDialog } from "./dialogs/WardrobeDialog";
-import { TileButton } from "./TileButton";
+import ArmoireIcon from "./images/ArmoireIcon";
+import FeedPetIcon from "./images/FeedPetIcon";
+import UseSkillIcon from "./images/UseSkillIcon";
+import WardrobeIcon from "./images/WardrobeIcon";
 
 interface IHomeProps {
     userData: { lastUpdate: number, data: Promise<IHabiticaData> };
@@ -47,25 +50,21 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
         return (
             <View style={styles.container}>
                 <View style={styles.column}>
-                    <TileButton
-                        caption="Feed Pet"
-                        onPress={() => this.openDialog("feedPet")}
-                    />
-                    <TileButton
-                        caption="Armoire"
-                        onPress={() => this.openDialog("lootArmoire")}
-                    />
+                    <TouchableOpacity style={styles.button} onPress={() => this.openDialog("feedPet")}>
+                        <FeedPetIcon/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={() => this.openDialog("lootArmoire")}>
+                        <ArmoireIcon/>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.column}>
-                    <TileButton
-                        caption="Use Skill"
-                        onPress={() => this.openDialog("spamSkill")}
-                    />
-                    <TileButton
-                        caption="Wardrobe"
-                        onPress={() => this.openDialog("wardrobe")}
-                    />
+                    <TouchableOpacity style={styles.button} onPress={() => this.openDialog("spamSkill")}>
+                        <UseSkillIcon/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={() => this.openDialog("wardrobe")}>
+                        <WardrobeIcon/>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -95,5 +94,14 @@ const styles = StyleSheet.create({
     },
     column: {
         flex: 1,
+    },
+    button: {
+        alignItems: "center",
+        justifyContent: "center",
+        height: Dimensions.get("window").height / 4,
+        backgroundColor: "#edecee",
+        borderRadius: 5,
+        elevation: 2,
+        margin: 8,
     },
 });
