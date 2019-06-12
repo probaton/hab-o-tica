@@ -8,7 +8,6 @@
             "ios",
             "android"
         ],
-        "version": "1.2.0",
         "orientation": "portrait",
         "icon": "./assets/androidIcon.png",
         "splash": {
@@ -23,7 +22,6 @@
             "**/*"
         ],
         "android": {
-            "versionCode": 8,
             "package": "com.dexx.habotica",
             "permissions": []
         },
