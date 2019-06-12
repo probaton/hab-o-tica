@@ -1,5 +1,4 @@
 import React from "react";
-import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import IHabiticaData from "../userData/IHabiticaData";
 
@@ -7,10 +6,7 @@ import { FeedPetDialog } from "./dialogs/FeedPetDialog";
 import { LootArmoireDialog } from "./dialogs/LootArmoireDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
 import { WardrobeDialog } from "./dialogs/WardrobeDialog";
-import ArmoireIcon from "./images/ArmoireIcon";
-import FeedPetIcon from "./images/FeedPetIcon";
-import UseSkillIcon from "./images/UseSkillIcon";
-import WardrobeIcon from "./images/WardrobeIcon";
+import IconButton from "./IconButton";
 
 interface IHomeProps {
     userData: { lastUpdate: number, data: Promise<IHabiticaData> };
@@ -48,25 +44,12 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
 
     private renderButtons() {
         return (
-            <View style={styles.container}>
-                <View style={styles.column}>
-                    <TouchableOpacity style={styles.button} onPress={() => this.openDialog("feedPet")}>
-                        <FeedPetIcon/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => this.openDialog("lootArmoire")}>
-                        <ArmoireIcon/>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.column}>
-                    <TouchableOpacity style={styles.button} onPress={() => this.openDialog("spamSkill")}>
-                        <UseSkillIcon/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => this.openDialog("wardrobe")}>
-                        <WardrobeIcon/>
-                    </TouchableOpacity>
-                </View>
-            </View>
+            <>
+                <IconButton caption="Feed pets" imageSource={require("./images/FeedPet.png")} onPress={() => this.openDialog("feedPet")}/>
+                <IconButton caption="Skills" imageSource={require("./images/UseSkill.png")} onPress={() => this.openDialog("spamSkill")}/>
+                <IconButton caption="Loot armoire" imageSource={require("./images/Armoire.png")} onPress={() => this.openDialog("lootArmoire")}/>
+                <IconButton caption="Wardrobe" imageSource={require("./images/Wardrobe.png")} onPress={() => this.openDialog("wardrobe")}/>
+            </>
         );
     }
 
@@ -86,22 +69,3 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
         this.setState({ viewState: undefined });
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: "row",
-    },
-    column: {
-        flex: 1,
-    },
-    button: {
-        alignItems: "center",
-        justifyContent: "center",
-        height: Dimensions.get("window").height / 4,
-        backgroundColor: "#edecee",
-        borderRadius: 5,
-        elevation: 2,
-        margin: 8,
-    },
-});
