@@ -1,5 +1,4 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
 
 import IHabiticaData from "../userData/IHabiticaData";
 
@@ -7,7 +6,7 @@ import { FeedPetDialog } from "./dialogs/FeedPetDialog";
 import { LootArmoireDialog } from "./dialogs/LootArmoireDialog";
 import { SpamSkillDialog } from "./dialogs/SpamSkillDialog";
 import { WardrobeDialog } from "./dialogs/WardrobeDialog";
-import { TileButton } from "./TileButton";
+import IconButton from "./IconButton";
 
 interface IHomeProps {
     userData: { lastUpdate: number, data: Promise<IHabiticaData> };
@@ -45,29 +44,12 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
 
     private renderButtons() {
         return (
-            <View style={styles.container}>
-                <View style={styles.column}>
-                    <TileButton
-                        caption="Feed Pet"
-                        onPress={() => this.openDialog("feedPet")}
-                    />
-                    <TileButton
-                        caption="Armoire"
-                        onPress={() => this.openDialog("lootArmoire")}
-                    />
-                </View>
-
-                <View style={styles.column}>
-                    <TileButton
-                        caption="Use Skill"
-                        onPress={() => this.openDialog("spamSkill")}
-                    />
-                    <TileButton
-                        caption="Wardrobe"
-                        onPress={() => this.openDialog("wardrobe")}
-                    />
-                </View>
-            </View>
+            <>
+                <IconButton caption="Feed pets" imageSource={require("./images/FeedPet.png")} onPress={() => this.openDialog("feedPet")}/>
+                <IconButton caption="Skills" imageSource={require("./images/UseSkill.png")} onPress={() => this.openDialog("spamSkill")}/>
+                <IconButton caption="Loot armoire" imageSource={require("./images/Armoire.png")} onPress={() => this.openDialog("lootArmoire")}/>
+                <IconButton caption="Wardrobe" imageSource={require("./images/Wardrobe.png")} onPress={() => this.openDialog("wardrobe")}/>
+            </>
         );
     }
 
@@ -87,13 +69,3 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
         this.setState({ viewState: undefined });
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: "row",
-    },
-    column: {
-        flex: 1,
-    },
-});
