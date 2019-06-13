@@ -137,8 +137,8 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
                 headaccessory: checklist.headAccessory ? rawGearSet.headaccessory : undefined,
                 back: checklist.backAccessory ? rawGearSet.back : undefined,
             };
-            WardrobeStore.add({ name, gearSet });
-            this.props.close();
+            await WardrobeStore.add({ name, gearSet });
+            this.setState({ isResolvedMessage: `Successfully added ${name} to your wardrobe.` });
         }
     }
 
