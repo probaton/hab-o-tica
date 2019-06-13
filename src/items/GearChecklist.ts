@@ -1,10 +1,10 @@
 export default class GearChecklist {
     armor = true;
-    headGear = true;
-    offHand = true;
-    bodyAccessory = true;
-    mainHand = true;
+    head = true;
+    shield = true;
+    body = true;
+    weapon = true;
     eyewear = true;
     headAccessory = true;
-    backAccessory = true;
+    back = true;
 }

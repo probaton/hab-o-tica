@@ -44,7 +44,7 @@ export interface IGearSet {
     body?: string;
     weapon?: string;
     eyewear?: string;
-    headaccessory?: string;
+    headAccessory?: string;
     back?: string;
 }
 

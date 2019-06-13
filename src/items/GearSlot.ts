@@ -1,1 +1,1 @@
-export type GearSlot = "armor" | "headGear" | "offHand" | "bodyAccessory" | "mainHand" | "headAccessory" | "eyewear" | "backAccessory";
+export type GearSlot = "armor" | "head" | "shield" | "body" | "weapon" | "headAccessory" | "eyewear" | "back";
