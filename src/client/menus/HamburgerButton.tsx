@@ -15,9 +15,7 @@ interface IHamburgerButtonState {
 export default class HamburgerButton extends React.Component<IHamburgerButtonProps, IHamburgerButtonState> {
     constructor(props: any) {
         super(props);
-        this.state = {
-            menuVisible: false,
-        };
+        this.state = { menuVisible: false };
     }
 
     render() {

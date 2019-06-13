@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { ActivityIndicator, Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import TouchButton from "../controls/TouchButton";
@@ -12,7 +12,7 @@ interface IBaseInputDialogProps {
     isResolvedMessage?: string;
 }
 
-export class BaseInputDialog extends Component<IBaseInputDialogProps> {
+export default class BaseInputDialog extends React.Component<IBaseInputDialogProps> {
     render() {
         const { dialogTitle, close, isResolvedMessage } = this.props;
         return (

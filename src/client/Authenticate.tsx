@@ -44,19 +44,17 @@ export default class Authenticate extends Component<IAuthenticateProps, IAuthent
                 <Input
                     autoFocus={true}
                     onChangeText={this.setUserInput}
-                    keyboardType={"default"}
                     placeholder="User ID"
                     dark={true}
                     onSubmitEditing={this.focusNext}
                     returnKeyType="next"
+                    stayOpenOnSubmit={true}
                 />
                 <Input
-                    autoFocus={false}
                     onChangeText={this.setTokenInput}
-                    keyboardType={"default"}
                     placeholder="API token"
                     dark={true}
-                    setNextInput={this.tokenInput}
+                    inputRef={this.tokenInput}
                     returnKeyType="done"
                     onSubmitEditing={this.onSubmit}
                 />

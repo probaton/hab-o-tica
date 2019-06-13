@@ -7,7 +7,7 @@ interface IHamburgerMenuItemProps {
     onPress: () => void;
 }
 
-export class HamburgerMenuItem extends React.Component<IHamburgerMenuItemProps> {
+export default class HamburgerMenuItem extends React.Component<IHamburgerMenuItemProps> {
     render() {
         return (
             <TouchableOpacity

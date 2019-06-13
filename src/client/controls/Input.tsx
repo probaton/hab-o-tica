@@ -1,5 +1,4 @@
 import React from "react";
-import { Component } from "react";
 import { Dimensions, KeyboardTypeOptions, ReturnKeyTypeOptions, StyleSheet, TextInput } from "react-native";
 
 interface IInputProps {
@@ -9,13 +8,14 @@ interface IInputProps {
     dark?: boolean;
     placeholder?: string;
     onSubmitEditing?: () => void;
-    setNextInput?: React.RefObject<TextInput>;
+    inputRef?: React.RefObject<TextInput>;
     returnKeyType?: ReturnKeyTypeOptions;
+    stayOpenOnSubmit?: boolean;
 }
 
-export default class Input extends Component<IInputProps> {
+export default class Input extends React.Component<IInputProps> {
     render() {
-        const { onChangeText, autoFocus, keyboardType, placeholder, dark, setNextInput, onSubmitEditing, returnKeyType } = this.props;
+        const { onChangeText, autoFocus, keyboardType, placeholder, dark, inputRef, onSubmitEditing, returnKeyType, stayOpenOnSubmit } = this.props;
         return (
             <TextInput
                 style={dark ? styles.dark : styles.light}
@@ -24,8 +24,9 @@ export default class Input extends Component<IInputProps> {
                 keyboardType={keyboardType}
                 placeholder={placeholder}
                 onSubmitEditing={onSubmitEditing}
-                ref={setNextInput}
+                ref={inputRef}
                 returnKeyType={returnKeyType || "default"}
+                blurOnSubmit={!stayOpenOnSubmit}
             />
         );
     }

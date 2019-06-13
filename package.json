@@ -6,7 +6,8 @@
         "android": "expo start --android",
         "ios": "expo start --ios",
         "eject": "expo eject",
-        "lint": "tslint --project ./"
+        "lint": "tslint --project ./",
+        "postinstall": "bash scripts/generateGitHubTokenFile.sh"
     },
     "dependencies": {
         "@types/expo": "^32.0.13",

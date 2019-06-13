@@ -8,7 +8,7 @@ import { getUserData } from "../../userData/userData";
 import Input from "../controls/Input";
 import TouchButton from "../controls/TouchButton";
 import Gold from "../images/Gold";
-import { BaseInputDialog } from "./BaseInputDialog";
+import BaseInputDialog from "./BaseInputDialog";
 
 interface IProps {
     userData: Promise<IHabiticaData>;
