@@ -100,12 +100,13 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
     }
 
     private onItemClick = async (outfitName: string) => {
+        this.setState({ loading: true });
         const newOutfit = this.state.wardrobe!.find(o => o.name === outfitName);
         if (newOutfit) {
             const outfitter = new Outfitter(newOutfit, this.state.useCostume, await this.props.userData);
-            this.setState({ isResolvedMessage: await outfitter.equipAll() });
+            this.setState({ loading: false, isResolvedMessage: await outfitter.equipAll() });
         } else {
-            this.setState({ isResolvedMessage: "Outfit not found." });
+            this.setState({ loading: false, isResolvedMessage: "Outfit not found." });
         }
     }
 
