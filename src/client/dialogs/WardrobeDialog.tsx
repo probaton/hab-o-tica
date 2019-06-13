@@ -100,12 +100,13 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
     }
 
     private onItemClick = async (outfitName: string) => {
+        this.setState({ loading: true });
         const newOutfit = this.state.wardrobe!.find(o => o.name === outfitName);
         if (newOutfit) {
             const outfitter = new Outfitter(newOutfit, this.state.useCostume, await this.props.userData);
-            this.setState({ isResolvedMessage: await outfitter.equipAll() });
+            this.setState({ loading: false, isResolvedMessage: await outfitter.equipAll() });
         } else {
-            this.setState({ isResolvedMessage: "Outfit not found." });
+            this.setState({ loading: false, isResolvedMessage: "Outfit not found." });
         }
     }
 
@@ -129,16 +130,16 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
             const checklist = this.state.outfitSlotChecklist;
             const gearSet = {
                 armor: checklist.armor ? rawGearSet.armor : undefined,
-                head: checklist.headGear ? rawGearSet.head : undefined,
-                shield: checklist.offHand ? rawGearSet.shield : undefined,
-                body: checklist.bodyAccessory ? rawGearSet.body : undefined,
-                weapon: checklist.mainHand ? rawGearSet.weapon : undefined,
+                head: checklist.head ? rawGearSet.head : undefined,
+                shield: checklist.shield ? rawGearSet.shield : undefined,
+                body: checklist.body ? rawGearSet.body : undefined,
+                weapon: checklist.weapon ? rawGearSet.weapon : undefined,
                 eyewear: checklist.eyewear ? rawGearSet.eyewear : undefined,
-                headaccessory: checklist.headAccessory ? rawGearSet.headaccessory : undefined,
-                back: checklist.backAccessory ? rawGearSet.back : undefined,
+                headAccessory: checklist.headAccessory ? rawGearSet.headAccessory : undefined,
+                back: checklist.back ? rawGearSet.back : undefined,
             };
-            WardrobeStore.add({ name, gearSet });
-            this.props.close();
+            await WardrobeStore.add({ name, gearSet });
+            this.setState({ isResolvedMessage: `Successfully added ${name} to your wardrobe.` });
         }
     }
 

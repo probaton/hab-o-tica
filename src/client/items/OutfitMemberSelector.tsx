@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { spacify } from "../../helpers/stringUtils";
 import GearChecklist from "../../items/GearChecklist";
 import { GearSlot } from "../../items/GearSlot";
 
@@ -19,26 +18,25 @@ export default class OutfitMemberSelector extends React.Component<IProps> {
                 <View style={styles.titleBar}>
                     <Text style={styles.title}>Gear slots to include</Text>
                 </View>
-            <View style={styles.columnManager}>
-                <View style={styles.column}>
-                    {this.renderMemberCheckBox("mainHand")}
-                    {this.renderMemberCheckBox("offHand")}
-                    {this.renderMemberCheckBox("headGear")}
-                    {this.renderMemberCheckBox("armor")}
+                <View style={styles.columnManager}>
+                    <View style={styles.column}>
+                        {this.renderMemberCheckBox("Main hand", "weapon")}
+                        {this.renderMemberCheckBox("Off hand", "shield")}
+                        {this.renderMemberCheckBox("Head gear", "head")}
+                        {this.renderMemberCheckBox("Armor", "armor")}
+                    </View>
+                    <View style={styles.column}>
+                        {this.renderMemberCheckBox("Head accessory", "headAccessory")}
+                        {this.renderMemberCheckBox("Eyewear", "eyewear")}
+                        {this.renderMemberCheckBox("Body accessory", "body")}
+                        {this.renderMemberCheckBox("Back accessory", "back")}
+                    </View>
                 </View>
-                <View style={styles.column}>
-                    {this.renderMemberCheckBox("headAccessory")}
-                    {this.renderMemberCheckBox("eyewear")}
-                    {this.renderMemberCheckBox("bodyAccessory")}
-                    {this.renderMemberCheckBox("backAccessory")}
-                </View>
-            </View>
             </View>
         );
     }
 
-    private renderMemberCheckBox(slot: GearSlot) {
-        const caption = spacify(slot[0].toUpperCase() + slot.slice(1));
+    private renderMemberCheckBox(caption: string, slot: GearSlot) {
         const onPress = (value: boolean) => this.props.updateGearSet(slot, value);
         return <CheckBoxButton caption={caption} onPress={onPress} value={this.props.gearChecklist[slot]}/>;
     }
