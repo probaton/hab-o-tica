@@ -18,8 +18,7 @@ By default, Habotica will target the Habitica production API, which means a vali
 Bonus: running a local instance is an excellent first step in becoming a Habitica contributor! Instructions on how to get started can be found [here](https://habitica.fandom.com/wiki/Setting_up_Habitica_Locally)!
 
 ### GitHub issue reporting
-Getting the GitHub issue reporting flow to work in development requires a valid GitHub API token. This should be added in a new file located at `./secret/gitHubToken.ts` with the following contents:
-`export const gitHubToken = <your-token-string>`
+Getting the GitHub issue reporting flow to work in development requires a valid GitHub API token. For testing purposes, you can replace the token found in `secret/gitHubToken.ts`. Please make sure to delete all reports generated during testing. 
 
 ## Disclaimer
 This read me is shorter than it might be, mostly because I don't actually expect people to contribute, but also because I'm not really sure what kind of trouble people are going to run into. That brevity does not, in any way, reflect any lack in respect or heartfelt love for anyone who wants to help out, merely my low expectations and pragmatism. So if you want to get started and get stuck using the instructions above, please don't hesitate to drop me a line: I'm more than happy to help out. 
