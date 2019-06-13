@@ -1,13 +1,12 @@
 export async function postGitHubIssue(title: string, description: string): Promise<string> {
     const headers: any = {
-        "Authorization": `Token 2cd2787d636bc78e04caf796e52a66dda3477496`,
+        "Authorization": `Token ${require("../../secret/gitHubToken").gitHubToken}`,
         "Accept": "application/vnd.github.v3+json",
         "Content-Type": "application/json",
     };
     const body: any = {
-        title,
+        title: `[NEW] ${title}`,
         body: description,
-        labels: ["NEW", "SubmittedFromApp"],
     };
     const options = {
         method: "POST",
@@ -15,10 +14,9 @@ export async function postGitHubIssue(title: string, description: string): Promi
         body: JSON.stringify(body),
     };
 
-    try {
-        await fetch("https://api.github.com/repos/probaton/habotica/issues", options);
-        return "";
-    } catch (e) {
-        return "Something went wrong while submitting your issue: " + e;
+    const response = await fetch("https://api.github.com/repos/probaton/habotica/issues", options);
+    if (!response.ok) {
+        return "Something went wrong while submitting your issue:\n" + (await response.json()).message;
     }
+    return "Issue reported. You can track your issue here:\nhttps://github.com/probaton/habotica/issues";
 }

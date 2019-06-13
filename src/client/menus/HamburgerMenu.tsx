@@ -1,8 +1,9 @@
 import React from "react";
 import { Modal, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { BaseInputDialog } from "../dialogs/BaseInputDialog";
-import { HamburgerMenuItem } from "./HamburgerMenuItem";
+import BaseInputDialog from "../dialogs/BaseInputDialog";
+import ReportIssueDialog from "../dialogs/ReportIssueDialog";
+import HamburgerMenuItem from "./HamburgerMenuItem";
 
 import { setCredentials, setVerifiedCredentials } from "../../store/CredentialStore";
 
@@ -13,22 +14,21 @@ interface IHamburgerMenuProps {
 }
 
 interface IHamburgerMenuState {
-    logoutConfirmationVisible: boolean;
+    viewState: "menu" | "logout" | "submitIssue";
 }
 
 export default class HamburgerMenu extends React.Component<IHamburgerMenuProps, IHamburgerMenuState> {
     constructor(props: IHamburgerMenuProps) {
         super(props);
-        this.state = {
-            logoutConfirmationVisible: false,
-        };
+        this.state = { viewState: "menu" };
     }
 
     render() {
-        if (this.state.logoutConfirmationVisible) {
-            return this.renderLogoutConfirmation();
+        switch (this.state.viewState) {
+            case "menu": return this.renderHamburgerMenu();
+            case "logout": return this.renderLogoutConfirmation();
+            case "submitIssue": return <ReportIssueDialog close={this.close}/>;
         }
-        return this.renderHamburgerMenu();
     }
 
     private renderHamburgerMenu() {
@@ -55,7 +55,12 @@ export default class HamburgerMenu extends React.Component<IHamburgerMenuProps, 
                             <HamburgerMenuItem
                                 icon={require("../images/LogoutIcon.png")}
                                 caption="Log out"
-                                onPress={this.toggleLogoutConfirmation}
+                                onPress={() => this.setState({ viewState: "logout" })}
+                            />
+                            <HamburgerMenuItem
+                                icon={require("../images/ReportIssue.png")}
+                                caption="Report an issue"
+                                onPress={() => this.setState({ viewState: "submitIssue" })}
                             />
                         </View>
                     </View>
@@ -64,19 +69,15 @@ export default class HamburgerMenu extends React.Component<IHamburgerMenuProps, 
         );
     }
 
-    private renderLogoutConfirmation = () => {
-        if (this.state.logoutConfirmationVisible) {
-            return (
-                <BaseInputDialog
-                    dialogTitle="Logout"
-                    dialogText="Are you sure you want to wipe your credentials?"
-                    onSubmit={this.logout}
-                    close={this.toggleLogoutConfirmation}
-                />
-            );
-        } else {
-            return null;
-        }
+    private renderLogoutConfirmation() {
+        return (
+            <BaseInputDialog
+                dialogTitle="Logout"
+                dialogText="Are you sure you want to wipe your credentials?"
+                onSubmit={this.logout}
+                close={this.close}
+            />
+        );
     }
 
     private refresh = () => {
@@ -88,13 +89,12 @@ export default class HamburgerMenu extends React.Component<IHamburgerMenuProps, 
         await setCredentials({ userId: "", apiToken: "" });
         await setVerifiedCredentials(false);
         this.props.onLogout();
-        this.toggleLogoutConfirmation();
-        this.props.close();
-
+        this.close();
     }
 
-    private toggleLogoutConfirmation = () => {
-        this.setState({ logoutConfirmationVisible: !this.state.logoutConfirmationVisible });
+    private close = () => {
+        this.setState({ viewState: "menu" });
+        this.props.close();
     }
 }
 

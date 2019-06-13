@@ -4,7 +4,7 @@ import { Alert, Dimensions, Picker, StyleSheet } from "react-native";
 
 import Input from "../controls/Input";
 import TouchButton from "../controls/TouchButton";
-import { BaseInputDialog } from "./BaseInputDialog";
+import BaseInputDialog from "./BaseInputDialog";
 
 import { getUserSkills, SkillId, spamSkill } from "../../skills/useSkill";
 import LastUsedSkillStore from "../../store/LastUsedSkillStore";
