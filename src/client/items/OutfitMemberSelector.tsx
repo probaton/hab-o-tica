@@ -1,14 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import GearChecklist from "../../items/GearChecklist";
-import { GearSlot } from "../../items/GearSlot";
+import OutfitChecklist from "../../items/OutfitChecklist";
+import { OutfitSlot } from "../../items/OutfitSlot";
 
 import CheckBoxButton from "../controls/CheckBoxButton";
 
 interface IProps {
-    gearChecklist: GearChecklist;
-    updateGearSet: (slot: GearSlot, value: boolean) => void;
+    gearChecklist: OutfitChecklist;
+    updateGearSet: (slot: OutfitSlot, value: boolean) => void;
 }
 
 export default class OutfitMemberSelector extends React.Component<IProps> {
@@ -24,19 +24,23 @@ export default class OutfitMemberSelector extends React.Component<IProps> {
                         {this.renderMemberCheckBox("Off hand", "shield")}
                         {this.renderMemberCheckBox("Head gear", "head")}
                         {this.renderMemberCheckBox("Armor", "armor")}
+                        {this.renderMemberCheckBox("Skin", "skin")}
+                        {this.renderMemberCheckBox("Pet", "pet")}
                     </View>
                     <View style={styles.column}>
                         {this.renderMemberCheckBox("Head accessory", "headAccessory")}
                         {this.renderMemberCheckBox("Eyewear", "eyewear")}
                         {this.renderMemberCheckBox("Body accessory", "body")}
                         {this.renderMemberCheckBox("Back accessory", "back")}
+                        {this.renderMemberCheckBox("Background", "background")}
+                        {this.renderMemberCheckBox("Mount", "mount")}
                     </View>
                 </View>
             </View>
         );
     }
 
-    private renderMemberCheckBox(caption: string, slot: GearSlot) {
+    private renderMemberCheckBox(caption: string, slot: OutfitSlot) {
         const onPress = (value: boolean) => this.props.updateGearSet(slot, value);
         return <CheckBoxButton caption={caption} onPress={onPress} value={this.props.gearChecklist[slot]}/>;
     }

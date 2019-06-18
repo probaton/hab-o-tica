@@ -1,4 +1,4 @@
-export default class GearChecklist {
+export default class OutfitChecklist {
     armor = true;
     head = true;
     shield = true;
@@ -7,4 +7,8 @@ export default class GearChecklist {
     eyewear = true;
     headAccessory = true;
     back = true;
+    skin = true;
+    background = true;
+    pet = true;
+    mount = true;
 }

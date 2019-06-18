@@ -7,9 +7,9 @@ import TouchButton from "../controls/TouchButton";
 import Interaction from "../Interaction";
 import OutfitMemberSelector from "../items/OutfitMemberSelector";
 
-import GearChecklist from "../../items/GearChecklist";
-import { GearSlot } from "../../items/GearSlot";
 import IOutfit from "../../items/IOutfit";
+import OutfitChecklist from "../../items/OutfitChecklist";
+import { OutfitSlot } from "../../items/OutfitSlot";
 import Outfitter from "../../items/Outfitter";
 import WardrobeStore from "../../store/WardrobeStore";
 import IHabiticaData from "../../userData/IHabiticaData";
@@ -23,7 +23,7 @@ interface IState {
     wardrobe?: IOutfit[];
     useCostume: boolean;
     outfitNameInput: string;
-    outfitSlotChecklist: GearChecklist;
+    outfitChecklist: OutfitChecklist;
     loading: boolean;
     showAddForm: boolean;
     isResolvedMessage?: string;
@@ -35,7 +35,7 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
         this.state = {
             useCostume: true,
             outfitNameInput: "",
-            outfitSlotChecklist: new GearChecklist(),
+            outfitChecklist: new OutfitChecklist(),
             loading: true,
             showAddForm: false,
         };
@@ -94,7 +94,7 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
         return (
             <>
                 <Input placeholder="Outfit name" onChangeText={outfitNameInput => this.setState({ outfitNameInput })}/>
-                <OutfitMemberSelector updateGearSet={this.updateGearSet} gearChecklist={this.state.outfitSlotChecklist}/>
+                <OutfitMemberSelector updateGearSet={this.updateGearSet} gearChecklist={this.state.outfitChecklist}/>
             </>
         );
     }
@@ -126,27 +126,35 @@ export class WardrobeDialog extends React.Component<IProps, IState> {
         if (nameValidationError) {
             Alert.alert("Invalid input", nameValidationError);
         } else {
-            const rawGearSet = (await this.props.userData).items.gear[this.state.useCostume ? "costume" : "equipped"];
-            const checklist = this.state.outfitSlotChecklist;
-            const gearSet = {
-                armor: checklist.armor ? rawGearSet.armor : undefined,
-                head: checklist.head ? rawGearSet.head : undefined,
-                shield: checklist.shield ? rawGearSet.shield : undefined,
-                body: checklist.body ? rawGearSet.body : undefined,
-                weapon: checklist.weapon ? rawGearSet.weapon : undefined,
-                eyewear: checklist.eyewear ? rawGearSet.eyewear : undefined,
-                headAccessory: checklist.headAccessory ? rawGearSet.headAccessory : undefined,
-                back: checklist.back ? rawGearSet.back : undefined,
+            const data = (await this.props.userData);
+            const rawGearSet = data.items.gear[this.state.useCostume ? "costume" : "equipped"];
+            const checklist = this.state.outfitChecklist;
+            const outfit: IOutfit = {
+                name,
+                gearSet: {
+                    armor: checklist.armor ? rawGearSet.armor : undefined,
+                    head: checklist.head ? rawGearSet.head : undefined,
+                    shield: checklist.shield ? rawGearSet.shield : undefined,
+                    body: checklist.body ? rawGearSet.body : undefined,
+                    weapon: checklist.weapon ? rawGearSet.weapon : undefined,
+                    eyewear: checklist.eyewear ? rawGearSet.eyewear : undefined,
+                    headAccessory: checklist.headAccessory ? rawGearSet.headAccessory : undefined,
+                    back: checklist.back ? rawGearSet.back : undefined,
+                },
+                skin: checklist.skin ? data.preferences.skin : undefined,
+                background: checklist.background ? data.preferences.background : undefined,
+                pet: checklist.pet ? data.items.currentPet : undefined,
+                mount: checklist.mount ? data.items.currentMount : undefined,
             };
-            await WardrobeStore.add({ name, gearSet });
+            await WardrobeStore.add(outfit);
             this.setState({ isResolvedMessage: `Successfully added ${name} to your wardrobe.` });
         }
     }
 
-    private updateGearSet = async (slot: GearSlot, value: boolean) => {
-        const outfitSlotChecklist = this.state.outfitSlotChecklist;
+    private updateGearSet = async (slot: OutfitSlot, value: boolean) => {
+        const outfitSlotChecklist = this.state.outfitChecklist;
         outfitSlotChecklist[slot] = value;
-        this.setState({ outfitSlotChecklist });
+        this.setState({ outfitChecklist: outfitSlotChecklist });
     }
 
     private validateOutfitName(outfitName: string): string | undefined {

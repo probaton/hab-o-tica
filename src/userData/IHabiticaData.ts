@@ -32,6 +32,12 @@ export default interface IHabiticaData {
             equipped: IGearSet;
             costume: IGearSet;
         }
+        currentPet?: string;
+        currentMount?: string;
+    };
+    preferences: {
+        background: string;
+        skin: string;
     };
 }
 
