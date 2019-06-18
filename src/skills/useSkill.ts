@@ -15,11 +15,16 @@ function callSkillApi(skill: SkillId, habitId: string): Promise<any> {
  * @param skill The skill to be used.
  * @param count The number of times to perform the skill. Will run until out of mana if set to -1, which is the default.
  */
-export async function spamSkill(skillId: SkillId, count = -1): Promise<any> {
+export async function spamSkill(skillId: SkillId, count = -1): Promise<string> {
     const skill = skills.find(sk => sk.id === skillId)!;
     let habitId = "";
     if (skill.habit !== "none") {
-        const habits = (await getUserData()).tasks.habits.sort((a: any, b: any) => a.value - b.value);
+        const habits = (await getUserData()).tasks.habits
+            .filter(h => Object.keys(h.challenge).length === 0)
+            .sort((a: any, b: any) => a.value - b.value);
+        if (habits.length < 1) {
+            return "You don't have a suitable task to use that skill on.";
+        }
         habitId = skill.habit === "lowest" ? habits[0].id : habits[habits.length - 1].id;
     }
 
