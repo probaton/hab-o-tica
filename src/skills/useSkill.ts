@@ -1,6 +1,6 @@
 import { s } from "../helpers/stringUtils";
 import { callHabApi } from "../requests/HabiticaRequest";
-import IHabiticaData, { HabiticaClass } from "../userData/IHabiticaData";
+import IHabiticaData, { HabiticaClass, IHabit } from "../userData/IHabiticaData";
 import { getUserData } from "../userData/userData";
 
 
@@ -21,31 +21,28 @@ export async function spamSkill(skillId: SkillId, count = -1): Promise<string> {
     if (skill.habit !== "none") {
         const habits = (await getUserData()).tasks.habits
             .filter(h => Object.keys(h.challenge).length === 0)
-            .sort((a: any, b: any) => a.value - b.value);
+            .sort((a: IHabit, b: IHabit) => a.value - b.value);
         if (habits.length < 1) {
             return "You don't have a suitable task to use that skill on.";
         }
         habitId = skill.habit === "lowest" ? habits[0].id : habits[habits.length - 1].id;
     }
 
-    return new Promise<string> (async (resolve) => {
-        let i = 0;
-        let run = true;
-        while ((count === -1 || i < count) && run) {
-            await callSkillApi(skill.id, habitId).catch(e => {
-                let customMessage = "";
-                if (e.message === "Not enough mana.") {
-                    customMessage = i > 0
-                        ? `Cast ${skill.name} ${i} time${s(i)} before running out of mana`
-                        : `Tried to use ${skill.name}, but you don't seem to have enough mana`;
-                }
-                resolve(customMessage || `${skill.name} failed after ${i} cast${s(i)}: \n${e.message}`);
-                run = false;
-            });
-            i++;
+    let i = 0;
+    while (count === -1 || i < count) {
+        try {
+            await callSkillApi(skill.id, habitId);
+        } catch (e) {
+            if (e.message === "Not enough mana.") {
+                return (i > 0)
+                    ? `Cast ${skill.name} ${i} time${s(i)} before running out of mana.`
+                    : `Tried to use ${skill.name}, but you don't seem to have enough mana.`;
+            }
+            return `${skill.name} failed after ${i} cast${s(i)}: \n${e.message}.`;
         }
-        resolve(`Succesfully cast ${skill.name} ${i} time${s(i)}`);
-    });
+        i++;
+    }
+    return `Succesfully cast ${skill.name} ${i} time${s(i)}`;
 }
 
 export type SkillId =
