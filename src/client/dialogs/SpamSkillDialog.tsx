@@ -37,8 +37,9 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
             newState.isResolvedMessage = "Your character won't have skills until you reach level 11.";
             LastUsedSkillStore.clear();
         } else {
-            newState.skillInput = await LastUsedSkillStore.get() || "placeholder";
             const classSkills = getUserSkills(userData);
+            const lastSkill = await LastUsedSkillStore.get();
+            newState.skillInput = (lastSkill && classSkills.find(s => s.id === lastSkill)) ? lastSkill : "placeholder";
             if (newState.skillInput === "placeholder") {
                 newState.skillOptions = this.state.skillOptions.concat(classSkills);
             } else {
@@ -89,12 +90,11 @@ export class SpamSkillDialog extends Component<ISpamSkillDialogProps, ISpamSkill
     }
 
     private setSkillInput = (skillInput: SkillId | "placeholder") => {
+        const newState: any = { skillInput };
         if (skillInput !== "placeholder") {
-            const newOptions = this.state.skillOptions!.filter(option => option.id !== "placeholder");
-            this.setState({ skillOptions: newOptions, skillInput });
-        } else {
-            this.setState({ skillInput });
+            newState.skillOptions = this.state.skillOptions!.filter(option => option.id !== "placeholder");
         }
+        this.setState(newState);
     }
 
     private onSubmit = async () => {
