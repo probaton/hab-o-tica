@@ -14,9 +14,9 @@ export async function postGitHubIssue(title: string, description: string): Promi
         body: JSON.stringify(body),
     };
 
-    const response = await fetch("https://api.github.com/repos/probaton/habotica/issues", options);
+    const response = await fetch("https://api.github.com/repos/probaton/hab-o-tica/issues", options);
     if (!response.ok) {
         return "Something went wrong while submitting your issue:\n" + (await response.json()).message;
     }
-    return "Issue reported. You can track your issue here:\nhttps://github.com/probaton/habotica/issues";
+    return "Issue reported. You can track your issue here:\nhttps://github.com/probaton/hab-o-tica/issues";
 }
