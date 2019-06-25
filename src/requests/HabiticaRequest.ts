@@ -1,7 +1,7 @@
 import { getEnv } from "../config";
 import { getCredentials } from "../store/CredentialStore";
 
-export async function callHabApi(apiSuffix: string, method: "POST" | "GET", body?: any): Promise<any> {
+export async function callHabApi(apiSuffix: string, method: "POST" | "GET" | "PUT", body?: any): Promise<any> {
     const credentials = await getCredentials();
     const headers: any = {
         "x-client": "probaton-habotica",

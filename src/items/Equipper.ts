@@ -33,6 +33,7 @@ export default class Equipper {
             await this.equipItem("back"),
             await this.equip("pet", this.newOutfit.pet, this.currentOutfit.pet),
             await this.equip("mount", this.newOutfit.mount, this.currentOutfit.mount),
+            await this.setPreferences(this.newOutfit.background, this.newOutfit.skin),
         ].filter(Boolean).join("\n");
         return failMessage || `${this.newOutfit.name} equipped successfully.`;
     }
@@ -48,6 +49,28 @@ export default class Equipper {
                 await callHabApi(`/api/v3/user/equip/${type}/${toBeEquipped}`, "POST");
             } catch (e) {
                 return `Failed to (un)equip ${newItem}: ${e.message}`;
+            }
+        }
+    }
+
+    async setPreferences(background?: string, skin?: string): Promise<string | undefined> {
+        const body: any = {};
+        let failMessage = "Failed to equip ";
+
+        if (background && background !== this.currentOutfit.background) {
+            body["preferences.background"] = background;
+            failMessage += background;
+        }
+        if (skin && skin !== this.currentOutfit.skin) {
+            body["preferences.skin"] = skin;
+            failMessage += background ? ` and ${skin}` : skin;
+        }
+
+        if (Object.keys(body).length > 0) {
+            try {
+                await callHabApi(`/api/v4/user`, "PUT", body);
+            } catch (e) {
+                return `${failMessage}: ${e.message}`;
             }
         }
     }
