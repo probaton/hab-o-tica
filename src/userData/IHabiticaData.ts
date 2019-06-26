@@ -38,6 +38,7 @@ export default interface IHabiticaData {
     preferences: {
         background: string;
         skin: string;
+        hair: IHair,
     };
 }
 
@@ -52,6 +53,15 @@ export interface IGearSet {
     eyewear?: string;
     headAccessory?: string;
     back?: string;
+}
+
+export interface IHair {
+    color: string;
+    base: string;
+    bangs: string;
+    beard: string;
+    mustache: string;
+    flower: string;
 }
 
 export interface IHabit {

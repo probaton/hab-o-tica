@@ -1,5 +1,5 @@
 import { callHabApi } from "../requests/HabiticaRequest";
-import IHabiticaData from "../userData/IHabiticaData";
+import IHabiticaData, { IHair } from "../userData/IHabiticaData";
 import IOutfit from "./IOutfit";
 
 export default class Equipper {
@@ -15,6 +15,7 @@ export default class Equipper {
             name: "current",
             gearSet: useCostume ? gear.costume : gear.equipped,
             skin: userData.preferences.skin,
+            hair: userData.preferences.hair,
             background: userData.preferences.background,
             pet: userData.items.currentPet,
             mount: userData.items.currentMount,
@@ -33,7 +34,7 @@ export default class Equipper {
             await this.equipItem("back"),
             await this.equip("pet", this.newOutfit.pet, this.currentOutfit.pet),
             await this.equip("mount", this.newOutfit.mount, this.currentOutfit.mount),
-            await this.setPreferences(this.newOutfit.background, this.newOutfit.skin),
+            await this.setPreferences(),
         ].filter(Boolean).join("\n");
         return failMessage || `${this.newOutfit.name} equipped successfully.`;
     }
@@ -53,24 +54,34 @@ export default class Equipper {
         }
     }
 
-    async setPreferences(background?: string, skin?: string): Promise<string | undefined> {
+    async setPreferences(): Promise<string | undefined> {
         const body: any = {};
-        let failMessage = "Failed to equip ";
 
+        const background = this.newOutfit.background;
         if (background && background !== this.currentOutfit.background) {
             body["preferences.background"] = background;
-            failMessage += background;
         }
+
+        const skin = this.newOutfit.skin;
         if (skin && skin !== this.currentOutfit.skin) {
             body["preferences.skin"] = skin;
-            failMessage += background ? ` and ${skin}` : skin;
+        }
+
+        const hair = this.newOutfit.hair;
+        if (hair && hair !== this.currentOutfit.hair) {
+            body["preferences.hair.color"] = hair.color;
+            body["preferences.hair.base"] = hair.base;
+            body["preferences.hair.bangs"] = hair.bangs;
+            body["preferences.hair.beard"] = hair.beard;
+            body["preferences.hair.mustache"] = hair.mustache;
+            body["preferences.hair.flower"] = hair.flower;
         }
 
         if (Object.keys(body).length > 0) {
             try {
                 await callHabApi(`/api/v4/user`, "PUT", body);
             } catch (e) {
-                return `${failMessage}: ${e.message}`;
+                return `Failed to equip background, skin, and/or hair: ${e.message}`;
             }
         }
     }

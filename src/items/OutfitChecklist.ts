@@ -8,6 +8,7 @@ export default class OutfitChecklist {
     headAccessory = true;
     back = true;
     skin = true;
+    hair = true;
     background = true;
     pet = true;
     mount = true;

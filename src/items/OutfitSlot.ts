@@ -8,6 +8,7 @@ export type OutfitSlot =
     | "eyewear"
     | "back"
     | "skin"
+    | "hair"
     | "background"
     | "pet"
     | "mount";

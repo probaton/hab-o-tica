@@ -26,6 +26,7 @@ export default class OutfitMemberSelector extends React.Component<IProps> {
                         {this.renderMemberCheckBox("Armor", "armor")}
                         {this.renderMemberCheckBox("Skin", "skin")}
                         {this.renderMemberCheckBox("Pet", "pet")}
+                        {this.renderMemberCheckBox("Hair", "hair")}
                     </View>
                     <View style={styles.column}>
                         {this.renderMemberCheckBox("Head accessory", "headAccessory")}

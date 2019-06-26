@@ -28,6 +28,7 @@ export default class OutfitMaker {
                 back: this.checklist.back ? rawGearSet.back : undefined,
             },
             skin: this.checklist.skin ? data.preferences.skin : undefined,
+            hair: this.checklist.hair ? data.preferences.hair : undefined,
             background: this.checklist.background ? data.preferences.background : undefined,
             pet: this.checklist.pet ? data.items.currentPet : undefined,
             mount: this.checklist.mount ? data.items.currentMount : undefined,
