@@ -68,13 +68,25 @@ export default class Equipper {
         }
 
         const hair = this.newOutfit.hair;
-        if (hair && hair !== this.currentOutfit.hair) {
-            body["preferences.hair.color"] = hair.color;
-            body["preferences.hair.base"] = hair.base;
-            body["preferences.hair.bangs"] = hair.bangs;
-            body["preferences.hair.beard"] = hair.beard;
-            body["preferences.hair.mustache"] = hair.mustache;
-            body["preferences.hair.flower"] = hair.flower;
+        if (hair) {
+            if (hair.color !== this.currentOutfit.hair!.color) {
+                body["preferences.hair.color"] = hair.color;
+            }
+            if (hair.base !== this.currentOutfit.hair!.base) {
+                body["preferences.hair.base"] = hair.base;
+            }
+            if (hair.bangs !== this.currentOutfit.hair!.bangs) {
+                body["preferences.hair.bangs"] = hair.bangs;
+            }
+            if (hair.beard !== this.currentOutfit.hair!.beard) {
+                body["preferences.hair.beard"] = hair.beard;
+            }
+            if (hair.mustache !== this.currentOutfit.hair!.mustache) {
+                body["preferences.hair.mustache"] = hair.mustache;
+            }
+            if (hair.flower !== this.currentOutfit.hair!.flower) {
+                body["preferences.hair.flower"] = hair.flower;
+            }
         }
 
         if (Object.keys(body).length > 0) {
