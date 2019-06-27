@@ -24,17 +24,17 @@ export default class OutfitMemberSelector extends React.Component<IProps> {
                         {this.renderMemberCheckBox("Off hand", "shield")}
                         {this.renderMemberCheckBox("Head gear", "head")}
                         {this.renderMemberCheckBox("Armor", "armor")}
-                        {this.renderMemberCheckBox("Skin", "skin")}
-                        {this.renderMemberCheckBox("Pet", "pet")}
-                        {this.renderMemberCheckBox("Hair", "hair")}
-                    </View>
-                    <View style={styles.column}>
                         {this.renderMemberCheckBox("Head accessory", "headAccessory")}
-                        {this.renderMemberCheckBox("Eyewear", "eyewear")}
                         {this.renderMemberCheckBox("Body accessory", "body")}
                         {this.renderMemberCheckBox("Back accessory", "back")}
+                    </View>
+                    <View style={styles.column}>
+                        {this.renderMemberCheckBox("Eyewear", "eyewear")}
+                        {this.renderMemberCheckBox("Skin", "skin")}
+                        {this.renderMemberCheckBox("Hair", "hair")}
                         {this.renderMemberCheckBox("Background", "background")}
                         {this.renderMemberCheckBox("Mount", "mount")}
+                        {this.renderMemberCheckBox("Pet", "pet")}
                     </View>
                 </View>
             </View>
@@ -54,11 +54,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignSelf: "stretch",
         alignItems: "center",
-        marginTop: 8,
+        marginTop: 4,
     },
     titleBar: {
         justifyContent: "center",
-        minHeight: 50,
+        minHeight: 40,
     },
     title: {
         textAlign: "center",
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     },
     columnManager: {
         flexDirection: "row",
-        marginBottom: 8,
+        marginBottom: 6,
     },
     column: {
         marginLeft: 8,

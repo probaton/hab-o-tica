@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     },
     titleBar: {
         justifyContent: "center",
-        minHeight: 50,
+        minHeight: 40,
     },
     title: {
         textAlign: "center",
