@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         alignItems: "center",
-        padding: 4,
+        padding: 3,
     },
     caption: {
         fontSize: 16,
