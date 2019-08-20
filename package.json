@@ -11,14 +11,15 @@
     },
     "dependencies": {
         "@types/expo": "^32.0.13",
-        "expo": "^32.0.0",
+        "expo": "^34.0.0",
+        "expo-constants": "~6.0.0",
         "js-yaml": "3.13.1",
-        "react": "16.5.0",
-        "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
+        "react": "16.8.3",
+        "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz"
     },
     "devDependencies": {
-        "@types/react": "^16.5.0",
-        "@types/react-dom": "^16.8.2",
+        "@types/react": "^16.8.3",
+        "@types/react-dom": "^16.8.3",
         "@types/react-native": "^0.57.38",
         "ts-node": "^3.0.4",
         "tslint": "^5.13.0",
