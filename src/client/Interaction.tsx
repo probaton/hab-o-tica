@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Dimensions, StyleSheet, Text, Pressable, View } from "react-native";
 
 import TouchButton from "./controls/TouchButton";
 import XButton from "./images/XButton";
@@ -23,9 +23,9 @@ export default class Interaction extends React.Component<IProps> {
                 <View style={styles.titleBar}>
                     <Text style={styles.title}>{dialogTitle}</Text>
                     <View style={styles.xButton}>
-                        <TouchableOpacity onPress={close}>
+                        <Pressable onPress={close}>
                                 <XButton/>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                 </View>
                 <View style={styles.padding}>

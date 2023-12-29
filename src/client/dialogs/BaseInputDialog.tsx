@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Dimensions, Modal, StyleSheet, Text, Pressable, View } from "react-native";
 
 import TouchButton from "../controls/TouchButton";
 
@@ -21,7 +21,7 @@ export default class BaseInputDialog extends React.Component<IBaseInputDialogPro
                 transparent={true}
                 onRequestClose={close}
             >
-                <TouchableOpacity
+                <Pressable
                     style={styles.overlay}
                     activeOpacity={1}
                     onPress={isResolvedMessage ? close : undefined}
@@ -46,7 +46,7 @@ export default class BaseInputDialog extends React.Component<IBaseInputDialogPro
                             {this.renderSubmitButton()}
                         </View>
                     </View>
-                </TouchableOpacity>
+                </Pressable>
             </Modal>
         );
     }

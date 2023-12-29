@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, Pressable } from "react-native";
 
 interface IHamburgerMenuItemProps {
     icon: any;
@@ -10,7 +10,7 @@ interface IHamburgerMenuItemProps {
 export default class HamburgerMenuItem extends React.Component<IHamburgerMenuItemProps> {
     render() {
         return (
-            <TouchableOpacity
+            <Pressable
                 style={styles.container}
                 onPress={this.props.onPress}
             >
@@ -21,7 +21,7 @@ export default class HamburgerMenuItem extends React.Component<IHamburgerMenuIte
                     style={styles.icon}
                 />
                 <Text style={styles.caption}>{this.props.caption}</Text>
-            </TouchableOpacity>
+            </Pressable>
         );
     }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, Pressable, View } from "react-native";
 
 import Add from "../images/Add";
 import ItemSelectorItem from "./ItemSelectorItem";
@@ -30,9 +30,9 @@ export default class ItemSelector extends React.Component<IProps> {
     private renderAddButton() {
         if (this.props.addItem) {
             return (
-                <TouchableOpacity onPress={this.props.addItem} style={styles.addButton}>
+                <Pressable onPress={this.props.addItem} style={styles.addButton}>
                     <Add/>
-                </TouchableOpacity>
+                </Pressable>
             );
         }
     }

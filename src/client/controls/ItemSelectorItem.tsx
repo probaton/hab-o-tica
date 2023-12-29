@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Pressable, View } from "react-native";
 
 import Trash from "../images/Trash";
 import TouchButton from "./TouchButton";
@@ -27,9 +27,9 @@ export default class ItemSelectorItem extends React.Component<IProps> {
 
     private renderTrash() {
         return (
-            <TouchableOpacity onPress={this.onDelete}>
+            <Pressable onPress={this.onDelete}>
                 <Trash/>
-            </TouchableOpacity>
+            </Pressable>
         );
     }
 

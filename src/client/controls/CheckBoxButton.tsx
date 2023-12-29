@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckBox, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { CheckBox, StyleSheet, Text, Pressable } from "react-native";
 
 interface IProps {
     caption: string;
@@ -10,10 +10,10 @@ interface IProps {
 export default class CheckBoxButton extends React.Component<IProps> {
     render() {
         return (
-            <TouchableOpacity style={styles.container} onPress={this.onPress}>
+            <Pressable style={styles.container} onPress={this.onPress}>
                 <CheckBox onValueChange={this.props.onPress} value={this.props.value}/>
                 <Text style={styles.caption}>{this.props.caption}</Text>
-            </TouchableOpacity>
+            </Pressable>
         );
     }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleProp, Text, TextStyle, TouchableOpacity, ViewStyle } from "react-native";
+import { StyleProp, Text, TextStyle, Pressable, ViewStyle } from "react-native";
 
 interface IProps {
     onPress: () => void;
@@ -11,12 +11,12 @@ interface IProps {
 export default class TouchButton extends React.Component<IProps> {
     render() {
         return (
-            <TouchableOpacity
+            <Pressable
                 style={this.props.buttonStyle}
                 onPress={this.props.onPress}
             >
                 <Text style={this.props.captionStyle}>{this.props.caption}</Text>
-            </TouchableOpacity>
+            </Pressable>
         );
     }
 }

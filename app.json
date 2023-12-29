@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "hab-o-tica2",
-    "slug": "hab-o-tica2",
-    "version": "1.0.0",
+    "name": "Hab[o]tica",
+    "slug": "Hab[o]tica",
+    "version": "2.2.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/androidIcon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#78ceae"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,12 +19,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/androidIcon.png",
+        "backgroundColor": "#78ceae"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/androidIcon.png"
+    },
+    "extra": { 
+      "habiticaEnv": "https://habitica.com"
     }
   }
 }

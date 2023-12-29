@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, StatusBar, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Modal, StatusBar, StyleSheet, Pressable, View } from "react-native";
 
 import BaseInputDialog from "../dialogs/BaseInputDialog";
 import ReportIssueDialog from "../dialogs/ReportIssueDialog";
@@ -40,7 +40,7 @@ export default class HamburgerMenu extends React.Component<IHamburgerMenuProps, 
                 transparent={true}
                 onRequestClose={this.props.close}
             >
-                <TouchableOpacity
+                <Pressable
                     style={styles.overlay}
                     activeOpacity={1}
                     onPress={this.props.close}
@@ -64,7 +64,7 @@ export default class HamburgerMenu extends React.Component<IHamburgerMenuProps, 
                             />
                         </View>
                     </View>
-                </TouchableOpacity>
+                </Pressable>
             </Modal>
         );
     }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, ImageSourcePropType, StyleSheet, Text, Pressable } from "react-native";
 
 interface IProps {
     caption: string;
@@ -10,7 +10,7 @@ interface IProps {
 export default class IconButton extends React.Component<IProps> {
     render() {
         return (
-            <TouchableOpacity style={styles.container} onPress={this.props.onPress}>
+            <Pressable style={styles.container} onPress={this.props.onPress}>
                 <Image
                     source={this.props.imageSource}
                     resizeMode="contain"
@@ -18,7 +18,7 @@ export default class IconButton extends React.Component<IProps> {
                     style={styles.image}
                 />
                 <Text style={styles.caption}>{this.props.caption}</Text>
-            </TouchableOpacity>
+            </Pressable>
         );
     }
 }
